@@ -13,15 +13,12 @@ struct TaskRowView: View {
     private let vSpacing: CGFloat = 5
     private let hSpacing: CGFloat = 5
     private let bottomPadding: CGFloat = 15
-    private let iconSize: CGFloat = 50
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 HStack(alignment: .top, spacing: hSpacing) {
-                    Rectangle()
-                        .foregroundStyle(.gray)
-                        .frame(width: iconSize, height: iconSize)
+                    TaskRowImageView(imageData: Data())
                     
                     VStack(alignment: .leading, spacing: vSpacing) {
                         TaskTitleDescriptionView(
