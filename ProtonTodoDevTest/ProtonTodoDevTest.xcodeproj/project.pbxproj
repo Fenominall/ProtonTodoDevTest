@@ -7,18 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4F7FC6CF2D548C7D002261B6 /* ProtonTodoDevTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7FC6C42D548C7C002261B6 /* ProtonTodoDevTest.framework */; };
 		4F7FC7232D54A37C002261B6 /* ProtonTodoDevTestiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7FC7192D54A37C002261B6 /* ProtonTodoDevTestiOS.framework */; };
+		4FD132FC2D54AF3000BF7A49 /* ProtonTodoDevTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7FC6C42D548C7C002261B6 /* ProtonTodoDevTest.framework */; };
+		4FD132FD2D54AF3000BF7A49 /* ProtonTodoDevTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7FC6C42D548C7C002261B6 /* ProtonTodoDevTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4FD133012D54AF3B00BF7A49 /* ProtonTodoDevTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7FC6C42D548C7C002261B6 /* ProtonTodoDevTest.framework */; };
+		4FD133022D54AF3B00BF7A49 /* ProtonTodoDevTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7FC6C42D548C7C002261B6 /* ProtonTodoDevTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4F7FC6D02D548C7D002261B6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4F7FC6BB2D548C7C002261B6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4F7FC6C32D548C7C002261B6;
-			remoteInfo = ProtonTodoDevTest;
-		};
 		4F7FC7242D54A37C002261B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F7FC6BB2D548C7C002261B6 /* Project object */;
@@ -26,7 +22,46 @@
 			remoteGlobalIDString = 4F7FC7182D54A37C002261B6;
 			remoteInfo = ProtonTodoDevTestiOS;
 		};
+		4FD132FE2D54AF3000BF7A49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F7FC6BB2D548C7C002261B6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F7FC6C32D548C7C002261B6;
+			remoteInfo = ProtonTodoDevTest;
+		};
+		4FD133032D54AF3B00BF7A49 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F7FC6BB2D548C7C002261B6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F7FC6C32D548C7C002261B6;
+			remoteInfo = ProtonTodoDevTest;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4FD133002D54AF3000BF7A49 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4FD132FD2D54AF3000BF7A49 /* ProtonTodoDevTest.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FD133052D54AF3B00BF7A49 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4FD133022D54AF3B00BF7A49 /* ProtonTodoDevTest.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4F7FC6C42D548C7C002261B6 /* ProtonTodoDevTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ProtonTodoDevTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,29 +70,9 @@
 		4F7FC7222D54A37C002261B6 /* ProtonTodoDevTestiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProtonTodoDevTestiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4F7FC6D62D548C7D002261B6 /* Exceptions for "ProtonTodoDevTest" folder in "ProtonTodoDevTest" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				ProtonTodoDevTest.h,
-			);
-			target = 4F7FC6C32D548C7C002261B6 /* ProtonTodoDevTest */;
-		};
-		4F7FC72A2D54A37C002261B6 /* Exceptions for "ProtonTodoDevTestiOS" folder in "ProtonTodoDevTestiOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			publicHeaders = (
-				ProtonTodoDevTestiOS.h,
-			);
-			target = 4F7FC7182D54A37C002261B6 /* ProtonTodoDevTestiOS */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4F7FC6C62D548C7C002261B6 /* ProtonTodoDevTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				4F7FC6D62D548C7D002261B6 /* Exceptions for "ProtonTodoDevTest" folder in "ProtonTodoDevTest" target */,
-			);
 			path = ProtonTodoDevTest;
 			sourceTree = "<group>";
 		};
@@ -68,9 +83,6 @@
 		};
 		4F7FC71A2D54A37C002261B6 /* ProtonTodoDevTestiOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				4F7FC72A2D54A37C002261B6 /* Exceptions for "ProtonTodoDevTestiOS" folder in "ProtonTodoDevTestiOS" target */,
-			);
 			path = ProtonTodoDevTestiOS;
 			sourceTree = "<group>";
 		};
@@ -93,7 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F7FC6CF2D548C7D002261B6 /* ProtonTodoDevTest.framework in Frameworks */,
+				4FD132FC2D54AF3000BF7A49 /* ProtonTodoDevTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FD133012D54AF3B00BF7A49 /* ProtonTodoDevTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +135,7 @@
 				4F7FC6D22D548C7D002261B6 /* ProtonTodoDevTestTests */,
 				4F7FC71A2D54A37C002261B6 /* ProtonTodoDevTestiOS */,
 				4F7FC7262D54A37C002261B6 /* ProtonTodoDevTestiOSTests */,
+				4F7FC7512D54A8C3002261B6 /* Frameworks */,
 				4F7FC6C52D548C7C002261B6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -135,6 +149,13 @@
 				4F7FC7222D54A37C002261B6 /* ProtonTodoDevTestiOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4F7FC7512D54A8C3002261B6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,11 +208,12 @@
 				4F7FC6CA2D548C7D002261B6 /* Sources */,
 				4F7FC6CB2D548C7D002261B6 /* Frameworks */,
 				4F7FC6CC2D548C7D002261B6 /* Resources */,
+				4FD133002D54AF3000BF7A49 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				4F7FC6D12D548C7D002261B6 /* PBXTargetDependency */,
+				4FD132FF2D54AF3000BF7A49 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4F7FC6D22D548C7D002261B6 /* ProtonTodoDevTestTests */,
@@ -211,10 +233,12 @@
 				4F7FC7152D54A37C002261B6 /* Sources */,
 				4F7FC7162D54A37C002261B6 /* Frameworks */,
 				4F7FC7172D54A37C002261B6 /* Resources */,
+				4FD133052D54AF3B00BF7A49 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4FD133042D54AF3B00BF7A49 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4F7FC71A2D54A37C002261B6 /* ProtonTodoDevTestiOS */,
@@ -358,15 +382,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4F7FC6D12D548C7D002261B6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4F7FC6C32D548C7C002261B6 /* ProtonTodoDevTest */;
-			targetProxy = 4F7FC6D02D548C7D002261B6 /* PBXContainerItemProxy */;
-		};
 		4F7FC7252D54A37C002261B6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4F7FC7182D54A37C002261B6 /* ProtonTodoDevTestiOS */;
 			targetProxy = 4F7FC7242D54A37C002261B6 /* PBXContainerItemProxy */;
+		};
+		4FD132FF2D54AF3000BF7A49 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F7FC6C32D548C7C002261B6 /* ProtonTodoDevTest */;
+			targetProxy = 4FD132FE2D54AF3000BF7A49 /* PBXContainerItemProxy */;
+		};
+		4FD133042D54AF3B00BF7A49 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F7FC6C32D548C7C002261B6 /* ProtonTodoDevTest */;
+			targetProxy = 4FD133032D54AF3B00BF7A49 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -384,6 +413,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/**",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -398,6 +431,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fenominall.ProtonTodoDevTest;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -417,6 +451,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/**",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -431,6 +469,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fenominall.ProtonTodoDevTest;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_VERSION = 5.0;
@@ -473,9 +512,14 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/**",
+					"$(inherited)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -494,8 +538,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 15.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -539,9 +584,14 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/**",
+					"$(inherited)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -555,6 +605,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -603,6 +654,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/**",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -638,6 +693,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/**",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

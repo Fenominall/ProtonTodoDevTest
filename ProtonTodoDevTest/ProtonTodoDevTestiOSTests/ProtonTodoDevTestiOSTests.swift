@@ -6,7 +6,6 @@
 //
 
 import XCTest
-@testable import ProtonTodoDevTestiOS
 
 final class ProtonTodoDevTestiOSTests: XCTestCase {
 
