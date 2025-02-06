@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AppImageConsntants: String {
+public enum AppImageConsntants: String {
     case house = "house"
     case calendar = "calendar"
     case bell = "bell"

@@ -12,4 +12,6 @@ public final class TodoFeedViewModel: ObservableObject {
     @Published var tasks = [TodoItemViewModel]()
     @Published var isLoading: Bool = false
     @Published var error: String?
+    
+    public init() {}
 }
