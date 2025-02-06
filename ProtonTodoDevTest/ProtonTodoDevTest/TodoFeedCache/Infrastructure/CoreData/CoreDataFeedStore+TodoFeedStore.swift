@@ -9,16 +9,16 @@ import Foundation
 import CoreData
 
 extension CoreDataFeedStore: TodoFeedStore {
-    func retrieve() async throws -> [LocalTodoItem] {
+    public func retrieve() async throws -> [LocalTodoItem] {
         // TODO
         []
     }
     
-    func insert(_ feed: [LocalTodoItem]) async throws {
+    public func insert(_ feed: [LocalTodoItem]) async throws {
         // TODO
     }
     
-    func update(_ item: LocalTodoItem) async throws {
+    public func update(_ item: LocalTodoItem) async throws {
         // TODO
     }
 }

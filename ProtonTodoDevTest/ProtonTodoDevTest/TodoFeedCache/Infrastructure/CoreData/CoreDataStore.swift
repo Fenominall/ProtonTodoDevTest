@@ -8,9 +8,9 @@
 import Foundation
 import CoreData
 
-final class CoreDataFeedStore {
+public final class CoreDataFeedStore {
     // MARK: - Properties
-    static let storeURL = NSPersistentContainer
+    public static let storeURL = NSPersistentContainer
         .defaultDirectoryURL()
         .appending(path: "")
     
