@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TodoFeedLoader {
+public protocol TodoFeedLoader {
     func load() async throws -> [TodoItem]
 }

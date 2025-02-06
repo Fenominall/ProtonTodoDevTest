@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TodoItemSaveable {
+public protocol TodoItemSaveable {
     func save(_ item: TodoItem) async throws
 }

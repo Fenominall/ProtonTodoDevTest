@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct TodoItem: Identifiable, Hashable {
-    let id: UUID
-    let title: String
-    let description: String
-    var completed: Bool
-    let createdAt: Date
-    let dueDate: Date
-    let imageURL: URL?
+public struct TodoItem: Identifiable, Hashable {
+    public let id: UUID
+    public let title: String
+    public let description: String
+    public var completed: Bool
+    public let createdAt: Date
+    public let dueDate: Date
+    public let imageURL: URL?
 
-    init(
+    public init(
         id: UUID,
         title: String,
         description: String,

@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TodoImageCache {
+public protocol TodoImageCache {
     func save(_ data: Data, for url: URL) async throws
 }

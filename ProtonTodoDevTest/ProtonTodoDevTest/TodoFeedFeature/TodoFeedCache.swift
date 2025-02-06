@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TodoFeedCache {
+public protocol TodoFeedCache {
     func save(_ feed: [TodoItem]) async throws
 }

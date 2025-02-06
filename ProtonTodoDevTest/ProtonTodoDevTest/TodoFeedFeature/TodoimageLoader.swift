@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TodoimageLoader {
+public protocol TodoimageLoader {
     func loadImage(from url: URL) async throws -> Data
 }
