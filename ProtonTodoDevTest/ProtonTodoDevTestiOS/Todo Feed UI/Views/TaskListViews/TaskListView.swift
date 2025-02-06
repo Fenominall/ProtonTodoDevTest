@@ -8,16 +8,16 @@
 import Foundation
 import SwiftUI
 
-struct TaskListView: View {
+public struct TaskListView: View {
     private let navigationTitle: String
     @ObservedObject private var viewModel: TodoFeedViewModel
     
-    init(navigationTitle: String, viewModel: TodoFeedViewModel) {
+    public init(navigationTitle: String, viewModel: TodoFeedViewModel) {
         self.navigationTitle = navigationTitle
         self.viewModel = viewModel
     }
     
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             List {
                 ForEach($viewModel.tasks) { $task in

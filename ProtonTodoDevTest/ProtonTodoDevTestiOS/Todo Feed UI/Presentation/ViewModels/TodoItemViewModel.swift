@@ -15,7 +15,25 @@ public struct TodoItemViewModel: Identifiable, Hashable {
     public var completed: Bool
     private let createdAt: Date
     private let dueDate: Date
-    public let imageURL: URL?
+    public let imageData: Data?
+    
+    init(
+        id: UUID,
+        title: String,
+        description: String,
+        completed: Bool,
+        createdAt: Date,
+        dueDate: Date,
+        imageURL: Data?
+    ) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.completed = completed
+        self.createdAt = createdAt
+        self.dueDate = dueDate
+        self.imageData = imageURL
+    }
     
     public init(from item: TodoItem) {
         self.id = item.id
@@ -24,7 +42,7 @@ public struct TodoItemViewModel: Identifiable, Hashable {
         self.completed = item.completed
         self.createdAt = item.createdAt
         self.dueDate = item.dueDate
-        self.imageURL = item.imageURL
+        self.imageData = nil
     }
     
     // MARK: - Helpers
