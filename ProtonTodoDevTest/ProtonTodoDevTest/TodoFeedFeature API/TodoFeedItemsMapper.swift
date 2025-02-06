@@ -43,7 +43,7 @@ public final class TodoFeedItemsMapper {
     
     private static let decoder = JSONDecoder()
     
-    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [TodoItem] {
+    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [TodoItem] {
         guard response.isStatusOK else {
             throw Error.invalidResponse
         }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ProtonTodoDevTest
+import Combine
 
 @main
 struct ProtonTodoDevTestAppApp: App {
@@ -24,6 +25,15 @@ struct ProtonTodoDevTestAppApp: App {
             return NullStore()
         }
     }()
+    
+    private let baseURL = URL(string: "https:/any.com/")!
+    
+    private let localTodoFeedManager: LocalTodoFeedManager
+    
+    // MARK: - Init
+    init() {
+        self.localTodoFeedManager = LocalTodoFeedManager(store: store)
+    }
     
     var body: some Scene {
         WindowGroup {

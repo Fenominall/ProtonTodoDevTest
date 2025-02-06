@@ -10,7 +10,7 @@ import Foundation
 public final class LocalTodoFeedManager {
     private let store: TodoFeedStore
     
-    init(store: TodoFeedStore) {
+    public init(store: TodoFeedStore) {
         self.store = store
     }
 }

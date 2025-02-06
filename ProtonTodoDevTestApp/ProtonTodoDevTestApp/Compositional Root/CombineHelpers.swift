@@ -36,6 +36,8 @@ extension HTTPClient {
 
 extension Publisher {
     func caching(to cache: TodoFeedCache) -> AnyPublisher<Output, Failure> where Output == [TodoItem] {
+        // Since the received Output has the same signature with saveIngoringResult function,
+        // it can be passed directly cache.saveIgnoringResult
         handleEvents(receiveOutput: { feed in
             Task {
                 await cache.saveIgnoringResult(feed)
@@ -48,5 +50,39 @@ extension Publisher {
 private extension TodoFeedCache {
     func saveIgnoringResult(_ feed: [TodoItem]) async {
         try? await save(feed)
+    }
+}
+
+
+extension LocalTodoFeedManager {
+    typealias Publisher = AnyPublisher<[TodoItem], Error>
+    
+    func loadPublisher() -> Publisher {
+        // A Deferred is a lazy publisher that awaits subscription before running.
+        // So you can use it to wrap and make an eager publisher lazy.
+        return Deferred {
+            // Because the types match between LocalTodoFeedManager return result and the Future return result block
+            // we can just path the load function for the completion parameter
+            // in this the 'self' is the LocalTodoFeedManager itself
+            Future { promise in
+                Task {
+                    do {
+                        let result = try await self.load()
+                        promise(.success(result))
+                    } catch {
+                        promise(.failure(error))
+                    }
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
+
+extension Publisher {
+    func fallback(to fallback: @escaping () -> AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> {
+        // First, it tries to use the primary source (self). If the primary publisher produces an error, use fallbackPublisher.
+        self.catch { _ in fallback()}.eraseToAnyPublisher()
     }
 }

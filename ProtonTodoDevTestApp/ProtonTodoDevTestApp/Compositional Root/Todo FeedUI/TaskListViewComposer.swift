@@ -10,7 +10,7 @@ import Combine
 import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
 
-final class ListViewComposer {
+final class TaskListViewComposer {
     private init() {}
     
     static func composedViewWith(
