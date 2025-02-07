@@ -21,8 +21,10 @@ final class ThreadSafeDictionary<Key: Hashable, Value> {
             return value
         }
         set(newValue) {
-            queue.async(flags:. barrier) { [weak self] in
-                self?.dictionary[key] = newValue
+            // ThreadSafeArray owns the queue, and the queue does not outlive ThreadSafeArray
+            // Weak self not needed
+            queue.async(flags:. barrier) {
+                self.dictionary[key] = newValue
             }
         }
     }
