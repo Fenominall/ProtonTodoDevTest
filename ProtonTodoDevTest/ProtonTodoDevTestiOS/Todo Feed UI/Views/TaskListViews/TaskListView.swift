@@ -12,6 +12,7 @@ public struct TaskListView: View {
     private let navigationTitle: String
     @ObservedObject private var viewModel: TodoFeedViewModel
     
+    
     public init(navigationTitle: String, viewModel: TodoFeedViewModel) {
         self.navigationTitle = navigationTitle
         self.viewModel = viewModel
@@ -24,7 +25,12 @@ public struct TaskListView: View {
                     NavigationLink {
                         
                     } label: {
-                        TaskRowView(task: $task)
+                        Button {
+                            
+                        } label: {
+                            TaskRowView(task: $task)
+                        }
+
                     }
                     .listRowSeparator(.hidden)
                 }
@@ -33,7 +39,7 @@ public struct TaskListView: View {
             .listStyle(.plain)
             .navigationTitle(navigationTitle)
         }
-        .refreshable {}
-        .task {}
+        .refreshable { viewModel.load() }
+        .onAppear{ viewModel.load() }
     }
 }
