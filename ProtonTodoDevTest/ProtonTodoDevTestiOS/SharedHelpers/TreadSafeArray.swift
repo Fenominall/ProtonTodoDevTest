@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ThreadSafeArrat<Element> {
+final class ThreadSafeArray<Element> {
     private var array: [Element] = []
     private var queue = DispatchQueue(label: "swift.threadSafeDictionary.com", attributes: .concurrent)
     
