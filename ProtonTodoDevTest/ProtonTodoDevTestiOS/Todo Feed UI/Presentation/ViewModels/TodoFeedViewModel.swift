@@ -16,7 +16,8 @@ public final class TodoFeedViewModel: ObservableObject {
     
     private let loadFeed: () async throws -> [TodoItem]
     private let selection: (TodoItem) -> Void
-    private var originalItems: [TodoItem] = []
+    
+    private var originalItems = ThreadSafeArray<TodoItem>()
     private var originalItemsDictionary = ThreadSafeDictionary<UUID, Int>()
     
     public init(loadFeed: @escaping () async throws -> [TodoItem],
@@ -52,13 +53,14 @@ public final class TodoFeedViewModel: ObservableObject {
     
     private func addOrUpdateTasks(_ tasks: [TodoItem]) {
         for task in tasks where originalItemsDictionary[task.id] == nil {
+            let currentCount = originalItems.count
             originalItems.append(task)
-            originalItemsDictionary[task.id] = originalItems.count - 1
+            originalItemsDictionary[task.id] = currentCount
         }
         
         for task in tasks {
             if let index = originalItemsDictionary[task.id] {
-                originalItems[index] = task
+                originalItems.update(at: index, with: task)
             }
         }
     }
