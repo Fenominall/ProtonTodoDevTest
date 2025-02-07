@@ -19,7 +19,7 @@ public final class TodoFeedItemsMapper {
             var completed: Bool
             let createdAt: Date
             let dueDate: Date
-            let imageURL: URL?
+            let imageURL: URL
         }
         
         var items: [TodoItem] {

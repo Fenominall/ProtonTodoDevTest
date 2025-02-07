@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:ProtonTodoDevTest/ProtonTodoDevTest/TodoFeedCache/Infrastructure/CoreData/ManagedCache+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:ProtonTodoDevTest/ProtonTodoDevTest/TodoFeedCache/Infrastructure/CoreData/ManagedTodoItem+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
       location = "container:ProtonTodoDevTest/ProtonTodoDevTest.xcodeproj">
    </FileRef>
    <FileRef
