@@ -23,7 +23,7 @@ final class ManagedTodoItem: NSManagedObject {
 }
 
 extension ManagedTodoItem {
-    var lcoal: LocalTodoItem {
+    var local: LocalTodoItem {
         LocalTodoItem(
             id: id,
             title: title,
