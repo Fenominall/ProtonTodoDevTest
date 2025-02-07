@@ -15,3 +15,9 @@ final class NullStore: TodoFeedStore {
     
     func update(_ item: ProtonTodoDevTest.LocalTodoItem) async throws {}
 }
+
+extension NullStore: TodoFeedImageStore {
+    func cache(_ data: Data, for url: URL) async throws {}
+    
+    func retrieve(from url: URL) async throws -> Data? { Data() }
+}

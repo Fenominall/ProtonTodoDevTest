@@ -17,7 +17,7 @@ struct ProtonTodoDevTestAppApp: App {
             session: URLSession(configuration: .ephemeral))
     }()
     
-    private let store: TodoFeedStore = {
+    private let store: TodoFeedStore & TodoFeedImageStore = {
         do {
             return try CoreDataFeedStore(storeURL: CoreDataFeedStore.storeURL)
         } catch {
@@ -38,9 +38,67 @@ struct ProtonTodoDevTestAppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(
-                allTasksView: AnyView(EmptyView()),
-                upcomingTasksView: AnyView(EmptyView())
+                allTasksView: makeAllTasksView(),
+                upcomingTasksView: makeUpcomingTasksView()
             )
         }
+    }
+    
+    // MARK: - Helpers
+    private func makeAllTasksView() -> AnyView {
+        return AnyView(
+            TaskListViewComposer
+                .composedViewWith(
+                    title: "All Tasks",
+                    feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+                    imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
+                    selection: { _ in }
+                )
+        )
+    }
+    
+    private func makeUpcomingTasksView() -> AnyView {
+        return AnyView(
+            TaskListViewComposer
+                .composedViewWith(
+                    title: "Upcoming Tasks",
+                    feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+                    imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
+                    selection: { _ in }
+                )
+        )
+    }
+    
+    private func makeRemoteFeedImageDataLoaderWithLocalFallback(url: URL) -> TodoImageLoader.Publisher {
+        let localimageLoader = LocalTodoImageCachingManager(imageStore: store)
+        
+        return localimageLoader
+            .loadImageDataPublisher(from: url)
+            .fallback { [httpClient] in
+                httpClient
+                    .getPublisher(from: url)
+                    .tryMap(TodoImageDataMapper.map)
+                    .caching(to: localimageLoader, using: url)
+                    .subscribe(on: DispatchQueue.main)
+                    .eraseToAnyPublisher()
+            }
+            .subscribe(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
+    
+    private func makeRemoteFeedLoaderWithLocalFallback() -> AnyPublisher<[TodoItem], Error> {
+        return makeRemoteFeedLoader()
+            .caching(to: localTodoFeedManager)
+            .fallback(to: localTodoFeedManager.loadPublisher)
+            .subscribe(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+        
+    }
+    
+    private func makeRemoteFeedLoader() -> AnyPublisher<[TodoItem], Error> {
+        return httpClient
+            .getPublisher(from: baseURL)
+            .tryMap(TodoFeedItemsMapper.map)
+            .eraseToAnyPublisher()
     }
 }

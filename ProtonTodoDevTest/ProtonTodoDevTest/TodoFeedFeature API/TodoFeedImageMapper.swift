@@ -12,7 +12,7 @@ public final class TodoImageDataMapper {
         case invalidData
     }
     
-    static func map(
+    public static func map(
         _ data: Data,
         from response: HTTPURLResponse
     ) throws -> Data {

@@ -14,15 +14,23 @@ public final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
     
-    private struct UnexpectedValueRepresentaion: Error {}
+    public enum HTTPClientError: Error {
+        case invalidResponse
+        case connectivity(Error)
+        case serverError(statusCode: Int)
+        case clientError(statusCode: Int)
+    }
     
     public func get(from url: URL) async throws -> HTTPResult {
-        let (data, response) = try await session.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw UnexpectedValueRepresentaion()
+        do {
+            let (data, response) = try await session.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw HTTPClientError.invalidResponse
+            }
+            return (data, httpResponse)
+        } catch {
+            throw HTTPClientError.connectivity(error)
         }
-        
-        return (data, httpResponse)
     }
 }
