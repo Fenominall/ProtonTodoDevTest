@@ -39,8 +39,3 @@ struct TaskRowView: View {
         }
     }
 }
-
-//TaskRowInfoVIew(
-//    topTimestamp: "12:30 PM, January 28, 2025",
-//    bottomTimestamp: "12:30 PM, January 28, 2025"
-//)
