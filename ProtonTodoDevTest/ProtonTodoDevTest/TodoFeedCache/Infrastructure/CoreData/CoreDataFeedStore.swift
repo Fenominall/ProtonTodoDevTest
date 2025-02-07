@@ -12,9 +12,9 @@ public final class CoreDataFeedStore {
     // MARK: - Properties
     public static let storeURL = NSPersistentContainer
         .defaultDirectoryURL()
-        .appending(path: "")
+        .appending(path: "todo-feed-store.sqlite")
     
-    private static let modelName: String = ""
+    private static let modelName: String = "TodoFeedStore"
     private static let model = NSManagedObjectModel
         .with(
             name: modelName,
