@@ -14,7 +14,7 @@ public struct LocalTodoItem: Equatable {
     public var completed: Bool
     public let createdAt: Date
     public let dueDate: Date
-    public let imageURL: URL?
+    public let imageURL: URL
     
     public init(
         id: UUID,
@@ -23,7 +23,7 @@ public struct LocalTodoItem: Equatable {
         completed: Bool,
         createdAt: Date,
         dueDate: Date,
-        imageURL: URL? = nil
+        imageURL: URL
     ) {
         self.id = id
         self.title = title

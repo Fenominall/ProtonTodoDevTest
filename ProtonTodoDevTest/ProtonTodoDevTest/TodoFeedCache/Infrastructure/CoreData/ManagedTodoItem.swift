@@ -17,7 +17,7 @@ final class ManagedTodoItem: NSManagedObject {
     @NSManaged var completed: Bool
     @NSManaged var createdAt: Date
     @NSManaged var dueDate: Date
-    @NSManaged var imageURL: URL?
+    @NSManaged var imageURL: URL
     @NSManaged var data: Data?
     @NSManaged var cache: ManagedCache
 }
