@@ -26,7 +26,7 @@ public struct TaskListView: View {
                         
                     } label: {
                         Button {
-                            
+                            viewModel.selectItem(with: task.id)
                         } label: {
                             TaskRowView(task: $task)
                         }

@@ -64,6 +64,13 @@ public final class TodoFeedViewModel: ObservableObject {
             }
         }
     }
+    
+    func selectItem(with id: UUID) {
+        if let index = originalItemsDictionary[id],
+           let item = originalItems.get(at: index) {
+            selection(item)
+        }
+    }
 }
 
 extension Array where Element == TodoItem {
