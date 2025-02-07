@@ -13,3 +13,9 @@ import CoreData
 final class ManagedCache: NSManagedObject {
     @NSManaged var feed: NSOrderedSet
 }
+
+extension ManagedCache {
+    var localFeed: [LocalTodoItem] {
+        feed.compactMap { ($0 as? ManagedTodoItem)?.lcoal }
+    }
+}

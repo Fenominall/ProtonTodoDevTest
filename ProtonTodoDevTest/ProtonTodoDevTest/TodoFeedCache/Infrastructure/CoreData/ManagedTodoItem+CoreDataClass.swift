@@ -21,3 +21,17 @@ final class ManagedTodoItem: NSManagedObject {
     @NSManaged var data: Data?
     @NSManaged var cache: ManagedCache
 }
+
+extension ManagedTodoItem {
+    var lcoal: LocalTodoItem {
+        LocalTodoItem(
+            id: id,
+            title: title,
+            description: todoDescription,
+            completed: completed,
+            createdAt: createdAt,
+            dueDate: dueDate,
+            imageURL: imageURL
+        )
+    }
+}
