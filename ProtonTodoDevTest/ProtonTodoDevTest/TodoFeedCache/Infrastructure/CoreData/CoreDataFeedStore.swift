@@ -46,9 +46,19 @@ public final class CoreDataFeedStore {
     }
     
     /// The action is executed on the background context, preventing any blocking of the main thread during data operations.
-    func performAsync(_ action: @escaping (NSManagedObjectContext) -> Void) {
+    /// Executes a throwing action on the background context and returns a result asynchronously.
+    func performAsync<T>(_ action: @escaping (NSManagedObjectContext) throws -> T) async throws -> T {
         let context = self.context
-        context.perform { action(context) }
+        return try await withCheckedThrowingContinuation { continuation in
+            context.perform {
+                do {
+                    let result = try action(context) // Perform the action on the context
+                    continuation.resume(returning: result)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
     
     private func cleanUpReferencesToPersistentStores() {

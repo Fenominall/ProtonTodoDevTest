@@ -10,15 +10,23 @@ import CoreData
 
 extension CoreDataFeedStore: TodoFeedStore {
     public func retrieve() async throws -> [LocalTodoItem] {
-        // TODO
-        []
+        try await performAsync { context in
+            guard let cache = try ManagedCache.find(in: context) else {
+                return []
+            }
+            return cache.localFeed
+        }
     }
     
     public func insert(_ feed: [LocalTodoItem]) async throws {
-        // TODO
+        try await performAsync { context in
+            
+        }
     }
     
     public func update(_ item: LocalTodoItem) async throws {
-        // TODO
+        try await performAsync { context in
+            
+        }
     }
 }
