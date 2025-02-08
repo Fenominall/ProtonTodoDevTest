@@ -28,7 +28,17 @@ public final class URLSessionHTTPClient: HTTPClient {
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw HTTPClientError.invalidResponse
             }
-            return (data, httpResponse)
+            
+            switch httpResponse.statusCode {
+            case 200..<300:
+                return (data, httpResponse)
+            case 400..<500:
+                throw HTTPClientError.clientError(statusCode: httpResponse.statusCode)
+            case 500..<600:
+                throw HTTPClientError.serverError(statusCode: httpResponse.statusCode)
+            default:
+                throw HTTPClientError.invalidResponse
+            }
         } catch {
             throw HTTPClientError.connectivity(error)
         }
