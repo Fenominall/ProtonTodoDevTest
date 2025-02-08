@@ -9,12 +9,12 @@ import Foundation
 import Combine
 
 public final class TodoItemDetailViewModel: ObservableObject {
-    private let task: TodoItemViewModel
+    private let task: TodoItemPresentationModel
     @Published var receivedImageData: Data?
     @Published var isImageDownloaded: Bool = false
     
     // MARK: - Init
-    public init(task: TodoItemViewModel) {
+    public init(task: TodoItemPresentationModel) {
         self.task = task
         receivedImageData = task.imageData
     }

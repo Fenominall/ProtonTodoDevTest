@@ -10,7 +10,8 @@ import Combine
 import ProtonTodoDevTest
 
 public final class TodoFeedViewModel: ObservableObject {
-    @Published var tasks = [TodoItemViewModel]()
+    // MARK: - Properties
+    @Published var tasks = [TodoItemPresentationModel]()
     @Published var isLoading: Bool = false
     @Published var error: String?
     
@@ -74,9 +75,9 @@ public final class TodoFeedViewModel: ObservableObject {
 }
 
 extension Array where Element == TodoItem {
-    public func mapToViewModel() -> [TodoItemViewModel] {
+    public func mapToViewModel() -> [TodoItemPresentationModel] {
         return map {
-            TodoItemViewModel(from: $0)
+            TodoItemPresentationModel(from: $0)
         }
     }
 }

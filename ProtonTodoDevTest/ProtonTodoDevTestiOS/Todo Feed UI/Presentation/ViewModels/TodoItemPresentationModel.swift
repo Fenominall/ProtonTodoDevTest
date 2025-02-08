@@ -8,7 +8,7 @@
 import Foundation
 import ProtonTodoDevTest
 
-public struct TodoItemViewModel: Identifiable, Hashable {
+public struct TodoItemPresentationModel: Identifiable, Hashable {
     public let id: UUID
     public let title: String
     public let description: String
@@ -47,10 +47,10 @@ public struct TodoItemViewModel: Identifiable, Hashable {
     
     // MARK: - Helpers
     var createdAtString: String {
-        iso8601FormattedString(from: createdAt)
+        createdAt.iso8601FormattedString(from: createdAt)
     }
     
     var dueDateString: String {
-        iso8601FormattedString(from: dueDate)
+        dueDate.iso8601FormattedString(from: dueDate)
     }
 }

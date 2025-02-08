@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct TaskRowView: View {
-    @Binding var task: TodoItemViewModel
+    @Binding var task: TodoItemPresentationModel
+    var onCompletionStatusChange: (UUID, Bool) -> Void
     
     private let vSpacing: CGFloat = 5
     private let hSpacing: CGFloat = 5
