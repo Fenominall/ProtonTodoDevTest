@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DownloadImageButton: View {
+struct DownloadImageButtonView: View {
     private let action: () -> Void
     
     init(action: @escaping () -> Void) {

@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct TaskDetailImageView: View {
-    let imageData: Data
+    let imageData: Data?
     
     var body: some View {
-        if let uiImage = UIImage(data: imageData) {
+        if let data = imageData, !data.isEmpty ,let uiImage = UIImage(data: data) {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFit()

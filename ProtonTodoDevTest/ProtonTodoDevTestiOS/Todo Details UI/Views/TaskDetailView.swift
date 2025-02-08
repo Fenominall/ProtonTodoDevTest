@@ -18,10 +18,9 @@ public struct TaskDetailView: View {
         VStack(alignment: .center) {
             Spacer()
             
-            if let imageData = viewModel.receivedImageData, !imageData.isEmpty {
-                TaskDetailImageView(imageData: imageData)
+            if viewModel.isImageDownloaded {
+                TaskDetailImageView(imageData: viewModel.receivedImageData)
             }
-
             VStack(alignment: .leading, spacing: 5) {
                 TaskTitleDescriptionView(title: viewModel.title, description: viewModel.description)
                 InfoRowView(label: "Created", timestamp: viewModel.createdAt)
@@ -30,9 +29,8 @@ public struct TaskDetailView: View {
             
             Spacer()
             
-            // If the image is not downloaded, show the "Download Image" button
             if !viewModel.isImageDownloaded {
-                DownloadImageButton(action: viewModel.downloadImage)
+                DownloadImageButtonView(action: viewModel.downloadImage)
             }
         }
         // Center everything within the available space
@@ -41,4 +39,5 @@ public struct TaskDetailView: View {
 }
 
 #Preview {
+    TaskDetailView(viewModel: TodoItemDetailViewModel(task: TodoItemPresentationModel(id: UUID(), title: "A title", description: "A description", completed: true, createdAt: Date.now, dueDate: Date.now, imageURL: nil)))
 }
