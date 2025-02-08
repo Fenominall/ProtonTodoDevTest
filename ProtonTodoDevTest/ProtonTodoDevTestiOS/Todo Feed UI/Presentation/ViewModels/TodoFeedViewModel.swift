@@ -75,7 +75,7 @@ public final class TodoFeedViewModel: ObservableObject {
 }
 
 extension Array where Element == TodoItem {
-    public func mapToViewModel() -> [TodoItemPresentationModel] {
+    func mapToViewRepresentationModel() -> [TodoItemPresentationModel] {
         return map {
             TodoItemPresentationModel(from: $0)
         }
