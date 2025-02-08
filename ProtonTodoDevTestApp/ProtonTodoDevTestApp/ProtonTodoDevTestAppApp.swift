@@ -46,27 +46,24 @@ struct ProtonTodoDevTestAppApp: App {
     
     // MARK: - Helpers
     private func makeAllTasksView() -> AnyView {
-        return AnyView(
-            TaskListViewComposer
-                .composedViewWith(
-                    title: "All Tasks",
-                    feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                    imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                    selection: { _ in }
-                )
-        )
+        return AnyView(TaskListViewComposer
+            .composedViewWith(
+                title: "All Tasks",
+                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
+                todoItemSaveable: localTodoFeedManager,
+                selection: { _ in
+                }))
     }
     
     private func makeUpcomingTasksView() -> AnyView {
-        return AnyView(
-            TaskListViewComposer
-                .composedViewWith(
-                    title: "Upcoming Tasks",
-                    feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                    imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                    selection: { _ in }
-                )
-        )
+        return AnyView(TaskListViewComposer
+            .composedViewWith(
+                title: "Upcoming Tasks",
+                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
+                todoItemSaveable: localTodoFeedManager, selection: { _ in
+                }))
     }
     
     // Trying to load the image data from the local storage if not succes using httpclient to download the files by the url

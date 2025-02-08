@@ -34,8 +34,11 @@ struct TaskRowView: View {
                 }
                 .padding(.bottom, bottomPadding)
                 
-                TaskRowCompletionToggle(isCompleted: $task.completed)
-                TaskRowSeparator()
+                TaskRowCompletionToggle(
+                    isCompleted: $task.completed,
+                    onCompletionStatusChange: { newStatus in
+                        onCompletionStatusChange(task.id, newStatus)
+                    })
             }
         }
     }

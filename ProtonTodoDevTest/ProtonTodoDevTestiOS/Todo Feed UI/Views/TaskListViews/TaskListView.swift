@@ -28,11 +28,14 @@ public struct TaskListView: View {
                         Button {
                             viewModel.selectItem(with: task.id)
                         } label: {
-                            TaskRowView(task: $task)
+                            TaskRowView(
+                                task: $task,
+                                onCompletionStatusChange: viewModel.updateTodoStatus
+                            )
                         }
-
+                        
                     }
-                    .listRowSeparator(.hidden)
+                    .listRowSeparator(.visible)
                 }
             }
             .padding(.horizontal, 35)
