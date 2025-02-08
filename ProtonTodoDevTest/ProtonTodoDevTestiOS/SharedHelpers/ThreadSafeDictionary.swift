@@ -7,25 +7,16 @@
 
 import Foundation
 
-final class ThreadSafeDictionary<Key: Hashable, Value> {
+actor ThreadSafeDictionary<Key: Hashable, Value> {
     
     private var dictionary = [Key: Value]()
-    private var queue = DispatchQueue(label: "swift.threadSafeDictionary.com", attributes: .concurrent)
     
     subscript(key: Key) -> Value? {
-        get {
-            var value: Value?
-            queue.sync {
-                value = dictionary[key]
-            }
-            return value
-        }
-        set(newValue) {
-            // ThreadSafeArray owns the queue, and the queue does not outlive ThreadSafeArray
-            // Weak self not needed
-            queue.async(flags:. barrier) {
-                self.dictionary[key] = newValue
-            }
-        }
+        get { dictionary[key] }
+        set { dictionary[key] = newValue }
+    }
+    
+    func setValue(_ value: Value, forKey key: Key) {
+        dictionary[key] = value
     }
 }

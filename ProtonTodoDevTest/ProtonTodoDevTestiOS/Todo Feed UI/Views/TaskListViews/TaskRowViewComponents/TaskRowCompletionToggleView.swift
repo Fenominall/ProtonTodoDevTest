@@ -9,15 +9,17 @@ import SwiftUI
 
 struct TaskRowCompletionToggleView: View {
     @Binding var isCompleted: Bool
-    var onCompletionStatusChange: (Bool) -> Void
+    var onCompletionStatusChange: (Bool) async -> Void
     
     var body: some View {
         
         HStack {
             Toggle("Done", isOn: $isCompleted)
-                .onChange(of: isCompleted, { _, newValue in
-                    onCompletionStatusChange(newValue)
-                })
+                .onChange(of: isCompleted) { _, newValue in
+                    Task {
+                        await onCompletionStatusChange(newValue)
+                    }
+                }
         }
     }
 }

@@ -38,13 +38,13 @@ public final class TodoFeedViewModel: ObservableObject {
             return }
         
         isLoading = true
-        // Task Captures self Weakly by Default in SwiftUI
-        // When you create a Task inside an ObservableObject, it doesn’t strongly retain self.
+        
         Task {
             do {
                 let items = try await loadFeed()
+                await addOrUpdateTasks(items)
+                
                 await MainActor.run {
-                    addOrUpdateTasks(items)
                     self.tasks = items.mapToViewRepresentationModel()
                     self.isLoading = false
                 }
@@ -57,33 +57,33 @@ public final class TodoFeedViewModel: ObservableObject {
         }
     }
     
-    private func addOrUpdateTasks(_ tasks: [TodoItem]) {
-        for task in tasks where originalItemsDictionary[task.id] == nil {
-            let currentCount = originalItems.count
-            originalItems.append(task)
-            originalItemsDictionary[task.id] = currentCount
+    private func addOrUpdateTasks(_ tasks: [TodoItem]) async {
+        for task in tasks where await originalItemsDictionary[task.id] == nil {
+            let currentCount = await originalItems.count
+            await originalItems.append(task)
+            await originalItemsDictionary.setValue(currentCount, forKey: task.id)
         }
         
         for task in tasks {
-            if let index = originalItemsDictionary[task.id] {
-                originalItems.update(at: index, with: task)
+            if let index = await originalItemsDictionary[task.id] {
+                await originalItems.update(at: index, with: task)
             }
         }
     }
     
-    func selectItem(with id: UUID) {
-        if let index = originalItemsDictionary[id],
-           let item = originalItems.get(at: index) {
+    func selectItem(with id: UUID) async {
+        if let index = await originalItemsDictionary[id],
+           let item = await originalItems.get(at: index) {
             selection(item)
         }
     }
     
-    func updateTodoStatus(withID id: UUID, isCompleted status: Bool) {
-        if let index = originalItemsDictionary[id],
-           var item = originalItems.get(at: index) {
+    func updateTodoStatus(withID id: UUID, isCompleted status: Bool) async {
+        if let index = await originalItemsDictionary[id],
+           var item = await originalItems.get(at: index) {
             
             item.completed = status
-            addOrUpdateTasks([item])
+            await addOrUpdateTasks([item])
             
             todoStatusChaged(item)
         }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TaskRowView: View {
     @Binding var task: TodoItemPresentationModel
-    var onCompletionStatusChange: (UUID, Bool) -> Void
+    var onCompletionStatusChange: (UUID, Bool) async -> Void
     
     private let vSpacing: CGFloat = 5
     private let hSpacing: CGFloat = 5
@@ -37,7 +37,7 @@ struct TaskRowView: View {
                 TaskRowCompletionToggleView(
                     isCompleted: $task.completed,
                     onCompletionStatusChange: { newStatus in
-                        onCompletionStatusChange(task.id, newStatus)
+                        await onCompletionStatusChange(task.id, newStatus)
                     })
             }
         }
