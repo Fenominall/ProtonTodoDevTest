@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TaskDetailView: View {
+public struct TodoItemkDetailView: View {
     @ObservedObject private var viewModel: TodoItemDetailViewModel
     
     public init(viewModel: TodoItemDetailViewModel) {
@@ -18,8 +18,8 @@ public struct TaskDetailView: View {
         VStack(alignment: .center) {
             Spacer()
             
-            if viewModel.isImageDownloaded {
-                TaskDetailImageView(imageData: viewModel.receivedImageData)
+            if viewModel.isImageLoading {
+                TodoDetailImageView(imageData: viewModel.imageData)
             }
             VStack(alignment: .leading, spacing: 5) {
                 TaskTitleDescriptionView(title: viewModel.title, description: viewModel.description)
@@ -29,28 +29,11 @@ public struct TaskDetailView: View {
             
             Spacer()
             
-            if !viewModel.isImageDownloaded {
+            if !viewModel.isImageLoading {
                 DownloadImageButtonView(action: viewModel.downloadImage)
             }
         }
         // Center everything within the available space
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-}
-
-#Preview {
-    TaskDetailView(
-        viewModel: TodoItemDetailViewModel(
-            task: TodoItemPresentationModel(
-                id: UUID(),
-                title: "A title",
-                description: "A description",
-                completed: true,
-                createdAt: Date.now,
-                dueDate: Date.now,
-                imageURL: URL(string: "https://any.com")!,
-                imageData: Data()
-            )
-        )
-    )
 }

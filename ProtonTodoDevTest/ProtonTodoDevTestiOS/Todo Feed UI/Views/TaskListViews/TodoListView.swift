@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public struct TaskListView: View {
+public struct TodoListView: View {
     private let navigationTitle: String
     @StateObject private var viewModel: TodoFeedViewModel
     public let taskRowView: (TodoItemPresentationModel) -> TaskRowView

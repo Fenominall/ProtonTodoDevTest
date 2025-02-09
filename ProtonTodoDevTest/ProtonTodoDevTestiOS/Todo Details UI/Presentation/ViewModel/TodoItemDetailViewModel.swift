@@ -7,18 +7,25 @@
 
 import Foundation
 import Combine
+import ProtonTodoDevTest
 
 public final class TodoItemDetailViewModel: ObservableObject {
-    private let task: TodoItemPresentationModel
-    @Published var receivedImageData: Data?
-    @Published var isImageDownloaded: Bool = false
+    private let task: TodoItem
+    private let imageLoad: () async throws -> Data?
+    
+    @Published var imageData: Data?
+    @Published var isImageLoading: Bool = false
+    @Published var imageLoadingError: String?
     
     // MARK: - Init
-    public init(task: TodoItemPresentationModel) {
+    public init(task: TodoItem,
+                imageLoad: @escaping () async throws -> Data?
+    ) {
         self.task = task
-        receivedImageData = task.imageData
+        self.imageLoad = imageLoad
     }
     
+    // MARK: - Helpers
     var title: String {
         task.title
     }
@@ -26,22 +33,34 @@ public final class TodoItemDetailViewModel: ObservableObject {
     var description: String {
         task.description
     }
-    
-    private var imageData: Data? {
-        task.imageData
-    }
-    
+        
     var createdAt: String {
-        task.createdAtString
+        task.createdAt.iso8601FormattedString(from: task.createdAt)
     }
     
     var dueDate: String {
-        task.dueDateString
+        task.dueDate.iso8601FormattedString(from: task.dueDate)
     }
     
-    // MARK: - Helpers
-    func downloadImage() {
-        // TODO
-        isImageDownloaded = true
+    // MARK: - Actions
+    func downloadImage() async {
+        guard !isImageLoading else { return }
+        
+        isImageLoading = true
+        
+        Task {
+            do {
+                let imageData = try await imageLoad()
+                await MainActor.run {                    
+                    self.isImageLoading = false
+                    self.imageData = imageData
+                }
+            } catch {
+                await MainActor.run {
+                    self.isImageLoading = false
+                    self.imageLoadingError = error.localizedDescription
+                }
+            }
+        }
     }
 }

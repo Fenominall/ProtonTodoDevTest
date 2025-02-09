@@ -7,16 +7,18 @@
 
 import SwiftUI
 
-struct DownloadImageButtonView: View {
-    private let action: () -> Void
+struct TododownloadImageButtonView: View {
+    private let action: () async -> Void
     
-    init(action: @escaping () -> Void) {
+    init(action: @escaping () async -> Void) {
         self.action = action
     }
     
     var body: some View {
         Button {
-            action()
+            Task {
+                await action()
+            }
         } label: {
             Text("Download Image")
                 .padding(.vertical, 10)

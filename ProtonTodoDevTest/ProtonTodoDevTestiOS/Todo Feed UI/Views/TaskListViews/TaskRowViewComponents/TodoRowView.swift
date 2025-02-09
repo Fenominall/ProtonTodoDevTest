@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TaskRowView: View {
+public struct TodoRowView: View {
     @StateObject private var viewModel: TaskRowViewModel
     
     public init(viewModel: TaskRowViewModel) {
