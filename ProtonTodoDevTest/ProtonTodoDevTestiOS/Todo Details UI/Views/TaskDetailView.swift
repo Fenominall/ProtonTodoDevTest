@@ -48,7 +48,7 @@ public struct TaskDetailView: View {
                 completed: true,
                 createdAt: Date.now,
                 dueDate: Date.now,
-                imageURL: URL(string: "")!,
+                imageURL: URL(string: "https://any.com")!,
                 imageData: Data()
             )
         )
