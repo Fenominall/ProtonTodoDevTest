@@ -94,7 +94,8 @@ extension TodoImageLoader {
                         promise(.success(data))
                     } catch {
                         promise(.failure(error))
-                    }            }
+                    }
+                }
             }
         }
         .eraseToAnyPublisher()
