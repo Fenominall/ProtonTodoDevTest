@@ -22,22 +22,22 @@ public struct TodoRowView: View {
         HStack {
             VStack(alignment: .leading) {
                 HStack(alignment: .top, spacing: hSpacing) {
-                    TaskRowImageView(imageData: viewModel.publishedTask.imageData)
+                    TodoRowImageView(imageData: viewModel.publishedTask.imageData)
                     
                     VStack(alignment: .leading, spacing: vSpacing) {
-                        TaskTitleDescriptionView(
+                        TodoTitleDescriptionView(
                             title: viewModel.publishedTask.title,
                             description: viewModel.publishedTask.description
                         )
                         
-                        TaskRowInfoVIew(
+                        TodoRowInfoVIew(
                             createdAt: viewModel.publishedTask.createdAtString,
                             dueDate: viewModel.publishedTask.dueDateString)
                     }
                 }
                 .padding(.bottom, bottomPadding)
                 
-                TaskRowCompletionToggleView(
+                TodoRowCompletionToggleView(
                     isCompleted: $viewModel.publishedTask.completed,
                     onCompletionStatusChange: viewModel.updateTodoStatus)
             }

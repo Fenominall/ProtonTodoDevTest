@@ -10,7 +10,7 @@ import Combine
 import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
 
-final class TaskListViewComposer {
+final class TodoListViewComposer {
     private init() {}
     
     private typealias LoadFeedPresentationAdapter = LoadResourcePresentationAdapter<[TodoItem]>
@@ -23,19 +23,19 @@ final class TaskListViewComposer {
         todoItemSaveable: TodoItemSaveable,
         tasksFilter: @escaping ([TodoItem]) -> [TodoItem],
         selection: @escaping (TodoItem) -> Void
-    ) -> TaskListView {
+    ) -> TodoListView {
         let adapter = LoadFeedPresentationAdapter(loader: feedLoader)
         let viewModel = TodoFeedViewModel(
             loadFeed: adapter.load, taskFilter: tasksFilter,
             selection: selection)
         
-        let view = TaskListView(
+        let view = TodoListView(
             navigationTitle: title,
             viewModel: viewModel,
             taskRowView: { createTaskRow(with: $0) }
         )
         
-        func createTaskRow(with task: TodoItemPresentationModel) -> TaskRowView {
+        func createTaskRow(with task: TodoItemPresentationModel) -> TodoRowView {
             let imageLoadingAdapter = ImageDataLoadingPresentationAdapter(loader: { [imageLoader] in
                 imageLoader(task.imageURL)
             })
@@ -45,7 +45,7 @@ final class TaskListViewComposer {
                 taskToUpdate: { task in
                     todoItemSaveable.cachingItem(task.toModel())
                 })
-            return TaskRowView(viewModel: viewModel)
+            return TodoRowView(viewModel: viewModel)
         }
         
         return view

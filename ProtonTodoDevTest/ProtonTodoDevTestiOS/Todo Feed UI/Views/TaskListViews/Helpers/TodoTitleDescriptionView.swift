@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TaskTitleDescriptionView: View {
+struct TodoTitleDescriptionView: View {
     let title: String
     let description: String
 

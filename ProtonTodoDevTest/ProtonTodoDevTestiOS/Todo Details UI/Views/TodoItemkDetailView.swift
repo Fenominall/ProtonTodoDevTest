@@ -22,7 +22,7 @@ public struct TodoItemkDetailView: View {
                 TodoDetailImageView(imageData: viewModel.imageData)
             }
             VStack(alignment: .leading, spacing: 5) {
-                TaskTitleDescriptionView(title: viewModel.title, description: viewModel.description)
+                TodoTitleDescriptionView(title: viewModel.title, description: viewModel.description)
                 InfoRowView(label: "Created", timestamp: viewModel.createdAt)
                 InfoRowView(label: "Due", timestamp: viewModel.dueDate)
             }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TaskRowInfoVIew: View {
+struct TodoRowInfoVIew: View {
     let createdAt: String
     let dueDate: String
     

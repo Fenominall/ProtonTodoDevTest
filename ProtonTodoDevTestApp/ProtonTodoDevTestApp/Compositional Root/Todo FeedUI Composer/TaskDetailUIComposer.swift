@@ -10,7 +10,7 @@ import Combine
 import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
 
-final class TaskDetailViewComposer {
+final class TodoDetailViewComposer {
     private init() {}
     
     private typealias ImageDataLoadingPresentationAdapter = LoadResourcePresentationAdapter<Data>

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TaskRowCompletionToggleView: View {
+struct TodoRowCompletionToggleView: View {
     @Binding var isCompleted: Bool
     var onCompletionStatusChange: (Bool) async -> Void
     

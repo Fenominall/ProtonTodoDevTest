@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TaskRowImageView: View {
+struct TodoRowImageView: View {
     let imageData: Data?
     private let iconSize: CGFloat = 50
     

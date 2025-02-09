@@ -57,7 +57,7 @@ struct ProtonTodoDevTestAppApp: App {
     
     // MARK: - Helpers
     private func makeAllTasksView() -> AnyView {
-        return AnyView(TaskListViewComposer
+        return AnyView(TodoListViewComposer
             .composedViewWith(
                 title: "All Tasks",
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
@@ -68,7 +68,7 @@ struct ProtonTodoDevTestAppApp: App {
     }
     
     private func makeUpcomingTasksView() -> AnyView {
-        return AnyView(TaskListViewComposer
+        return AnyView(TodoListViewComposer
             .composedViewWith(
                 title: "Upcoming Tasks",
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
