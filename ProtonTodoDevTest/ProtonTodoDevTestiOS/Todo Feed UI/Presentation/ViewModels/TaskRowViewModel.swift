@@ -11,7 +11,6 @@ import Combine
 
 public final class TaskRowViewModel: ObservableObject {
     @Published var task: TodoItemPresentationModel
-    @Published var imageData: Data?
     private let loadImageData: () async throws -> Data?
     
     public init(
@@ -29,11 +28,12 @@ public final class TaskRowViewModel: ObservableObject {
                 self.task.imageData = imageLoadResult
             }
         } catch {
-            
+            // TODO
         }
     }
     
     func updateTodoStatus(isCompleted status: Bool) async {
+        // TODO
         task.completed = status
     }
 }
