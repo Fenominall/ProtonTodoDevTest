@@ -17,6 +17,17 @@ struct ProtonTodoDevTestAppApp: App {
             session: URLSession(configuration: .ephemeral))
     }()
     
+    private let scheduler: DispatchQueue = {
+        return DispatchQueue(label: "com.fenominall.infra.queue",
+                                   qos: .userInitiated,
+                                   attributes: .concurrent)
+    }()
+    
+    private let mockHttpClient: HTTPClient = {
+        let mockData = Data(mockJSONString.utf8)
+        return MockHTTPClient(data: mockData, statusCode: 200)
+    }()
+    
     private let store: TodoFeedStore & TodoFeedImageStore = {
         do {
             return try CoreDataFeedStore(storeURL: CoreDataFeedStore.storeURL)
@@ -69,18 +80,17 @@ struct ProtonTodoDevTestAppApp: App {
     // Trying to load the image data from the local storage if not succes using httpclient to download the files by the url
     private func makeRemoteFeedImageDataLoaderWithLocalFallback(url: URL) -> TodoImageLoader.Publisher {
         let localimageLoader = LocalTodoImageCachingManager(imageStore: store)
-        
         return localimageLoader
             .loadImageDataPublisher(from: url)
-            .fallback { [httpClient] in
+            .fallback { [httpClient, scheduler] in
                 httpClient
                     .getPublisher(from: url)
                     .tryMap(TodoImageDataMapper.map)
                     .caching(to: localimageLoader, using: url)
-                    .subscribe(on: DispatchQueue.main)
+                    .subscribe(on: scheduler)
                     .eraseToAnyPublisher()
             }
-            .subscribe(on: DispatchQueue.main)
+            .subscribe(on: scheduler)
             .eraseToAnyPublisher()
     }
     
@@ -88,13 +98,13 @@ struct ProtonTodoDevTestAppApp: App {
         return makeRemoteFeedLoader()
             .caching(to: localTodoFeedManager)
             .fallback(to: localTodoFeedManager.loadPublisher)
-            .subscribe(on: DispatchQueue.main)
+            .subscribe(on: scheduler)
             .eraseToAnyPublisher()
         
     }
     
     private func makeRemoteFeedLoader() -> AnyPublisher<[TodoItem], Error> {
-        return httpClient
+        return mockHttpClient
             .getPublisher(from: baseURL)
             .tryMap(TodoFeedItemsMapper.map)
             .eraseToAnyPublisher()
