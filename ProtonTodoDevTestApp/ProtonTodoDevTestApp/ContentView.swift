@@ -33,7 +33,7 @@ struct ContentView: View {
             upcomingTasksView
                 .tabItem {
                     Label(
-                        "All Tasks",
+                        "Upcoming Tasks",
                         systemImage: AppImageConsntants.calendar.rawValue
                     )
                 }
