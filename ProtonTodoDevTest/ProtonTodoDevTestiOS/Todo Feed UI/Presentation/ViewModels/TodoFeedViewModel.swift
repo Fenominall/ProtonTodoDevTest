@@ -45,13 +45,13 @@ public final class TodoFeedViewModel: ObservableObject {
                 await addOrUpdateTasks(items)
                 let filteredTasks = await filterTasks(with: items)
                 await MainActor.run {
-                    self.tasks = filteredTasks.mapToViewRepresentationModel()
                     self.isLoading = false
+                    self.tasks = filteredTasks.mapToViewRepresentationModel()
                 }
             } catch {
                 await MainActor.run {
-                    self.error = error.localizedDescription
                     self.isLoading = false
+                    self.error = error.localizedDescription
                 }
             }
         }
