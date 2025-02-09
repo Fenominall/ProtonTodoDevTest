@@ -38,7 +38,12 @@ final class TaskListViewComposer {
             let imageLoadingAdapter = ImageDataLoadingPresentationAdapter(loader: { [imageLoader] in
                 imageLoader(task.imageURL)
             })
-            let viewModel = TaskRowViewModel(task: task, loadImageData: imageLoadingAdapter.load)
+            let viewModel = TaskRowViewModel(
+                receivedTask: task,
+                loadImageData: imageLoadingAdapter.load,
+                taskToUpdate: { task in
+                    todoItemSaveable.cachingItem(task.toModel())
+                })
             return TaskRowView(viewModel: viewModel)
         }
         
@@ -46,10 +51,24 @@ final class TaskListViewComposer {
     }
 }
 
-extension TodoItemSaveable {
+private extension TodoItemSaveable {
     func cachingItem(_ item: TodoItem) {
         Task  {
             try await save(item)
         }
+    }
+}
+
+private extension TodoItemPresentationModel {
+    func toModel() -> TodoItem {
+        TodoItem(
+            id: id,
+            title: title,
+            description: description,
+            completed: completed,
+            createdAt: createdAt,
+            dueDate: createdAt,
+            imageURL: imageURL
+        )
     }
 }

@@ -10,22 +10,27 @@ import ProtonTodoDevTest
 import Combine
 
 public final class TaskRowViewModel: ObservableObject {
-    @Published var task: TodoItemPresentationModel
+    @Published var publishedTask: TodoItemPresentationModel
+    private var receivedTask: TodoItemPresentationModel
     private let loadImageData: () async throws -> Data?
+    private let taskToUpdate: (TodoItemPresentationModel) -> Void
     
     public init(
-        task: TodoItemPresentationModel,
-        loadImageData: @escaping () async throws -> Data?
+        receivedTask: TodoItemPresentationModel,
+        loadImageData: @escaping () async throws -> Data?,
+        taskToUpdate: @escaping (TodoItemPresentationModel) -> Void
     ) {
-        self.task = task
+        self.publishedTask = receivedTask
+        self.receivedTask = receivedTask
         self.loadImageData = loadImageData
+        self.taskToUpdate = taskToUpdate
     }
     
     func loadImageData() async {
         do {
             let imageLoadResult = try await loadImageData()
             await MainActor.run {
-                self.task.imageData = imageLoadResult
+                self.publishedTask.imageData = imageLoadResult
             }
         } catch {
             // TODO
@@ -33,7 +38,9 @@ public final class TaskRowViewModel: ObservableObject {
     }
     
     func updateTodoStatus(isCompleted status: Bool) async {
-        // TODO
-        task.completed = status
+        Task {
+            receivedTask.completed = status
+            taskToUpdate(receivedTask)
+        }
     }
 }
