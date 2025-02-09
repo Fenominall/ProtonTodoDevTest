@@ -39,5 +39,18 @@ public struct TaskDetailView: View {
 }
 
 #Preview {
-    TaskDetailView(viewModel: TodoItemDetailViewModel(task: TodoItemPresentationModel(id: UUID(), title: "A title", description: "A description", completed: true, createdAt: Date.now, dueDate: Date.now, imageURL: URL(string: "")!, imageData: Data())))
+    TaskDetailView(
+        viewModel: TodoItemDetailViewModel(
+            task: TodoItemPresentationModel(
+                id: UUID(),
+                title: "A title",
+                description: "A description",
+                completed: true,
+                createdAt: Date.now,
+                dueDate: Date.now,
+                imageURL: URL(string: "")!,
+                imageData: Data()
+            )
+        )
+    )
 }
