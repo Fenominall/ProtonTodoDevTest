@@ -62,7 +62,7 @@ struct ProtonTodoDevTestAppApp: App {
                 title: "All Tasks",
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
                 imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                todoItemSaveable: localTodoFeedManager,
+                todoItemSaveable: localTodoFeedManager, tasksFilter: { $0 },
                 selection: { _ in
                 }))
     }
@@ -73,7 +73,9 @@ struct ProtonTodoDevTestAppApp: App {
                 title: "Upcoming Tasks",
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
                 imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                todoItemSaveable: localTodoFeedManager, selection: { _ in
+                todoItemSaveable: localTodoFeedManager,
+                tasksFilter: { $0.filter { !$0.completed } },
+                selection: { _ in
                 }))
     }
     

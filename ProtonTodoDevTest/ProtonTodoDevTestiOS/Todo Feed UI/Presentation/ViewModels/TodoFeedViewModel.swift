@@ -16,6 +16,7 @@ public final class TodoFeedViewModel: ObservableObject {
     @Published var error: String?
     
     private let loadFeed: () async throws -> [TodoItem]
+    private let tasksFilter: ([TodoItem]) -> [TodoItem]
     private let selection: (TodoItem) -> Void
     
     private var originalItems = ThreadSafeArray<TodoItem>()
@@ -23,9 +24,11 @@ public final class TodoFeedViewModel: ObservableObject {
     
     // MARK: - Initializer
     public init(loadFeed: @escaping () async throws -> [TodoItem],
+                taskFilter: @escaping ([TodoItem]) -> [TodoItem],
                 selection: @escaping (TodoItem) -> Void
     ) {
         self.loadFeed = loadFeed
+        self.tasksFilter = taskFilter
         self.selection = selection
     }
     
@@ -40,9 +43,9 @@ public final class TodoFeedViewModel: ObservableObject {
             do {
                 let items = try await loadFeed()
                 await addOrUpdateTasks(items)
-                
+                let filteredTasks = await filterTasks(with: items)
                 await MainActor.run {
-                    self.tasks = items.mapToViewRepresentationModel()
+                    self.tasks = filteredTasks.mapToViewRepresentationModel()
                     self.isLoading = false
                 }
             } catch {
@@ -66,6 +69,10 @@ public final class TodoFeedViewModel: ObservableObject {
                 await originalItems.update(at: index, with: task)
             }
         }
+    }
+    
+    private func filterTasks(with tasks: [TodoItem]) async -> [TodoItem] {
+        tasksFilter(tasks)
     }
     
     func selectItem(with id: UUID) async {

@@ -21,11 +21,12 @@ final class TaskListViewComposer {
         feedLoader: @escaping () -> AnyPublisher<[TodoItem], Error>,
         imageLoader: @escaping (URL) -> TodoImageLoader.Publisher,
         todoItemSaveable: TodoItemSaveable,
+        tasksFilter: @escaping ([TodoItem]) -> [TodoItem],
         selection: @escaping (TodoItem) -> Void
     ) -> TaskListView {
         let adapter = LoadFeedPresentationAdapter(loader: feedLoader)
         let viewModel = TodoFeedViewModel(
-            loadFeed: adapter.load,
+            loadFeed: adapter.load, taskFilter: tasksFilter,
             selection: selection)
         
         let view = TaskListView(
