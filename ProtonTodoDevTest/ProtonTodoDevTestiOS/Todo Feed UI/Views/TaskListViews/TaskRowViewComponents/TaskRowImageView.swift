@@ -15,6 +15,8 @@ struct TaskRowImageView: View {
         Group {
             if let data = imageData, !data.isEmpty {
                 AsyncImageView(imageData: data)
+                    .aspectRatio(contentMode: .fill)
+                    .clipped()
             } else {
                 Rectangle()
                     .foregroundStyle(.gray)
