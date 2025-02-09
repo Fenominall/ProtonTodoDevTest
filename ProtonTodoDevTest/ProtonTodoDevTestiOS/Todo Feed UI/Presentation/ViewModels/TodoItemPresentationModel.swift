@@ -13,8 +13,8 @@ public struct TodoItemPresentationModel: Identifiable, Hashable {
     public let title: String
     public let description: String
     public var completed: Bool
-    private let createdAt: Date
-    private let dueDate: Date
+    public let createdAt: Date
+    public let dueDate: Date
     public let imageURL: URL
     public var imageData: Data?
     
