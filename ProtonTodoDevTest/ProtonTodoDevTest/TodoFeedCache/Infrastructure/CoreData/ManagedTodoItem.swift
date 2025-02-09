@@ -12,11 +12,11 @@ import CoreData
 @objc(ManagedTodoItem)
 final class ManagedTodoItem: NSManagedObject {
     @NSManaged var id: UUID
-    @NSManaged var title: String
-    @NSManaged var todoDescription: String
-    @NSManaged var completed: Bool
-    @NSManaged var createdAt: Date
-    @NSManaged var dueDate: Date
+    @NSManaged var title: Data?
+    @NSManaged var todoDescription: Data?
+    @NSManaged var completed: Data?
+    @NSManaged var createdAt: Data?
+    @NSManaged var dueDate: Data?
     @NSManaged var imageURL: URL
     @NSManaged var data: Data?
     @NSManaged var cache: ManagedCache
@@ -27,13 +27,33 @@ extension ManagedTodoItem {
     var local: LocalTodoItem {
         LocalTodoItem(
             id: id,
-            title: title,
-            description: todoDescription,
-            completed: completed,
-            createdAt: createdAt,
-            dueDate: dueDate,
+            title: encryptedTitle(),
+            description: encryptedDescription(),
+            completed: encryptedCompleted(),
+            createdAt: encryptedCreatedDate(),
+            dueDate: encryptedDueDate(),
             imageURL: imageURL
         )
+    }
+    
+    private func encryptedTitle() -> String {
+        return (ManagedTodoItem.decryptTodoItemString(title ?? Data())) ?? ""
+    }
+    
+    private func encryptedDescription() -> String {
+        return (ManagedTodoItem.decryptTodoItemString(todoDescription ?? Data())) ?? ""
+    }
+    
+    private func encryptedCompleted() -> Bool {
+        return (ManagedTodoItem.decryptTodoItemBool(completed ?? Data())) ?? false
+    }
+    
+    private func encryptedCreatedDate() -> Date {
+        return (ManagedTodoItem.decryptTodoItemDate(createdAt ?? Data())) ?? Date()
+    }
+    
+    private func encryptedDueDate() -> Date {
+        return (ManagedTodoItem.decryptTodoItemDate(dueDate ?? Data())) ?? Date()
     }
 }
 
@@ -70,11 +90,11 @@ extension ManagedTodoItem {
         return  localTasks.map { local in
             let managedTodo = ManagedTodoItem(context: context)
             managedTodo.id = local.id
-            managedTodo.title = local.title
-            managedTodo.todoDescription = local.description
-            managedTodo.completed = local.completed
-            managedTodo.createdAt = local.createdAt
-            managedTodo.dueDate = local.dueDate
+            managedTodo.title = ManagedTodoItem.encryptTodoItemString(local.title)
+            managedTodo.todoDescription = ManagedTodoItem.encryptTodoItemString(local.description)
+            managedTodo.completed = ManagedTodoItem.encryptTodoItemBool(local.completed)
+            managedTodo.createdAt = ManagedTodoItem.encryptTodoItemDate(local.createdAt)
+            managedTodo.dueDate = ManagedTodoItem.encryptTodoItemDate(local.dueDate)
             managedTodo.imageURL = local.imageURL
             
             return managedTodo
@@ -89,11 +109,11 @@ extension ManagedTodoItem {
         with task: LocalTodoItem
     ) {
         managedTodo.id = task.id
-        managedTodo.title = task.title
-        managedTodo.todoDescription = task.description
-        managedTodo.completed = task.completed
-        managedTodo.createdAt = task.createdAt
-        managedTodo.dueDate = task.dueDate
+        managedTodo.title = ManagedTodoItem.encryptTodoItemString(task.title)
+        managedTodo.todoDescription = ManagedTodoItem.encryptTodoItemString(task.description)
+        managedTodo.completed = ManagedTodoItem.encryptTodoItemBool(task.completed)
+        managedTodo.createdAt = ManagedTodoItem.encryptTodoItemDate(task.createdAt)
+        managedTodo.dueDate = ManagedTodoItem.encryptTodoItemDate(task.dueDate)
         managedTodo.imageURL = task.imageURL
     }
 }
