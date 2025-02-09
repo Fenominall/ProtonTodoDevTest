@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TododownloadImageButtonView: View {
+struct TodoDownloadImageButtonView: View {
     private let action: () async -> Void
     
     init(action: @escaping () async -> Void) {
