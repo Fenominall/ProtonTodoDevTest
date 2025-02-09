@@ -77,11 +77,6 @@ extension ManagedTodoItem {
             managedTodo.dueDate = local.dueDate
             managedTodo.imageURL = local.imageURL
             
-            // Perfomance optization
-            // If context.userInfo[local.imageURL] contains image data (Data), it is assigned to managedTodo.data.
-            // If context.userInfo[local.imageURL] is nil (i.e., the image data isn’t available in memory), managedTodo.data remains nil.
-            managedTodo.data = try? ManagedTodoItem.data(with: local.imageURL, in: context)
-            
             return managedTodo
         }
     }

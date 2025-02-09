@@ -39,16 +39,22 @@ public final class TodoFeedItemsMapper {
     
     private enum Error: Swift.Error {
         case invalidResponse
+        case invalidData
     }
     
-    private static let decoder = JSONDecoder()
+    private static let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
     
     public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [TodoItem] {
         guard response.isStatusOK else {
             throw Error.invalidResponse
         }
-        let root = try decoder.decode(Root.self, from: data)
-        
+        guard let root = try? decoder.decode(Root.self, from: data) else {
+            throw Error.invalidData
+        }
         return root.items
     }
 }
