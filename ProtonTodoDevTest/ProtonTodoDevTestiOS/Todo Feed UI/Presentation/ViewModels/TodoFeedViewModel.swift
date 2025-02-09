@@ -17,19 +17,16 @@ public final class TodoFeedViewModel: ObservableObject {
     
     private let loadFeed: () async throws -> [TodoItem]
     private let selection: (TodoItem) -> Void
-    private let todoStatusChaged: (TodoItem) -> Void
     
     private var originalItems = ThreadSafeArray<TodoItem>()
     private var originalItemsDictionary = ThreadSafeDictionary<UUID, Int>()
     
     // MARK: - Initializer
     public init(loadFeed: @escaping () async throws -> [TodoItem],
-                selection: @escaping (TodoItem) -> Void,
-                todoStatusChaged: @escaping (TodoItem) -> Void
+                selection: @escaping (TodoItem) -> Void
     ) {
         self.loadFeed = loadFeed
         self.selection = selection
-        self.todoStatusChaged = todoStatusChaged
     }
     
     // MARK: - Actions
@@ -75,17 +72,6 @@ public final class TodoFeedViewModel: ObservableObject {
         if let index = await originalItemsDictionary[id],
            let item = await originalItems.get(at: index) {
             selection(item)
-        }
-    }
-    
-    func updateTodoStatus(withID id: UUID, isCompleted status: Bool) async {
-        if let index = await originalItemsDictionary[id],
-           var item = await originalItems.get(at: index) {
-            
-            item.completed = status
-            await addOrUpdateTasks([item])
-            
-            todoStatusChaged(item)
         }
     }
 }

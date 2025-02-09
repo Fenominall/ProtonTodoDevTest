@@ -10,12 +10,17 @@ import SwiftUI
 
 public struct TaskListView: View {
     private let navigationTitle: String
-    @ObservedObject private var viewModel: TodoFeedViewModel
+    @StateObject private var viewModel: TodoFeedViewModel
+    public let taskRowView: (TodoItemPresentationModel) -> TaskRowView
     
-    
-    public init(navigationTitle: String, viewModel: TodoFeedViewModel) {
+    public init(
+        navigationTitle: String,
+        viewModel: TodoFeedViewModel,
+        taskRowView: @escaping (TodoItemPresentationModel) -> TaskRowView
+    ) {
         self.navigationTitle = navigationTitle
-        self.viewModel = viewModel
+        _viewModel = StateObject(wrappedValue: viewModel)
+        self.taskRowView = taskRowView
     }
     
     public var body: some View {
@@ -30,10 +35,7 @@ public struct TaskListView: View {
                                 await viewModel.selectItem(with: task.id)
                             }
                         } label: {
-                            TaskRowView(
-                                task: $task,
-                                onCompletionStatusChange: viewModel.updateTodoStatus
-                            )
+                            taskRowView(task)
                         }
                         
                     }

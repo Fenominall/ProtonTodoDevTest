@@ -7,39 +7,44 @@
 
 import SwiftUI
 
-struct TaskRowView: View {
-    @Binding var task: TodoItemPresentationModel
-    var onCompletionStatusChange: (UUID, Bool) async -> Void
+public struct TaskRowView: View {
+    @StateObject private var viewModel: TaskRowViewModel
+    
+    public init(viewModel: TaskRowViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     private let vSpacing: CGFloat = 5
     private let hSpacing: CGFloat = 5
     private let bottomPadding: CGFloat = 15
     
-    var body: some View {
+    public var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 HStack(alignment: .top, spacing: hSpacing) {
-                    TaskRowImageView(imageData: Data())
+                    TaskRowImageView(imageData: viewModel.task.imageData)
                     
                     VStack(alignment: .leading, spacing: vSpacing) {
                         TaskTitleDescriptionView(
-                            title: task.title,
-                            description: task.description
+                            title: viewModel.task.title,
+                            description: viewModel.task.description
                         )
                         
                         TaskRowInfoVIew(
-                            createdAt: task.createdAtString,
-                            dueDate: task.dueDateString)
+                            createdAt: viewModel.task.createdAtString,
+                            dueDate: viewModel.task.dueDateString)
                     }
                 }
                 .padding(.bottom, bottomPadding)
                 
                 TaskRowCompletionToggleView(
-                    isCompleted: $task.completed,
-                    onCompletionStatusChange: { newStatus in
-                        await onCompletionStatusChange(task.id, newStatus)
+                    isCompleted: $viewModel.task.completed,
+                    onCompletionStatusChange: { _ in
                     })
             }
+        }
+        .task {
+            await viewModel.loadImageData()
         }
     }
 }

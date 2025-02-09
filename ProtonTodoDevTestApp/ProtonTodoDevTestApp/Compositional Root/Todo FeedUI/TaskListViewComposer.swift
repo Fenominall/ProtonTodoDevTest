@@ -13,28 +13,35 @@ import ProtonTodoDevTestiOS
 final class TaskListViewComposer {
     private init() {}
     
-    private typealias LoadFeedAdapter = LoadResourcePresentationAdapter<[TodoItem]>
+    private typealias LoadFeedPresentationAdapter = LoadResourcePresentationAdapter<[TodoItem]>
+    private typealias ImageDataLoadingPresentationAdapter = LoadResourcePresentationAdapter<Data>
     
     static func composedViewWith(
         title: String,
         feedLoader: @escaping () -> AnyPublisher<[TodoItem], Error>,
-        imageLoader: @escaping (URL) -> AnyPublisher<Data, Error>,
+        imageLoader: @escaping (URL) -> TodoImageLoader.Publisher,
         todoItemSaveable: TodoItemSaveable,
         selection: @escaping (TodoItem) -> Void
     ) -> TaskListView {
-        let adapter = LoadFeedAdapter(loader: feedLoader)
+        let adapter = LoadFeedPresentationAdapter(loader: feedLoader)
         let viewModel = TodoFeedViewModel(
             loadFeed: adapter.load,
-            selection: selection,
-            todoStatusChaged: {
-                todoItemSaveable.cachingItem($0)
-            }
-        )
+            selection: selection)
         
         let view = TaskListView(
             navigationTitle: title,
-            viewModel: viewModel
+            viewModel: viewModel,
+            taskRowView: { createTaskRow(with: $0) }
         )
+        
+        func createTaskRow(with task: TodoItemPresentationModel) -> TaskRowView {
+            let imageLoadingAdapter = ImageDataLoadingPresentationAdapter(loader: { [imageLoader] in
+                imageLoader(task.imageURL)
+            })
+            let viewModel = TaskRowViewModel(task: task, loadImageData: imageLoadingAdapter.load)
+            return TaskRowView(viewModel: viewModel)
+        }
+        
         return view
     }
 }
