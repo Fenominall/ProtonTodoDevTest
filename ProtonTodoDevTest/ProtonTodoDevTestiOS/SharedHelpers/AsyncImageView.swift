@@ -17,8 +17,6 @@ struct AsyncImageView: View {
             if let uiImage {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .clipped()
             } else {
                 ProgressView()
                     .onAppear {
