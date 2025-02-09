@@ -30,10 +30,9 @@ public struct TodoItemkDetailView: View {
             Spacer()
             
             if !viewModel.isImageLoading {
-                DownloadImageButtonView(action: viewModel.downloadImage)
+                TodoDownloadImageButtonView(action: viewModel.downloadImage)
             }
         }
-        // Center everything within the available space
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
