@@ -25,11 +25,11 @@ public struct TodoListView: View {
     public init(
         navigationTitle: String,
         viewModel: TodoFeedViewModel,
-        taskRowView: @escaping (TodoItemPresentationModel) -> TodoRowView
+        todoRowView: @escaping (TodoItemPresentationModel) -> TodoRowView
     ) {
         self.navigationTitle = navigationTitle
         _viewModel = StateObject(wrappedValue: viewModel)
-        self.todoRowView = taskRowView
+        self.todoRowView = todoRowView
     }
     
     public var body: some View {

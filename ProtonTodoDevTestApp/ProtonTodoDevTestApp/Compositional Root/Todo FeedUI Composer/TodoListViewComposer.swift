@@ -32,7 +32,7 @@ final class TodoListViewComposer {
         let view = TodoListView(
             navigationTitle: title,
             viewModel: viewModel,
-            taskRowView: { createTaskRow(with: $0) }
+            todoRowView: { createTaskRow(with: $0) }
         )
         
         func createTaskRow(with task: TodoItemPresentationModel) -> TodoRowView {
