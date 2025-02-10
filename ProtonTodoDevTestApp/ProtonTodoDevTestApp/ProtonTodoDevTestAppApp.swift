@@ -19,8 +19,8 @@ struct ProtonTodoDevTestAppApp: App {
     
     private let scheduler: DispatchQueue = {
         return DispatchQueue(label: "com.fenominall.infra.queue",
-                                   qos: .userInitiated,
-                                   attributes: .concurrent)
+                             qos: .userInitiated,
+                             attributes: .concurrent)
     }()
     
     private let mockHttpClient: HTTPClient = {
@@ -63,8 +63,7 @@ struct ProtonTodoDevTestAppApp: App {
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
                 imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
                 todoItemSaveable: localTodoFeedManager, tasksFilter: { $0 },
-                selection: { _ in
-                }))
+                selection: { _ in }))
     }
     
     private func makeUpcomingTasksView() -> AnyView {
@@ -75,8 +74,15 @@ struct ProtonTodoDevTestAppApp: App {
                 imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
                 todoItemSaveable: localTodoFeedManager,
                 tasksFilter: { $0.filter { !$0.completed } },
-                selection: { _ in
-                }))
+                selection: { _ in }))
+    }
+    
+    private func makeTodoTedailView(for item: TodoItem) -> AnyView {
+        return AnyView(
+            TodoDetailViewComposer.composedViewWith(
+                item: item,
+                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback)
+        )
     }
     
     // Trying to load the image data from the local storage if not succes using httpclient to download the files by the url
@@ -102,7 +108,6 @@ struct ProtonTodoDevTestAppApp: App {
             .fallback(to: localTodoFeedManager.loadPublisher)
             .subscribe(on: scheduler)
             .eraseToAnyPublisher()
-        
     }
     
     private func makeRemoteFeedLoader() -> AnyPublisher<[TodoItem], Error> {
