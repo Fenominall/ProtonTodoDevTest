@@ -9,13 +9,14 @@ import SwiftUI
 
 struct TodoRowImageView: View {
     let imageData: Data?
-    private let iconSize: CGFloat = 50
+    private let iconSize: CGFloat = 70
     
     var body: some View {
         Group {
             if let data = imageData, !data.isEmpty {
                 AsyncImageView(imageData: data)
                     .aspectRatio(contentMode: .fill)
+                    .frame(width: iconSize, height: iconSize)
                     .clipped()
             } else {
                 Rectangle()
