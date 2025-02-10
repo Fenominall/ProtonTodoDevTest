@@ -6,13 +6,17 @@
 //
 
 import SwiftUI
+import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
 
 struct ContentView: View {
     private let allTasksView: AnyView
     private let upcomingTasksView: AnyView
     
-    init(allTasksView: AnyView, upcomingTasksView: AnyView) {
+    init(
+        allTasksView: AnyView,
+        upcomingTasksView: AnyView
+    ) {
         self.allTasksView = allTasksView
         self.upcomingTasksView = upcomingTasksView
     }
@@ -20,7 +24,6 @@ struct ContentView: View {
     var body: some View {
         Text("Proton Test")
             .font(.largeTitle)
-        
         TabView {
             allTasksView
                 .tabItem {
@@ -42,5 +45,8 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(allTasksView: AnyView(EmptyView()), upcomingTasksView: AnyView(EmptyView()))
+    ContentView(
+        allTasksView: AnyView(EmptyView()),
+        upcomingTasksView: AnyView(EmptyView())
+    )
 }
