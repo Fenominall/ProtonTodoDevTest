@@ -9,6 +9,13 @@ import Foundation
 import CryptoKit
 import Security
 
+enum CryptoManagerError: Error {
+    case encryptionFailed
+    case decryptionFailed
+    case invalidData
+    case keyGenerationFailed
+}
+
 class CryptoManager {
     
     // MARK: - Keychain Secure Storage
