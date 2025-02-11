@@ -26,8 +26,10 @@ final class TodoListViewComposer {
     ) -> TodoListView {
         let adapter = LoadFeedPresentationAdapter(loader: feedLoader)
         let viewModel = TodoFeedViewModel(
-            loadFeed: adapter.load, taskFilter: tasksFilter,
-            selection: selection)
+            loadFeed: adapter.load,
+            taskFilter: tasksFilter,
+            selection: selection
+        )
         
         let view = TodoListView(
             navigationTitle: title,
