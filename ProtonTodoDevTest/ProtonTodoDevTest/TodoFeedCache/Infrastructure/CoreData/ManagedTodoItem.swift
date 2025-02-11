@@ -21,13 +21,20 @@ final class ManagedTodoItem: NSManagedObject {
     @NSManaged var data: Data?
     @NSManaged var cache: ManagedCache
     
-    @NSManaged var dependencies: Set<ManagedTodoDependency>?
+    @NSManaged var dependentTasks: NSOrderedSet?
 }
 
 // MARK: - Local Representation
 extension ManagedTodoItem {
     var local: LocalTodoItem {
-        LocalTodoItem(
+        var dependenciesIDs: [UUID] = []
+        
+        if let dependenciesSet = dependentTasks,
+           let dependenciesArray = dependenciesSet.array as? [ManagedTodoDependency] {
+            dependenciesIDs = dependenciesArray.compactMap { $0.id }
+        }
+        
+        return LocalTodoItem(
             id: id,
             title: decryptedTitle(),
             description: decryptedDescription(),
@@ -35,7 +42,7 @@ extension ManagedTodoItem {
             createdAt: decryptedCreatedDate(),
             dueDate: decryptedDueDate(),
             imageURL: imageURL,
-            dependencies: []
+            dependencies: dependenciesIDs
         )
     }
     
@@ -46,7 +53,7 @@ extension ManagedTodoItem {
     private func decryptedDescription() -> String {
         return (ManagedTodoItem.decryptTodoItemString(todoDescription ?? Data())) ?? ""
     }
-        
+    
     private func decryptedCreatedDate() -> Date {
         return (ManagedTodoItem.decryptTodoItemDate(createdAt ?? Data())) ?? Date()
     }
@@ -85,8 +92,9 @@ extension ManagedTodoItem {
         from localTasks: [LocalTodoItem],
         in context: NSManagedObjectContext,
         with cache: ManagedCache
-    ) -> [ManagedTodoItem] {
-        return  localTasks.map { local in
+    ) throws -> [ManagedTodoItem] {
+        return  try localTasks.map { local in
+            print(local.dependencies)
             let managedTodo = ManagedTodoItem(context: context)
             managedTodo.id = local.id
             managedTodo.title = ManagedTodoItem.encryptTodoItemString(local.title)
@@ -95,9 +103,26 @@ extension ManagedTodoItem {
             managedTodo.createdAt = ManagedTodoItem.encryptTodoItemDate(local.createdAt)
             managedTodo.dueDate = ManagedTodoItem.encryptTodoItemDate(local.dueDate)
             managedTodo.imageURL = local.imageURL
+            managedTodo.dependentTasks = try createBatchManagedDependencies(from: local, in: context)
             
             return managedTodo
         }
+    }
+    
+    private static func createBatchManagedDependencies(
+        from localTask: LocalTodoItem,
+        in context: NSManagedObjectContext
+    ) throws -> NSOrderedSet? {
+        let taskDependencies = NSMutableOrderedSet()
+        
+        for localDependencyId in localTask.dependencies {
+            let managedDependency = ManagedTodoDependency(context: context)
+            managedDependency.id = localDependencyId
+            
+            taskDependencies.add(managedDependency)
+        }
+        
+        return taskDependencies.copy() as? NSOrderedSet
     }
 }
 
@@ -105,8 +130,9 @@ extension ManagedTodoItem {
 extension ManagedTodoItem {
     static func update(
         _ managedTodo: ManagedTodoItem,
-        with task: LocalTodoItem
-    ) {
+        with task: LocalTodoItem,
+        in contexnt: NSManagedObjectContext
+    ) throws {
         managedTodo.id = task.id
         managedTodo.title = ManagedTodoItem.encryptTodoItemString(task.title)
         managedTodo.todoDescription = ManagedTodoItem.encryptTodoItemString(task.description)
@@ -114,6 +140,7 @@ extension ManagedTodoItem {
         managedTodo.createdAt = ManagedTodoItem.encryptTodoItemDate(task.createdAt)
         managedTodo.dueDate = ManagedTodoItem.encryptTodoItemDate(task.dueDate)
         managedTodo.imageURL = task.imageURL
+        managedTodo.dependentTasks = try createBatchManagedDependencies(from: task, in: contexnt)
     }
 }
 
