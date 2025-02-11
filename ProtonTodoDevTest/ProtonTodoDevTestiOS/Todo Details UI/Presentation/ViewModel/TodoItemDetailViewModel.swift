@@ -16,7 +16,7 @@ public final class TodoItemDetailViewModel: ObservableObject {
     @Published var imageData: Data?
     @Published var isImageLoading: Bool = false
     @Published var imageLoadingError: String?
-    
+    @Published var showImageLoadingError: Bool = false
     // MARK: - Init
     public init(task: TodoItem,
                 imageLoad: @escaping () async throws -> Data?
@@ -33,7 +33,7 @@ public final class TodoItemDetailViewModel: ObservableObject {
     var description: String {
         task.description
     }
-        
+    
     var createdAt: String {
         task.createdAt.iso8601FormattedString(from: task.createdAt)
     }
@@ -51,14 +51,15 @@ public final class TodoItemDetailViewModel: ObservableObject {
         Task {
             do {
                 let imageData = try await imageLoad()
-                await MainActor.run {                    
+                await MainActor.run {
                     self.isImageLoading = false
                     self.imageData = imageData
                 }
             } catch {
                 await MainActor.run {
                     self.isImageLoading = false
-                    self.imageLoadingError = error.localizedDescription
+                    self.imageLoadingError = "Network Loading Error..."
+                    self.showImageLoadingError = true
                 }
             }
         }

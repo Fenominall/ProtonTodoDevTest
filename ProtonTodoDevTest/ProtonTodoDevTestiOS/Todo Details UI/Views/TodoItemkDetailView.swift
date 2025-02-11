@@ -34,5 +34,12 @@ public struct TodoItemkDetailView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .alert(viewModel.imageLoadingError ?? "Network Error", isPresented: $viewModel.showImageLoadingError) {
+            Button("Retry", role: .cancel) {
+                Task {
+                    await viewModel.downloadImage()
+                }
+            }
+        }
     }
 }
