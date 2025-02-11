@@ -20,6 +20,7 @@ public final class TodoFeedItemsMapper {
             let createdAt: Date
             let dueDate: Date
             let imageURL: URL
+            let dependencies: [UUID]
         }
         
         var items: [TodoItem] {
@@ -31,7 +32,8 @@ public final class TodoFeedItemsMapper {
                     completed: $0.completed,
                     createdAt: $0.createdAt,
                     dueDate: $0.dueDate,
-                    imageURL: $0.imageURL
+                    imageURL: $0.imageURL,
+                    dependencies: $0.dependencies
                 )
             }
         }

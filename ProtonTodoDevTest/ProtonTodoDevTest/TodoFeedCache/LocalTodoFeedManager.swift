@@ -44,7 +44,7 @@ extension LocalTodoFeedManager: TodoItemSaveable {
             createdAt: item.createdAt,
             dueDate: item.dueDate,
             imageURL: item.imageURL,
-            dependencies: <#[UUID]#>
+            dependencies: item.dependencies
         )
     }
 }
@@ -60,7 +60,8 @@ private extension Array where Element == LocalTodoItem {
                 completed: $0.completed,
                 createdAt: $0.createdAt,
                 dueDate: $0.dueDate,
-                imageURL: $0.imageURL
+                imageURL: $0.imageURL,
+                dependencies: $0.dependencies
             )
         }
     }
@@ -77,7 +78,7 @@ private extension Array where Element == TodoItem {
                 createdAt: $0.createdAt,
                 dueDate: $0.dueDate,
                 imageURL: $0.imageURL,
-                dependencies: <#[UUID]#>
+                dependencies: $0.dependencies
             )
         }
     }

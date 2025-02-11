@@ -69,7 +69,8 @@ private extension TodoItemPresentationModel {
             completed: completed,
             createdAt: createdAt,
             dueDate: createdAt,
-            imageURL: imageURL
+            imageURL: imageURL,
+            dependencies: dependencies
         )
     }
 }

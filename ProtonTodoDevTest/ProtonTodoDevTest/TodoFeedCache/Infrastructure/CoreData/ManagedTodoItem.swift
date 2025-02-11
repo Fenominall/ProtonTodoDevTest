@@ -20,6 +20,8 @@ final class ManagedTodoItem: NSManagedObject {
     @NSManaged var imageURL: URL
     @NSManaged var data: Data?
     @NSManaged var cache: ManagedCache
+    
+    @NSManaged var dependencies: Set<ManagedTodoDependency>?
 }
 
 // MARK: - Local Representation
@@ -32,7 +34,8 @@ extension ManagedTodoItem {
             completed: completed,
             createdAt: decryptedCreatedDate(),
             dueDate: decryptedDueDate(),
-            imageURL: imageURL
+            imageURL: imageURL,
+            dependencies: []
         )
     }
     

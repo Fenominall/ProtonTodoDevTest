@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import CoreData
+
+@objc(ManagedTodoDependency)
+final class ManagedTodoDependency: NSManagedObject {
+    @NSManaged var id: UUID
+}

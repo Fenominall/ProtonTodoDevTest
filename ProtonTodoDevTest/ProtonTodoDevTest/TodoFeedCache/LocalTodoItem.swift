@@ -15,7 +15,7 @@ public struct LocalTodoItem: Equatable {
     public let createdAt: Date
     public let dueDate: Date
     public let imageURL: URL
-    private var dependencies: [UUID]
+    public var dependencies: [UUID]
     
     public init(
         id: UUID,
