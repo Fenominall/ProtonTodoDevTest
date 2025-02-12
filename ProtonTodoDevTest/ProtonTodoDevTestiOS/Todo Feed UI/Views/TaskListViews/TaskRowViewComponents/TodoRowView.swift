@@ -11,7 +11,7 @@ public struct TodoRowView: View {
     @StateObject private var viewModel: TaskRowViewModel
     
     public init(viewModel: TaskRowViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     private let vSpacing: CGFloat = 5
@@ -38,8 +38,9 @@ public struct TodoRowView: View {
                 .padding(.bottom, bottomPadding)
                 
                 TodoRowCompletionToggleView(
-                    isCompleted: $viewModel.publishedTask.completed,
-                    onCompletionStatusChange: viewModel.updateTodoStatus)
+                    isCompleted: $viewModel.bindableTask.completed,
+                    onToggle: viewModel.updateTodoStatus
+                )
             }
         }
         .task {

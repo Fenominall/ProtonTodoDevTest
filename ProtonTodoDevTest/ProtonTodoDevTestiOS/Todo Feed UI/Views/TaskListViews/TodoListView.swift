@@ -11,7 +11,7 @@ import SwiftUI
 public struct TodoListView: View {
     private let navigationTitle: String
     @StateObject private var viewModel: TodoFeedViewModel
-    public let todoRowView: (TodoItemPresentationModel) -> TodoRowView
+    public let todoRowView: (Binding<TodoItemPresentationModel>) -> TodoRowView
     
     @State private var error: String?
     private var isShowingError: Binding<Bool> {
@@ -25,7 +25,7 @@ public struct TodoListView: View {
     public init(
         navigationTitle: String,
         viewModel: TodoFeedViewModel,
-        todoRowView: @escaping (TodoItemPresentationModel) -> TodoRowView
+        todoRowView: @escaping (Binding<TodoItemPresentationModel>) -> TodoRowView
     ) {
         self.navigationTitle = navigationTitle
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -44,7 +44,7 @@ public struct TodoListView: View {
                                 await viewModel.selectItem(with: task.id)
                             }
                         } label: {
-                            todoRowView(task)
+                            todoRowView($task)
                         }
                         
                     }

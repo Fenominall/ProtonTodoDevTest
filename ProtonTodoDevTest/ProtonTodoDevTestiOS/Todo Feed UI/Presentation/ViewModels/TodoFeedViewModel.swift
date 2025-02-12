@@ -18,6 +18,8 @@ public final class TodoFeedViewModel: ObservableObject {
     private let loadFeed: () async throws -> [TodoItem]
     private let tasksFilter: ([TodoItem]) -> [TodoItem]
     private let selection: (TodoItem) -> Void
+    private let taskToUpdate: (TodoItem) -> Void
+    
     
     private var originalItems = ThreadSafeArray<TodoItem>()
     private var originalItemsDictionary = ThreadSafeDictionary<UUID, Int>()
@@ -25,14 +27,17 @@ public final class TodoFeedViewModel: ObservableObject {
     // MARK: - Initializer
     public init(loadFeed: @escaping () async throws -> [TodoItem],
                 taskFilter: @escaping ([TodoItem]) -> [TodoItem],
-                selection: @escaping (TodoItem) -> Void
+                selection: @escaping (TodoItem) -> Void,
+                taskToUpdate: @escaping (TodoItem) -> Void
     ) {
         self.loadFeed = loadFeed
         self.tasksFilter = taskFilter
         self.selection = selection
+        self.taskToUpdate = taskToUpdate
     }
     
     // MARK: - Actions
+    /// Loading TodoItems from the API
     func load() {
         guard !isLoading else {
             return }
@@ -75,11 +80,114 @@ public final class TodoFeedViewModel: ObservableObject {
         tasksFilter(tasks)
     }
     
+    /// Used to find a TodoItem by the selected index on order to provide for composing the TodoItemDetailViewComposer
     func selectItem(with id: UUID) async {
-        if let index = await originalItemsDictionary[id],
-           let item = await originalItems.get(at: index) {
-            selection(item)
+        guard let todo = await getTodoItem(byID: id) else { return }
+        selection(todo)
+    }
+    
+    // MARK: - Checking tasks dpendencies for TodoItem status completion
+    public func toggleTaskCompletion(withID id: UUID) async -> Bool {
+        guard var originalTodo = await getTodoItem(byID: id),
+              let todoDTOIndex = await originalItemsDictionary[id] else {
+            return false
         }
+        
+        if originalTodo.completed {
+            return await updateTodoItemsAfterCheckWith(
+                index: todoDTOIndex,
+                for: &originalTodo,
+                boolToReturn: false
+            )
+        } else if await canFinishTask(id: id, in: originalItems) {
+            return await updateTodoItemsAfterCheckWith(
+                index: todoDTOIndex,
+                for: &originalTodo,
+                boolToReturn: true
+            )
+        } else {
+            return await updateTodoItemsAfterCheckWith(
+                index: todoDTOIndex,
+                for: &originalTodo,
+                boolToReturn: false
+            )
+        }
+    }
+    
+    private func updateTodoItemsAfterCheckWith(
+        index: Int,
+        for model: inout TodoItem,
+        boolToReturn: Bool
+    ) async -> Bool {
+        await MainActor.run {
+            tasks[index].completed = boolToReturn
+        }
+        model.completed = boolToReturn
+        await originalItems.update(at: index, with: model)
+        taskToUpdate(model)
+        return boolToReturn
+    }
+    
+    private func canFinishCheckWith(
+        id: UUID,
+        in todos: ThreadSafeArray<TodoItem>,
+        visited: inout Set<UUID>
+    ) async -> Bool {
+        if visited.contains(id) {
+            return false
+        }
+        
+        guard let task = await getTodoItem(byID: id) else {
+            return false
+        }
+        
+        if task.completed {
+            return true
+        }
+        
+        visited.insert(id)
+        
+        for dependencyID in task.dependencies {
+            guard let depTask = await getTodoItem(byID: dependencyID) else {
+                return false
+            }
+            
+            if !depTask.completed {
+                return false
+            }
+            
+            if await !canFinishCheckWith(
+                id: dependencyID,
+                in: todos,
+                visited: &visited
+            ) {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    private func canFinishTask(
+        id: UUID,
+        in todos: ThreadSafeArray<TodoItem>
+    ) async -> Bool {
+        var visited = Set<UUID>()
+        
+        return await canFinishCheckWith(
+            id: id,
+            in: todos,
+            visited: &visited
+        )
+    }
+    
+    private func getTodoItem(byID id: UUID) async -> TodoItem? {
+        guard let index = await originalItemsDictionary[id],
+              let task = await originalItems.get(at: index) else {
+            return nil
+        }
+        
+        return task
     }
 }
 

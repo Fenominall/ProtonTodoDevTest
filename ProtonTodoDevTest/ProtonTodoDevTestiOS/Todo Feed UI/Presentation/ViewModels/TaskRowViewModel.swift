@@ -8,22 +8,23 @@
 import Foundation
 import ProtonTodoDevTest
 import Combine
+import SwiftUI
 
 public final class TaskRowViewModel: ObservableObject {
     @Published var publishedTask: TodoItemPresentationModel
-    private var receivedTask: TodoItemPresentationModel
+    @Binding var bindableTask: TodoItemPresentationModel
     private let loadImageData: () async throws -> Data?
-    private let taskToUpdate: (TodoItemPresentationModel) -> Void
+    private let taskId: (UUID) async -> Bool
     
     public init(
-        receivedTask: TodoItemPresentationModel,
+        receivedTask: Binding<TodoItemPresentationModel>,
         loadImageData: @escaping () async throws -> Data?,
-        taskToUpdate: @escaping (TodoItemPresentationModel) -> Void
+        taskId: @escaping (UUID) async -> Bool
     ) {
-        self.publishedTask = receivedTask
-        self.receivedTask = receivedTask
+        self._bindableTask = receivedTask
+        self._publishedTask = .init(initialValue: receivedTask.wrappedValue)
         self.loadImageData = loadImageData
-        self.taskToUpdate = taskToUpdate
+        self.taskId = taskId
     }
     
     func loadImageData() async {
@@ -37,10 +38,8 @@ public final class TaskRowViewModel: ObservableObject {
         }
     }
     
-    func updateTodoStatus(isCompleted status: Bool) async {
-        Task {
-            receivedTask.completed = status
-            taskToUpdate(receivedTask)
-        }
+    func updateTodoStatus() async -> Bool {
+        let taskIdValue = await MainActor.run { bindableTask.id }
+        return await taskId(taskIdValue)
     }
 }
