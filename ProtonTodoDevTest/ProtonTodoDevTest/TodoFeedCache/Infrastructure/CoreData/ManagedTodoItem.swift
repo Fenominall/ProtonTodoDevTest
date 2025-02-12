@@ -94,7 +94,6 @@ extension ManagedTodoItem {
         with cache: ManagedCache
     ) throws -> [ManagedTodoItem] {
         return  try localTasks.map { local in
-            print(local.dependencies)
             let managedTodo = ManagedTodoItem(context: context)
             managedTodo.id = local.id
             managedTodo.title = ManagedTodoItem.encryptTodoItemString(local.title)
