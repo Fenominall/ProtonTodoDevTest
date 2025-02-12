@@ -25,7 +25,7 @@ let mockJSONString = """
       "id": "660e8400-e29b-41d4-a716-446655440001",
       "title": "Go to the Gym",
       "description": "Workout session at 6 PM",
-      "completed": true,
+      "completed": false,
       "createdAt": "2025-02-05T08:00:00Z",
       "dueDate": "2025-02-07T18:00:00Z",
       "imageURL": "https://s.yimg.com/ny/api/res/1.2/JZqyCklnD.41dRADG.VkAg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD04Mjg7Y2Y9d2VicA--/https://media.zenfs.com/en/afp.co.uk/0d65ca9502dba95e03653a6d345740c6",
