@@ -97,19 +97,19 @@ public final class TodoFeedViewModel: ObservableObject {
             return await updateTodoItemsAfterCheckWith(
                 index: todoDTOIndex,
                 for: &originalTodo,
-                boolToReturn: false
+                isCompleted: false
             )
         } else if await canFinishTask(id: id, in: originalItems) {
             return await updateTodoItemsAfterCheckWith(
                 index: todoDTOIndex,
                 for: &originalTodo,
-                boolToReturn: true
+                isCompleted: true
             )
         } else {
             return await updateTodoItemsAfterCheckWith(
                 index: todoDTOIndex,
                 for: &originalTodo,
-                boolToReturn: false
+                isCompleted: false
             )
         }
     }
@@ -117,15 +117,15 @@ public final class TodoFeedViewModel: ObservableObject {
     private func updateTodoItemsAfterCheckWith(
         index: Int,
         for model: inout TodoItem,
-        boolToReturn: Bool
+        isCompleted: Bool
     ) async -> Bool {
         await MainActor.run {
-            tasks[index].completed = boolToReturn
+            tasks[index].completed = isCompleted
         }
         model.completed = boolToReturn
         await originalItems.update(at: index, with: model)
         taskToUpdate(model)
-        return boolToReturn
+        return isCompleted
     }
     
     private func canFinishCheckWith(
