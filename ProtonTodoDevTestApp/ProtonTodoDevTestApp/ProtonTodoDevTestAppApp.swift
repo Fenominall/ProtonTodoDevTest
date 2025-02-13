@@ -64,16 +64,10 @@ struct ProtonTodoDevTestAppApp: App {
                 imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
                 todoItemSaveable: localTodoFeedManager,
                 tasksFilter: { tasks in
-                    sortTasksAndFilterByPredicate(tasks) { $0.createdAt > $1.createdAt }
+                    TasksFilteringManager
+                        .sortTasksAndFilterByPredicate(tasks) { $0.createdAt > $1.createdAt }
                 },
                 selection: { _ in }))
-    }
-    
-    private func sortTasksAndFilterByPredicate(
-        _ items: [TodoItem],
-        by preicate: (TodoItem, TodoItem) -> Bool
-    ) -> [TodoItem] {
-        return items.sorted(by: preicate)
     }
     
     private func makeUpcomingTasksView() -> AnyView {
@@ -83,61 +77,11 @@ struct ProtonTodoDevTestAppApp: App {
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
                 imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
                 todoItemSaveable: localTodoFeedManager,
-                tasksFilter: filterUpcomingTasksByDependencies,
+                tasksFilter: TasksFilteringManager
+                    .filterUpcomingTasksByDependencies,
                 selection: { _ in }))
     }
-    
-    private func filterUpcomingTasksByDependencies(_ items: [TodoItem]) -> [TodoItem] {
-        var filteredItems: [TodoItem] = []
         
-        for item in items {
-            if !item.completed {
-                filteredItems.append(item)
-            }
-        }
-        
-        var graph: [UUID: [UUID]] = [:]
-        var taskMap: [UUID: TodoItem] = [:]
-        var visiting: Set<UUID> = []
-        var visited: Set<UUID> = []
-        var resultStack = [TodoItem]()
-        
-        for todo in filteredItems {
-            graph[todo.id] = todo.dependencies
-            taskMap[todo.id] = todo
-        }
-        
-        func dfs(_ taskID: UUID) -> Bool {
-            if visiting.contains(taskID) { return false }
-            if visited.contains(taskID) { return true }
-            
-            visiting.insert(taskID)
-            
-            for depID in graph[taskID] ?? [] {
-                if !dfs(depID) { return false }
-            }
-            
-            visiting.remove(taskID)
-            visited.insert(taskID)
-            
-            if let task = taskMap[taskID] {
-                resultStack.append(task)
-            }
-            
-            return true
-        }
-        
-        for taskID in filteredItems {
-            if !visited.contains(taskID.id) {
-                if !dfs(taskID.id) {
-                    return []
-                }
-            }
-        }
-        
-        return resultStack
-    }
-    
     private func makeTodoTedailView(for item: TodoItem) -> AnyView {
         return AnyView(
             TodoDetailViewComposer.composedViewWith(
