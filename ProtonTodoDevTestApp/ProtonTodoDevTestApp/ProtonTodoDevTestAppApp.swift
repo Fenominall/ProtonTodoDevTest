@@ -64,12 +64,12 @@ struct ProtonTodoDevTestAppApp: App {
                 imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
                 todoItemSaveable: localTodoFeedManager,
                 tasksFilter: { tasks in
-                    sortTasksAndFilterByDate(tasks) { $0.createdAt > $1.createdAt }
+                    sortTasksAndFilterByPredicate(tasks) { $0.createdAt > $1.createdAt }
                 },
                 selection: { _ in }))
     }
     
-    private func sortTasksAndFilterByDate(
+    private func sortTasksAndFilterByPredicate(
         _ items: [TodoItem],
         by preicate: (TodoItem, TodoItem) -> Bool
     ) -> [TodoItem] {
