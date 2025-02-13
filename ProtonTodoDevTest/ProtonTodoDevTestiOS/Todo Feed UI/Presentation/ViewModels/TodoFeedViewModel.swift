@@ -189,6 +189,65 @@ public final class TodoFeedViewModel: ObservableObject {
         
         return task
     }
+    
+    private func getListOfNotFinishedDependencies(
+        id: UUID,
+        in todos: ThreadSafeArray<TodoItem>,
+        visited: inout Set<UUID>
+    ) async -> String? {
+        var unfinishedDependencies = Set<String>()
+        
+        if visited.contains(id) {
+            guard let todoToAdd = await getTodoItem(byID: id) else {
+                return nil
+            }
+            unfinishedDependencies.insert(todoToAdd.title)
+            return unfinishedDependencies.joined(separator: ", ")
+        }
+        
+        guard let todo = await getTodoItem(byID: id) else {
+            return nil
+        }
+        
+        visited.insert(id)
+        
+        for dependencyID in todo.dependencies {
+            guard let depTodo = await getTodoItem(byID: dependencyID) else {
+                continue
+            }
+            
+            if !depTodo.completed {
+                unfinishedDependencies.insert(depTodo.title)
+            }
+            
+            if let missingUnfinishedDependencies = await getListOfNotFinishedDependencies(
+                id: dependencyID,
+                in: todos,
+                visited: &visited
+            ), !missingUnfinishedDependencies.isEmpty {
+                unfinishedDependencies
+                    .formUnion(
+                        missingUnfinishedDependencies
+                            .split(separator: ",\n")
+                            .map { String($0) })
+            }
+        }
+        
+        return unfinishedDependencies.isEmpty ? nil : unfinishedDependencies.joined(separator: ",\n ")
+    }
+    
+    private func unfinishedTasks(
+        id: UUID,
+        in todos: ThreadSafeArray<TodoItem>
+    ) async -> String? {
+        var visited = Set<UUID>()
+        
+        return await getListOfNotFinishedDependencies(
+            id: id,
+            in: todos,
+            visited: &visited
+        )
+    }
 }
 
 extension Array where Element == TodoItem {
