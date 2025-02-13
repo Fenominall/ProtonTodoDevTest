@@ -15,7 +15,7 @@ let mockJSONString = """
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "title": "Buy Groceries",
       "description": "Milk, Bread, Eggs, Butter",
-      "completed": false,
+      "completed": true,
       "createdAt": "2025-02-06T12:00:00Z",
       "dueDate": "2025-02-10T12:00:00Z",
       "imageURL": "https://images.ctfassets.net/f7l5sefbt57k/5qtjdCxnDwJ1drPVMkwBpf/410b1e7193b8f488d0d3fe2e5b65a0ce/Default_A_pair_of_hands_their_fingers_dancing_skillfully_acro_1.jpg",

@@ -47,8 +47,8 @@ public final class TodoFeedViewModel: ObservableObject {
         Task {
             do {
                 let items = try await loadFeed()
-                await addOrUpdateTasks(items)
                 let filteredTasks = await filterTasks(with: items)
+                await addOrUpdateTasks(items)
                 await MainActor.run {
                     self.isLoading = false
                     self.tasks = filteredTasks.mapToViewRepresentationModel()
@@ -106,17 +106,13 @@ public final class TodoFeedViewModel: ObservableObject {
                 isCompleted: true
             )
         } else {
-            guard let unfinishedError = await unfinishedTasks(id: id, in: originalItems) else {
+            guard let unfinishedDependenciesError = await unfinishedTasks(id: id, in: originalItems) else {
                 return false
             }
             await MainActor.run {
-                todoFeedError = .unmetDependencies(unfinishedError)
+                todoFeedError = .unmetDependencies(unfinishedDependenciesError)
             }
-            return await updateTodoItemsAfterCheckWith(
-                index: todoDTOIndex,
-                for: &originalTodo,
-                isCompleted: false
-            )
+            return false
         }
     }
     
