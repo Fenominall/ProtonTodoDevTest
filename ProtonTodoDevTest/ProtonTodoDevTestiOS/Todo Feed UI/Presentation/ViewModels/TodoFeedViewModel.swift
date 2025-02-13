@@ -48,7 +48,7 @@ public final class TodoFeedViewModel: ObservableObject {
             do {
                 let items = try await loadFeed()
                 let filteredTasks = await filterTasks(with: items)
-                await addOrUpdateTasks(items)
+                await addOrUpdateTasks(filteredTasks)
                 await MainActor.run {
                     self.isLoading = false
                     self.tasks = filteredTasks.mapToViewRepresentationModel()
