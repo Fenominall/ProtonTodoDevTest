@@ -13,7 +13,7 @@ public final class TodoFeedViewModel: ObservableObject {
     // MARK: - Properties
     @Published var tasks = [TodoItemPresentationModel]()
     @Published var isLoading: Bool = false
-    @Published var error: String?
+    @Published var todoFeedError: TodoFeedError?
     
     private let loadFeed: () async throws -> [TodoItem]
     private let tasksFilter: ([TodoItem]) -> [TodoItem]
@@ -56,7 +56,7 @@ public final class TodoFeedViewModel: ObservableObject {
             } catch {
                 await MainActor.run {
                     self.isLoading = false
-                    self.error = error.localizedDescription
+                    self.todoFeedError = .networkError
                 }
             }
         }
@@ -106,6 +106,12 @@ public final class TodoFeedViewModel: ObservableObject {
                 isCompleted: true
             )
         } else {
+            guard let unfinishedError = await unfinishedTasks(id: id, in: originalItems) else {
+                return false
+            }
+            await MainActor.run {
+                todoFeedError = .unmetDependencies(unfinishedError)
+            }
             return await updateTodoItemsAfterCheckWith(
                 index: todoDTOIndex,
                 for: &originalTodo,
@@ -122,7 +128,7 @@ public final class TodoFeedViewModel: ObservableObject {
         await MainActor.run {
             tasks[index].completed = isCompleted
         }
-        model.completed = boolToReturn
+        model.completed = isCompleted
         await originalItems.update(at: index, with: model)
         taskToUpdate(model)
         return isCompleted
