@@ -7,11 +7,14 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 public struct TodoListView: View {
     private let navigationTitle: String
     @StateObject private var viewModel: TodoFeedViewModel
     public let todoRowView: (Binding<TodoItemPresentationModel>) -> TodoRowView
+    
+    public let taskCountPublisher: AnyPublisher<Int, Never>
     
     public init(
         navigationTitle: String,
@@ -21,6 +24,10 @@ public struct TodoListView: View {
         self.navigationTitle = navigationTitle
         _viewModel = StateObject(wrappedValue: viewModel)
         self.todoRowView = todoRowView
+        
+        taskCountPublisher = viewModel.$tasks
+            .map { $0.count }
+            .eraseToAnyPublisher()
     }
     
     public var body: some View {

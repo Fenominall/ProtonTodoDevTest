@@ -10,15 +10,14 @@ import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
 
 struct ContentView: View {
-    private let allTasksView: AnyView
-    private let upcomingTasksView: AnyView
+    @ObservedObject private var badgeCountViewModel: DashboardViewModel
+    private let allTasksView: TodoListView
+    private let upcomingTasksView: TodoListView
     
-    init(
-        allTasksView: AnyView,
-        upcomingTasksView: AnyView
-    ) {
-        self.allTasksView = allTasksView
-        self.upcomingTasksView = upcomingTasksView
+    init(badgeCountViewModel: DashboardViewModel) {
+        self.badgeCountViewModel = badgeCountViewModel
+        self.allTasksView = badgeCountViewModel.allTasksView
+        self.upcomingTasksView = badgeCountViewModel.upComingTasksView
     }
     
     var body: some View {
@@ -32,6 +31,7 @@ struct ContentView: View {
                         systemImage: AppImageConsntants.house.rawValue
                     )
                 }
+                .badge(badgeCountViewModel.allTaskViewBadge)
             
             upcomingTasksView
                 .tabItem {
@@ -40,13 +40,7 @@ struct ContentView: View {
                         systemImage: AppImageConsntants.calendar.rawValue
                     )
                 }
+                .badge(badgeCountViewModel.upcomingTasksViewBagde)
         }
     }
-}
-
-#Preview {
-    ContentView(
-        allTasksView: AnyView(EmptyView()),
-        upcomingTasksView: AnyView(EmptyView())
-    )
 }

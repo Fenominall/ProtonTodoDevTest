@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ProtonTodoDevTest
+import ProtonTodoDevTestiOS
 import Combine
 
 @main
@@ -49,15 +50,21 @@ struct ProtonTodoDevTestAppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(
-                allTasksView: makeAllTasksView(),
-                upcomingTasksView: makeUpcomingTasksView()
+                badgeCountViewModel: makeDashboardComposerViewModel()
             )
         }
     }
     
     // MARK: - Helpers
-    private func makeAllTasksView() -> AnyView {
-        return AnyView(TodoListViewComposer
+    private func makeDashboardComposerViewModel() -> DashboardViewModel {
+        return DashboardViewModel(
+            allTasksView: makeAllTasksView(),
+            upComingTasksView: makeUpcomingTasksView()
+        )
+    }
+    
+    private func makeAllTasksView() -> TodoListView {
+        return TodoListViewComposer
             .composedViewWith(
                 title: "All Tasks",
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
@@ -67,11 +74,11 @@ struct ProtonTodoDevTestAppApp: App {
                     TasksFilteringManager
                         .sortTasksAndFilterByPredicate(tasks) { $0.createdAt > $1.createdAt }
                 },
-                selection: { _ in }))
+                selection: { _ in })
     }
     
-    private func makeUpcomingTasksView() -> AnyView {
-        return AnyView(TodoListViewComposer
+    private func makeUpcomingTasksView() -> TodoListView {
+        return TodoListViewComposer
             .composedViewWith(
                 title: "Upcoming Tasks",
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
@@ -79,9 +86,9 @@ struct ProtonTodoDevTestAppApp: App {
                 todoItemSaveable: localTodoFeedManager,
                 tasksFilter: TasksFilteringManager
                     .filterUpcomingTasksByDependencies,
-                selection: { _ in }))
+                selection: { _ in })
     }
-        
+    
     private func makeTodoTedailView(for item: TodoItem) -> AnyView {
         return AnyView(
             TodoDetailViewComposer.composedViewWith(
