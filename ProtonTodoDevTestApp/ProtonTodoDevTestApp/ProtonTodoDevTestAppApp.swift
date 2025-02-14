@@ -11,8 +11,7 @@ import ProtonTodoDevTestiOS
 import Combine
 
 @main
-struct ProtonTodoDevTestAppApp: App {
-    
+struct ProtonTodoDevTestAppApp: App {    
     private let httpClient: HTTPClient = {
         URLSessionHTTPClient(
             session: URLSession(configuration: .ephemeral))
@@ -49,54 +48,15 @@ struct ProtonTodoDevTestAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                badgeCountViewModel: makeDashboardComposerViewModel()
+            AppTabView(
+                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
+                todoItemSaveable: localTodoFeedManager
             )
         }
     }
     
     // MARK: - Helpers
-    private func makeDashboardComposerViewModel() -> DashboardViewModel {
-        return DashboardViewModel(
-            allTasksView: makeAllTasksView(),
-            upComingTasksView: makeUpcomingTasksView()
-        )
-    }
-    
-    private func makeAllTasksView() -> TodoListView {
-        return TodoListViewComposer
-            .composedViewWith(
-                title: "All Tasks",
-                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                todoItemSaveable: localTodoFeedManager,
-                tasksFilter: { tasks in
-                    TasksFilteringManager
-                        .sortTasksAndFilterByPredicate(tasks) { $0.createdAt > $1.createdAt }
-                },
-                selection: { _ in })
-    }
-    
-    private func makeUpcomingTasksView() -> TodoListView {
-        return TodoListViewComposer
-            .composedViewWith(
-                title: "Upcoming Tasks",
-                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                todoItemSaveable: localTodoFeedManager,
-                tasksFilter: TasksFilteringManager
-                    .filterUpcomingTasksByDependencies,
-                selection: { _ in })
-    }
-    
-    private func makeTodoTedailView(for item: TodoItem) -> AnyView {
-        return AnyView(
-            TodoDetailViewComposer.composedViewWith(
-                item: item,
-                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback)
-        )
-    }
-    
     // Trying to load the image data from the local storage if not succes using httpclient to download the files by the url
     private func makeRemoteFeedImageDataLoaderWithLocalFallback(url: URL) -> TodoImageLoader.Publisher {
         let localimageLoader = LocalTodoImageCachingManager(imageStore: store)

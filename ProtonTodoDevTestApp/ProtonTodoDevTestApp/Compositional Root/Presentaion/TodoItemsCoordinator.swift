@@ -34,7 +34,9 @@ struct TodoListCoordinator: View {
             todoItemSaveable: dependencies.todoItemSaveable,
             tasksFilter: dependencies.tasksFilter,
             selection: { task in
-                router.navigate(to: TodoListDestination.taskDetails(task: task))
+                Task.detached(priority: .userInitiated) {
+                    await router.navigate(to: TodoListDestination.taskDetails(task: task))
+                }
             }
         )
         .navigationDestination(for: TodoListDestination.self) { destination in

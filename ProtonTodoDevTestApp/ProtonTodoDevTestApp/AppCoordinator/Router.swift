@@ -9,23 +9,32 @@ import SwiftUI
 import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
 
-final class Router: ObservableObject {
-    @Published var navigationPath = NavigationPath()
-    private let detailViewFactory: (TodoItem) -> TodoItemkDetailView
-
-    init(detailViewFactory: @escaping (TodoItem) -> TodoItemkDetailView) {
-        self.detailViewFactory = detailViewFactory
+public final class AnyIdentifiable: Identifiable {
+    public let destination: any Identifiable
+    
+    init(destination: any Identifiable) {
+        self.destination = destination
     }
+}
 
-    func pushDetailView(for item: TodoItem) {
-        navigationPath.append(item)
+@MainActor
+public final class Router: ObservableObject {
+    @Published public var navigationPath = NavigationPath()
+    @Published public var presentedSheet: AnyIdentifiable?
+    
+    public init() {}
+    
+    public func navigate(to destination: any Hashable) {
+        navigationPath.append(destination)
     }
-
-    func goBack() {
-        navigationPath.removeLast()
+    
+    public func navigateBack() {
+        if !navigationPath.isEmpty {
+            navigationPath.removeLast()
+        }
     }
-
-    func goHome() {
+    
+    public func navigateToRoot() {
         navigationPath.removeLast(navigationPath.count)
     }
 }

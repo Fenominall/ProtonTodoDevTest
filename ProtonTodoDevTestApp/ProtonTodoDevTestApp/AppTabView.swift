@@ -11,18 +11,15 @@ import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
 
 struct AppTabView: View {
-    @ObservedObject private var dashboardViewModel: DashboardViewModel
     let feedLoader: () -> AnyPublisher<[TodoItem], Error>
     let imageLoader: (URL) -> TodoImageLoader.Publisher
     let todoItemSaveable: TodoItemSaveable
     
     init(
-        dashboardViewModel: DashboardViewModel,
         feedLoader: @escaping () -> AnyPublisher<[TodoItem], Error>,
         imageLoader: @escaping (URL) -> TodoImageLoader.Publisher,
         todoItemSaveable: TodoItemSaveable
     ) {
-        self.dashboardViewModel = dashboardViewModel
         self.feedLoader = feedLoader
         self.imageLoader = imageLoader
         self.todoItemSaveable = todoItemSaveable
@@ -48,7 +45,6 @@ struct AppTabView: View {
                     systemImage: AppImageConsntants.house.rawValue
                 )
             }
-            .badge(dashboardViewModel.allTaskViewBadge)
             
             TodoTabCoordinator(
                 title: "Upcoming Tasks",
@@ -64,7 +60,6 @@ struct AppTabView: View {
                     systemImage: AppImageConsntants.calendar.rawValue
                 )
             }
-            .badge(dashboardViewModel.upcomingTasksViewBagde)
         }
     }
 }
