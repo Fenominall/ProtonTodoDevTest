@@ -18,7 +18,7 @@ public struct TodoItemDetailView: View {
         VStack(alignment: .center) {
             Spacer()
             
-            if viewModel.isImageLoading {
+            if viewModel.isImageLoading || viewModel.imageData != nil {
                 TodoDetailImageView(imageData: viewModel.imageData)
             }
             VStack(alignment: .leading, spacing: 5) {
@@ -29,7 +29,7 @@ public struct TodoItemDetailView: View {
             
             Spacer()
             
-            if !viewModel.isImageLoading {
+            if viewModel.imageData == nil && !viewModel.isImageLoading {
                 TodoDownloadImageButtonView(action: viewModel.downloadImage)
             }
         }

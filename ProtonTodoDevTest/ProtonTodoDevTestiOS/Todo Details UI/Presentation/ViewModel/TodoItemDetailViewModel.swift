@@ -43,6 +43,7 @@ public final class TodoItemDetailViewModel: ObservableObject {
     }
     
     // MARK: - Actions
+    @MainActor
     func downloadImage() async {
         guard !isImageLoading else { return }
         
@@ -50,17 +51,14 @@ public final class TodoItemDetailViewModel: ObservableObject {
         
         Task {
             do {
-                let imageData = try await imageLoad()
-                await MainActor.run {
-                    self.isImageLoading = false
-                    self.imageData = imageData
-                }
+                let imageData = try await self.imageLoad()
+                self.imageData = imageData
+                self.isImageLoading = false
             } catch {
-                await MainActor.run {
-                    self.isImageLoading = false
-                    self.imageLoadingError = "Network Loading Error..."
-                    self.showImageLoadingError = true
-                }
+                isImageLoading = false
+                imageLoadingError = "Network Loading Error..."
+                showImageLoadingError = true
+                
             }
         }
     }
