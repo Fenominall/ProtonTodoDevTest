@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TodoItemkDetailView: View {
+public struct TodoItemDetailView: View {
     @ObservedObject private var viewModel: TodoItemDetailViewModel
     
     public init(viewModel: TodoItemDetailViewModel) {
