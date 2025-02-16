@@ -10,7 +10,7 @@ import SwiftUI
 struct TodoRowCompletionToggleView: View {
     @Binding var isCompleted: Bool
     @State private var localIsCompleted: Bool
-    var onToggle: () async -> Bool
+    private var onToggle: () async -> Bool
     
     init(
         isCompleted: Binding<Bool>,

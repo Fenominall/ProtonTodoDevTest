@@ -1,16 +1,3 @@
-//
-//  TodoItemsCoordinator.swift
-//  ProtonTodoDevTestApp
-//
-//  Created by Fenominall on 2/14/25.
-//
-
-import Foundation
-import SwiftUI
-import ProtonTodoDevTest
-import ProtonTodoDevTestiOS
-import Combine
-
 enum TodoListDestination: Hashable {
     case taskDetails(task: TodoItem)
 }
@@ -24,6 +11,7 @@ struct TodoListCoordinator: View {
     init(title: String, dependencies: Dependencies) {
         self.title = title
         self.dependencies = dependencies
+        print("CREATED TodoListCoordinator")
     }
     
     var body: some View {

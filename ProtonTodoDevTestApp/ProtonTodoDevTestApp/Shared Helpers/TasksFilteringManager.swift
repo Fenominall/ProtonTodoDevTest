@@ -8,7 +8,7 @@
 import Foundation
 import ProtonTodoDevTest
 
-struct TasksFilteringManager {
+actor TasksFilteringManager {
     
     static func filterUpcomingTasksByDependencies(_ items: [TodoItem]) -> [TodoItem] {
         var filteredItems: [TodoItem] = []

@@ -24,6 +24,9 @@ public final class TodoFeedViewModel: ObservableObject {
     private var originalItems = ThreadSafeArray<TodoItem>()
     private var originalItemsDictionary = ThreadSafeDictionary<UUID, Int>()
     
+    private var originalFilteredItems = ThreadSafeArray<TodoItem>()
+    private var originalFilteredItemsDictionary = ThreadSafeDictionary<UUID, Int>()
+    
     // MARK: - Initializer
     public init(loadFeed: @escaping () async throws -> [TodoItem],
                 taskFilter: @escaping ([TodoItem]) -> [TodoItem],
@@ -34,11 +37,16 @@ public final class TodoFeedViewModel: ObservableObject {
         self.tasksFilter = taskFilter
         self.selection = selection
         self.taskToUpdate = taskToUpdate
+        print("CREATED TodoFeedViewModel")
+        print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
     }
     
     // MARK: - Actions
     /// Loading TodoItems from the API
+    @MainActor
     func load() {
+        print("CALLED LOAD and assigned data to tasks in TodoFeedViewModel")
+        print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
         guard !isLoading else {
             return }
         
@@ -47,31 +55,16 @@ public final class TodoFeedViewModel: ObservableObject {
         Task {
             do {
                 let items = try await loadFeed()
-                let filteredTasks = await filterTasks(with: items)
-                await addOrUpdateTasks(filteredTasks)
-                await MainActor.run {
-                    self.isLoading = false
-                    self.tasks = filteredTasks.mapToViewRepresentationModel()
-                }
+                
+                let updatedOriginalItems = await addOrOriginalUpdateTasks(items)
+                let filteredOriginalItems = await filterTasks(with: updatedOriginalItems)
+                let updatedOriginalFilteredItems = await addOrUpdateOriginalFilteredTasks(filteredOriginalItems)
+                
+                isLoading = false
+                tasks = updatedOriginalFilteredItems.mapToViewRepresentationModel()
             } catch {
-                await MainActor.run {
-                    self.isLoading = false
-                    self.todoFeedError = .networkError
-                }
-            }
-        }
-    }
-    
-    private func addOrUpdateTasks(_ tasks: [TodoItem]) async {
-        for task in tasks where await originalItemsDictionary[task.id] == nil {
-            let currentCount = await originalItems.count
-            await originalItems.append(task)
-            await originalItemsDictionary.setValue(currentCount, forKey: task.id)
-        }
-        
-        for task in tasks {
-            if let index = await originalItemsDictionary[task.id] {
-                await originalItems.update(at: index, with: task)
+                isLoading = false
+                todoFeedError = .networkError
             }
         }
     }
@@ -82,13 +75,19 @@ public final class TodoFeedViewModel: ObservableObject {
     
     /// Used to find a TodoItem by the selected index on order to provide for composing the TodoItemDetailViewComposer
     func selectItem(with id: UUID) async {
-        guard let todo = await getTodoItem(byID: id) else { return }
+        guard let todo = await getOriginalTodoItem(byID: id) else { return }
+        print("Called selectItem in TodoFeedViewModel")
+        print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
         selection(todo)
     }
     
     // MARK: - Checking tasks dpendencies for TodoItem status completion
     public func toggleTaskCompletion(withID id: UUID) async -> Bool {
-        guard var originalTodo = await getTodoItem(byID: id),
+        print("CALLED toggleTaskCompletion method in toggleTaskCompletion")
+        print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
+        await print(originalItemsDictionary.count)
+        await print(originalItems.count)
+        guard var originalTodo = await getOriginalTodoItem(byID: id),
               let todoDTOIndex = await originalItemsDictionary[id] else {
             return false
         }
@@ -121,9 +120,18 @@ public final class TodoFeedViewModel: ObservableObject {
         for model: inout TodoItem,
         isCompleted: Bool
     ) async -> Bool {
-        await MainActor.run {
-            tasks[index].completed = isCompleted
+        // Updating Filtered items array with the DTO array
+        guard var originalFilteredTodo = await getOriginalFilteredTodoItem(byID: model.id),
+              let todoFilteredDTOIndex = await originalFilteredItemsDictionary[model.id] else {
+            return false
         }
+        
+        await MainActor.run {
+            tasks[todoFilteredDTOIndex].completed = isCompleted
+        }
+        originalFilteredTodo.completed = isCompleted
+        
+        // Updating original items and saving changes in the local storage
         model.completed = isCompleted
         await originalItems.update(at: index, with: model)
         taskToUpdate(model)
@@ -139,7 +147,7 @@ public final class TodoFeedViewModel: ObservableObject {
             return false
         }
         
-        guard let task = await getTodoItem(byID: id) else {
+        guard let task = await getOriginalTodoItem(byID: id) else {
             return false
         }
         
@@ -150,7 +158,7 @@ public final class TodoFeedViewModel: ObservableObject {
         visited.insert(id)
         
         for dependencyID in task.dependencies {
-            guard let depTask = await getTodoItem(byID: dependencyID) else {
+            guard let depTask = await getOriginalTodoItem(byID: dependencyID) else {
                 return false
             }
             
@@ -183,13 +191,33 @@ public final class TodoFeedViewModel: ObservableObject {
         )
     }
     
-    private func getTodoItem(byID id: UUID) async -> TodoItem? {
+    private func getTodoItem(
+        byID id: UUID,
+        fromArray array: ThreadSafeArray<TodoItem>,
+        withDictionary dictionary: ThreadSafeDictionary<UUID, Int>
+    ) async -> TodoItem? {
         guard let index = await originalItemsDictionary[id],
               let task = await originalItems.get(at: index) else {
             return nil
         }
         
         return task
+    }
+    
+    private func getOriginalTodoItem(byID id: UUID) async -> TodoItem? {
+        return await getTodoItem(
+            byID: id,
+            fromArray: originalItems,
+            withDictionary: originalItemsDictionary
+        )
+    }
+    
+    private func getOriginalFilteredTodoItem(byID id: UUID) async -> TodoItem? {
+        return await getTodoItem(
+            byID: id,
+            fromArray: originalFilteredItems,
+            withDictionary: originalFilteredItemsDictionary
+        )
     }
     
     private func getListOfNotFinishedDependencies(
@@ -200,21 +228,21 @@ public final class TodoFeedViewModel: ObservableObject {
         var unfinishedDependencies = Set<String>()
         
         if visited.contains(id) {
-            guard let todoToAdd = await getTodoItem(byID: id) else {
+            guard let todoToAdd = await getOriginalTodoItem(byID: id) else {
                 return nil
             }
             unfinishedDependencies.insert(todoToAdd.title)
             return unfinishedDependencies.joined(separator: ", ")
         }
         
-        guard let todo = await getTodoItem(byID: id) else {
+        guard let todo = await getOriginalTodoItem(byID: id) else {
             return nil
         }
         
         visited.insert(id)
         
         for dependencyID in todo.dependencies {
-            guard let depTodo = await getTodoItem(byID: dependencyID) else {
+            guard let depTodo = await getOriginalTodoItem(byID: dependencyID) else {
                 continue
             }
             
@@ -252,6 +280,52 @@ public final class TodoFeedViewModel: ObservableObject {
     }
 }
 
+extension TodoFeedViewModel {
+    private func addOrUpdateTasks(
+        _ tasks: [TodoItem],
+        inArray array: ThreadSafeArray<TodoItem>,
+        withDictionary dictionary: ThreadSafeDictionary<UUID, Int>
+    ) async -> [TodoItem] {
+        for task in tasks where await dictionary[task.id] == nil {
+            let currentCount = await array.count
+            await array.append(task)
+            await dictionary.setValue(currentCount, forKey: task.id)
+        }
+        
+        for task in tasks {
+            if let index = await dictionary[task.id] {
+                await array.update(at: index, with: task)
+            }
+        }
+        
+        let sortedTasks = await array.getAllElements()
+        print("Called addOrUpdateTasks in TodoFeedViewModel")
+        print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
+        print(await originalItems.count)
+        print(await originalItemsDictionary.count)
+        return sortedTasks
+    }
+    
+    private func addOrOriginalUpdateTasks(
+        _ tasks: [TodoItem]
+    ) async -> [TodoItem] {
+        return await addOrUpdateTasks(
+            tasks,
+            inArray: originalItems,
+            withDictionary: originalItemsDictionary
+        )
+    }
+    
+    private func addOrUpdateOriginalFilteredTasks(_ tasks: [TodoItem]) async -> [TodoItem] {
+        return await addOrUpdateTasks(
+            tasks,
+            inArray: originalFilteredItems,
+            withDictionary: originalFilteredItemsDictionary
+        )
+    }
+}
+
+
 extension Array where Element == TodoItem {
     func mapToViewRepresentationModel() -> [TodoItemPresentationModel] {
         return map {
@@ -259,3 +333,4 @@ extension Array where Element == TodoItem {
         }
     }
 }
+
