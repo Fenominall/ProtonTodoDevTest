@@ -11,4 +11,5 @@ public enum AppImageConsntants: String {
     case house = "house"
     case calendar = "calendar"
     case bell = "bell"
+    case refresh = "arrow.clockwise"
 }

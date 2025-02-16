@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct TodoItemkDetailView: View {
+public struct TodoItemDetailView: View {
     @ObservedObject private var viewModel: TodoItemDetailViewModel
     
     public init(viewModel: TodoItemDetailViewModel) {
@@ -18,7 +18,7 @@ public struct TodoItemkDetailView: View {
         VStack(alignment: .center) {
             Spacer()
             
-            if viewModel.isImageLoading {
+            if viewModel.isImageLoading || viewModel.imageData != nil {
                 TodoDetailImageView(imageData: viewModel.imageData)
             }
             VStack(alignment: .leading, spacing: 5) {
@@ -29,10 +29,20 @@ public struct TodoItemkDetailView: View {
             
             Spacer()
             
-            if !viewModel.isImageLoading {
+            if viewModel.imageData == nil && !viewModel.isImageLoading {
                 TodoDownloadImageButtonView(action: viewModel.downloadImage)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .alert(
+            viewModel.imageLoadingError ?? "Network Error",
+            isPresented: $viewModel.showImageLoadingError
+        ) {
+            Button("Retry", role: .cancel) {
+                Task {
+                    await viewModel.downloadImage()
+                }
+            }
+        }
     }
 }

@@ -19,4 +19,8 @@ actor ThreadSafeDictionary<Key: Hashable, Value> {
     func setValue(_ value: Value, forKey key: Key) {
         dictionary[key] = value
     }
+    
+    var count: Int {
+        dictionary.count
+    }
 }

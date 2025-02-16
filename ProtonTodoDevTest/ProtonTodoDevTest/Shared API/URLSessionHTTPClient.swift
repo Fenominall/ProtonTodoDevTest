@@ -14,33 +14,45 @@ public final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
     
-    public enum HTTPClientError: Error {
-        case invalidResponse
-        case connectivity(Error)
-        case serverError(statusCode: Int)
-        case clientError(statusCode: Int)
-    }
-    
-    public func get(from url: URL) async throws -> HTTPResult {
+    public func sendRequest(endpoint: any Endpoint) async throws -> Result<HTTPResult, RequestError> {
+        guard let urlRequest = Request.buildURLRequest(from: endpoint) else {
+            return .failure(.urlMalformed)
+        }
+        
         do {
-            let (data, response) = try await session.data(from: url)
+            let (data, response) = try await session.data(for: urlRequest)
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                throw HTTPClientError.invalidResponse
+                throw RequestError.noResponse
             }
             
-            switch httpResponse.statusCode {
-            case 200..<300:
-                return (data, httpResponse)
-            case 400..<500:
-                throw HTTPClientError.clientError(statusCode: httpResponse.statusCode)
-            case 500..<600:
-                throw HTTPClientError.serverError(statusCode: httpResponse.statusCode)
-            default:
-                throw HTTPClientError.invalidResponse
+            guard 200..<300 ~= httpResponse.statusCode else {
+                throw RequestError(fromHttpStatusCode: httpResponse.statusCode)
             }
+            
+            return .success(data)
         } catch {
-            throw HTTPClientError.connectivity(error)
+            return .failure(handleError(urlRequest, error))
+        }
+    }
+    
+    private func handleError(
+        _ request: URLRequest,
+        _ error: Error
+    ) -> RequestError {
+        if let error = error as? RequestError {
+            return error
+        }
+        let errorCode = (error as NSError).code
+        switch errorCode {
+        case NSURLErrorTimedOut:
+            return RequestError.timeout
+        case NSURLErrorNotConnectedToInternet, NSURLErrorDataNotAllowed:
+            return RequestError.noConnection
+        case NSURLErrorNetworkConnectionLost:
+            return RequestError.lostConnection
+        default:
+            return RequestError.unknown(error.localizedDescription)
         }
     }
 }

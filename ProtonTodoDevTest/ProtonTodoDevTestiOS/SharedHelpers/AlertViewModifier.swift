@@ -9,39 +9,52 @@ import SwiftUI
 
 struct AlertViewModifier: ViewModifier {
     @Binding var isShowingError: Bool
-    let title: String
+    let title: String?
     let buttonTitle: String
     let message: String?
     let action: () -> Void
     
     func body(content: Content) -> some View {
         content
-            .alert(title, isPresented: $isShowingError) {
-                Button(buttonTitle) {
-                    Task {
-                        action()
+            .alert(
+                title ?? "",
+                isPresented: $isShowingError) {
+                    Button(buttonTitle) {
+                        Task {
+                            action()
+                        }
+                    }
+                } message: {
+                    if let message = message {
+                        Text(message)
                     }
                 }
-            } message: {
-                if let message = message {
-                    Text(message)
-                }
-            }
     }
 }
 
 extension View {
-    func alertView(isShowingError: Binding<Bool>,
-                   title: String,
-                   buttonTitle: String,
-                   message: String?,
-                   action: @escaping () -> Void) -> some View {
+    func todoFeedErrorAlert(
+        error: Binding<TodoFeedError?>,
+        retryAction: @escaping () -> Void = {}
+    ) -> some View {
         self.modifier(AlertViewModifier(
-            isShowingError: isShowingError,
-            title: title,
-            buttonTitle: buttonTitle,
-            message: message,
-            action: action)
+            isShowingError: Binding(
+                get: {
+                    error.wrappedValue != nil
+                }, set: { newValue in
+                    if !newValue {
+                        error.wrappedValue = nil
+                    }
+                }),
+            title: error.wrappedValue?.errorDescription,
+            buttonTitle: error.wrappedValue?.buttonTitle ?? "Ok",
+            message: error.wrappedValue?.recoverySuggestion,
+            action: {
+                if error.wrappedValue == .networkError {
+                    retryAction()
+                }
+                error.wrappedValue = nil
+            })
         )
     }
 }

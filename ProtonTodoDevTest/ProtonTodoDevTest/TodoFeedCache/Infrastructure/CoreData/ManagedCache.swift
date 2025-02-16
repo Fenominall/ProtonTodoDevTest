@@ -20,7 +20,8 @@ extension ManagedCache {
         guard let cache = feed.array as? [ManagedTodoItem] else {
             return []
         }
-        return cache.compactMap { $0.local }
+        return cache.compactMap {
+            return $0.local }
     }
 }
 
@@ -82,7 +83,7 @@ extension ManagedCache {
         let existingTasks = feed.mutableCopy() as? NSMutableOrderedSet ?? NSMutableOrderedSet()
         
         // Create new tasks from the provided items
-        let newTasks = ManagedTodoItem.createBatch(from: items, in: context, with: managedCache)
+        let newTasks = try ManagedTodoItem.createBatch(from: items, in: context, with: managedCache)
         
         // Add new tasks to the existing ordered set
         addItemsToCache(existingTasks, newItems: newTasks)
@@ -97,7 +98,6 @@ extension ManagedCache {
     }
     
     private func addItemsToCache(_ existingTasks: NSMutableOrderedSet, newItems: [ManagedTodoItem]) {
-        // Add new items to the existing set in order
         for newItem in newItems {
             existingTasks.add(newItem)
         }
@@ -108,7 +108,7 @@ extension ManagedCache {
             throw CoreDataFeedStoreError.todoNotFound
         }
         
-        ManagedTodoItem.update(managedTodo, with: item)
+        try ManagedTodoItem.update(managedTodo, with: item, in: context)
         
         try context.save()
     }

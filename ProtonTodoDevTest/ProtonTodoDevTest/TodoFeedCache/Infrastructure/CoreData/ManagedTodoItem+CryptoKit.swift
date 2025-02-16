@@ -7,41 +7,66 @@
 
 import Foundation
 
+import Foundation
+
 extension ManagedTodoItem {
+    // Encrypt Data
     static func encryptTodoItemData(_ data: Data) -> Data? {
-        return CryptoManager.encryptData(data)
+        do {
+            return try CryptoManager.encrypt(data)
+        } catch {
+            print("Data Encryption failed: \(error)")
+            return nil
+        }
     }
-    
+
+    // Decrypt Data
     static func decryptTodoItemData(_ data: Data) -> Data? {
-        print(data.description)
-        return CryptoManager.encryptData(data)
+        do {
+            return try CryptoManager.decrypt(data)
+        } catch {
+            print("Data Decryption failed: \(error)")
+            return nil
+        }
     }
-    
-    static func decryptTodoItemData(_ data: Data) -> String? {
-        return CryptoManager.decryptString(data)
-    }
-    
+
+    // Encrypt String
     static func encryptTodoItemString(_ string: String) -> Data? {
-        return CryptoManager.encryptString(string)
+        do {
+            return try CryptoManager.encryptString(string)
+        } catch {
+            print("String Encryption failed: \(error)")
+            return nil
+        }
     }
-    
+
+    // Decrypt String
     static func decryptTodoItemString(_ data: Data) -> String? {
-        return CryptoManager.decryptString(data)
+        do {
+            return try CryptoManager.decryptString(data)
+        } catch {
+            print("String Decryption failed: \(error)")
+            return nil
+        }
     }
-    
+
+    // Encrypt Date
     static func encryptTodoItemDate(_ date: Date) -> Data? {
-        return CryptoManager.encryptDate(date)
+        do {
+            return try CryptoManager.encryptDate(date)
+        } catch {
+            print("Date Encryption failed: \(error)")
+            return nil
+        }
     }
-    
+
+    // Decrypt Date
     static func decryptTodoItemDate(_ data: Data) -> Date? {
-        return CryptoManager.decryptDate(data)
-    }
-    
-    static func encryptTodoItemBool(_ bool: Bool) -> Data? {
-        return CryptoManager.encryptBool(bool)
-    }
-    
-    static func decryptTodoItemBool(_ data: Data) -> Bool? {
-        return CryptoManager.decryptBool(data)
+        do {
+            return try CryptoManager.decryptDate(data)
+        } catch {
+            print("Date Decryption failed: \(error)")
+            return nil
+        }
     }
 }

@@ -7,20 +7,22 @@
 
 import SwiftUI
 import ProtonTodoDevTest
+import ProtonTodoDevTestiOS
 import Combine
 
 @main
-struct ProtonTodoDevTestAppApp: App {
-    
+struct ProtonTodoDevTestAppApp: App {    
     private let httpClient: HTTPClient = {
         URLSessionHTTPClient(
             session: URLSession(configuration: .ephemeral))
     }()
     
+    private let endpoint = MyAPIEndpoint()
+    
     private let scheduler: DispatchQueue = {
         return DispatchQueue(label: "com.fenominall.infra.queue",
-                                   qos: .userInitiated,
-                                   attributes: .concurrent)
+                             qos: .userInitiated,
+                             attributes: .concurrent)
     }()
     
     private let mockHttpClient: HTTPClient = {
@@ -36,9 +38,7 @@ struct ProtonTodoDevTestAppApp: App {
             return NullStore()
         }
     }()
-    
-    private let baseURL = URL(string: "https:/any.com/")!
-    
+        
     private let localTodoFeedManager: LocalTodoFeedManager
     
     // MARK: - Init
@@ -48,37 +48,15 @@ struct ProtonTodoDevTestAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(
-                allTasksView: makeAllTasksView(),
-                upcomingTasksView: makeUpcomingTasksView()
+            AppTabView(
+                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
+                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
+                todoItemSaveable: localTodoFeedManager
             )
         }
     }
     
     // MARK: - Helpers
-    private func makeAllTasksView() -> AnyView {
-        return AnyView(TodoListViewComposer
-            .composedViewWith(
-                title: "All Tasks",
-                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                todoItemSaveable: localTodoFeedManager, tasksFilter: { $0 },
-                selection: { _ in
-                }))
-    }
-    
-    private func makeUpcomingTasksView() -> AnyView {
-        return AnyView(TodoListViewComposer
-            .composedViewWith(
-                title: "Upcoming Tasks",
-                feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
-                todoItemSaveable: localTodoFeedManager,
-                tasksFilter: { $0.filter { !$0.completed } },
-                selection: { _ in
-                }))
-    }
-    
     // Trying to load the image data from the local storage if not succes using httpclient to download the files by the url
     private func makeRemoteFeedImageDataLoaderWithLocalFallback(url: URL) -> TodoImageLoader.Publisher {
         let localimageLoader = LocalTodoImageCachingManager(imageStore: store)
@@ -86,7 +64,7 @@ struct ProtonTodoDevTestAppApp: App {
             .loadImageDataPublisher(from: url)
             .fallback { [httpClient, scheduler] in
                 httpClient
-                    .getPublisher(from: url)
+                    .getPublisher(from: endpoint)
                     .tryMap(TodoImageDataMapper.map)
                     .caching(to: localimageLoader, using: url)
                     .subscribe(on: scheduler)
@@ -102,12 +80,11 @@ struct ProtonTodoDevTestAppApp: App {
             .fallback(to: localTodoFeedManager.loadPublisher)
             .subscribe(on: scheduler)
             .eraseToAnyPublisher()
-        
     }
     
     private func makeRemoteFeedLoader() -> AnyPublisher<[TodoItem], Error> {
         return mockHttpClient
-            .getPublisher(from: baseURL)
+            .getPublisher(from: endpoint)
             .tryMap(TodoFeedItemsMapper.map)
             .eraseToAnyPublisher()
     }

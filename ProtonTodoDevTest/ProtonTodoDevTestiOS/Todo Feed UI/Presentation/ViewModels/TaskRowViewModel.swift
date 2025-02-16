@@ -8,39 +8,39 @@
 import Foundation
 import ProtonTodoDevTest
 import Combine
+import SwiftUI
 
 public final class TaskRowViewModel: ObservableObject {
     @Published var publishedTask: TodoItemPresentationModel
-    private var receivedTask: TodoItemPresentationModel
+    @Binding var bindableTask: TodoItemPresentationModel
+    @Published var isImageLoadFail: Bool = false
     private let loadImageData: () async throws -> Data?
-    private let taskToUpdate: (TodoItemPresentationModel) -> Void
+    private let taskId: (UUID) async -> Bool
     
     public init(
-        receivedTask: TodoItemPresentationModel,
+        receivedTask: Binding<TodoItemPresentationModel>,
         loadImageData: @escaping () async throws -> Data?,
-        taskToUpdate: @escaping (TodoItemPresentationModel) -> Void
+        taskId: @escaping (UUID) async -> Bool
     ) {
-        self.publishedTask = receivedTask
-        self.receivedTask = receivedTask
+        self._bindableTask = receivedTask
+        self._publishedTask = .init(initialValue: receivedTask.wrappedValue)
         self.loadImageData = loadImageData
-        self.taskToUpdate = taskToUpdate
+        self.taskId = taskId
     }
     
+    @MainActor
     func loadImageData() async {
         do {
             let imageLoadResult = try await loadImageData()
-            await MainActor.run {
-                self.publishedTask.imageData = imageLoadResult
-            }
+            isImageLoadFail = false
+            publishedTask.imageData = imageLoadResult
         } catch {
-            // TODO
+            isImageLoadFail = true
         }
     }
     
-    func updateTodoStatus(isCompleted status: Bool) async {
-        Task {
-            receivedTask.completed = status
-            taskToUpdate(receivedTask)
-        }
+    func updateTodoStatus() async -> Bool {
+        let taskIdValue = await MainActor.run { bindableTask.id }
+        return await taskId(taskIdValue)
     }
 }

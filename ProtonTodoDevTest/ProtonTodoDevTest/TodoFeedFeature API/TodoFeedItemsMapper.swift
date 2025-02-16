@@ -7,8 +7,7 @@
 
 import Foundation
 
-public final class TodoFeedItemsMapper {
-    
+public final class TodoFeedItemsMapper {    
     private struct Root: Codable {
         private let tasks: [RemoteTodoItem]
         
@@ -20,6 +19,7 @@ public final class TodoFeedItemsMapper {
             let createdAt: Date
             let dueDate: Date
             let imageURL: URL
+            let dependencies: [UUID]
         }
         
         var items: [TodoItem] {
@@ -31,27 +31,25 @@ public final class TodoFeedItemsMapper {
                     completed: $0.completed,
                     createdAt: $0.createdAt,
                     dueDate: $0.dueDate,
-                    imageURL: $0.imageURL
+                    imageURL: $0.imageURL,
+                    dependencies: $0.dependencies
                 )
             }
         }
     }
     
     private enum Error: Swift.Error {
-        case invalidResponse
         case invalidData
     }
     
     private static let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
     
-    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [TodoItem] {
-        guard response.isStatusOK else {
-            throw Error.invalidResponse
-        }
+    public static func map(_ data: Data) throws -> [TodoItem] {
         guard let root = try? decoder.decode(Root.self, from: data) else {
             throw Error.invalidData
         }
