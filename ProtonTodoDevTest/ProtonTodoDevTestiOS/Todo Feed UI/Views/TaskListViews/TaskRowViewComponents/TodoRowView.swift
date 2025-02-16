@@ -22,7 +22,11 @@ public struct TodoRowView: View {
         HStack {
             VStack(alignment: .leading) {
                 HStack(alignment: .top, spacing: hSpacing) {
-                    TodoRowImageView(imageData: viewModel.publishedTask.imageData)
+                    TodoRowImageView(
+                        imageData: viewModel.publishedTask.imageData,
+                        isImageLoadFail: $viewModel.isImageLoadFail,
+                        onRefresh: viewModel.loadImageData
+                    )
                     
                     VStack(alignment: .leading, spacing: vSpacing) {
                         TodoTitleDescriptionView(

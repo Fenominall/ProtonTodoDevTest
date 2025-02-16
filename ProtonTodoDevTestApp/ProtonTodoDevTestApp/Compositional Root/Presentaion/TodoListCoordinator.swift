@@ -1,3 +1,15 @@
+//
+//  TodoListDestination.swift
+//  ProtonTodoDevTestApp
+//
+//  Created by Fenominall on 2/14/25.
+//
+
+import Foundation
+import SwiftUI
+import ProtonTodoDevTest
+import Combine
+
 enum TodoListDestination: Hashable {
     case taskDetails(task: TodoItem)
 }

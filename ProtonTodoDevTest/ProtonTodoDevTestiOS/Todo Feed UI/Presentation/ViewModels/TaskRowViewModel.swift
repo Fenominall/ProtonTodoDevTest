@@ -13,6 +13,7 @@ import SwiftUI
 public final class TaskRowViewModel: ObservableObject {
     @Published var publishedTask: TodoItemPresentationModel
     @Binding var bindableTask: TodoItemPresentationModel
+    @Published var isImageLoadFail: Bool = false
     private let loadImageData: () async throws -> Data?
     private let taskId: (UUID) async -> Bool
     
@@ -27,14 +28,14 @@ public final class TaskRowViewModel: ObservableObject {
         self.taskId = taskId
     }
     
+    @MainActor
     func loadImageData() async {
         do {
             let imageLoadResult = try await loadImageData()
-            await MainActor.run {
-                self.publishedTask.imageData = imageLoadResult
-            }
+            isImageLoadFail = false
+            publishedTask.imageData = imageLoadResult
         } catch {
-            // TODO
+            isImageLoadFail = true
         }
     }
     
