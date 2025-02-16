@@ -25,6 +25,8 @@ final class TodoListViewComposer {
         tasksFilter: @escaping ([TodoItem]) -> [TodoItem],
         selection: @escaping (TodoItem) -> Void
     ) -> TodoListView {
+        print("CREATED TodoListViewComposer")
+        print("TodoListViewComposer INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
         let adapter = LoadFeedPresentationAdapter(loader: feedLoader)
         let feedViewModel = TodoFeedViewModel(
             loadFeed: adapter.load,

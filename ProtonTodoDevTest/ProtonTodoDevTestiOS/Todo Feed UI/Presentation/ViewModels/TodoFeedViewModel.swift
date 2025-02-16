@@ -40,8 +40,10 @@ public final class TodoFeedViewModel: ObservableObject {
         print("CREATED TodoFeedViewModel")
         print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
     }
-    
-    // MARK: - Actions
+}
+
+// MARK: - Load Feed & Pass Selected Model to Open Todo Detail View
+extension TodoFeedViewModel {
     /// Loading TodoItems from the API
     @MainActor
     func load() {
@@ -69,10 +71,6 @@ public final class TodoFeedViewModel: ObservableObject {
         }
     }
     
-    private func filterTasks(with tasks: [TodoItem]) async -> [TodoItem] {
-        tasksFilter(tasks)
-    }
-    
     /// Used to find a TodoItem by the selected index on order to provide for composing the TodoItemDetailViewComposer
     func selectItem(with id: UUID) async {
         guard let todo = await getOriginalTodoItem(byID: id) else { return }
@@ -80,8 +78,10 @@ public final class TodoFeedViewModel: ObservableObject {
         print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
         selection(todo)
     }
-    
-    // MARK: - Checking tasks dpendencies for TodoItem status completion
+}
+
+// MARK: - Checking tasks dpendencies for TodoItem status completion
+extension TodoFeedViewModel {
     public func toggleTaskCompletion(withID id: UUID) async -> Bool {
         print("CALLED toggleTaskCompletion method in toggleTaskCompletion")
         print("TodoFeedViewModel INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
@@ -137,7 +137,10 @@ public final class TodoFeedViewModel: ObservableObject {
         taskToUpdate(model)
         return isCompleted
     }
-    
+}
+
+// MARK: - Find and check Taask Finished dependencies check algorithm
+extension TodoFeedViewModel {
     private func canFinishCheckWith(
         id: UUID,
         in todos: ThreadSafeArray<TodoItem>,
@@ -190,36 +193,10 @@ public final class TodoFeedViewModel: ObservableObject {
             visited: &visited
         )
     }
-    
-    private func getTodoItem(
-        byID id: UUID,
-        fromArray array: ThreadSafeArray<TodoItem>,
-        withDictionary dictionary: ThreadSafeDictionary<UUID, Int>
-    ) async -> TodoItem? {
-        guard let index = await originalItemsDictionary[id],
-              let task = await originalItems.get(at: index) else {
-            return nil
-        }
-        
-        return task
-    }
-    
-    private func getOriginalTodoItem(byID id: UUID) async -> TodoItem? {
-        return await getTodoItem(
-            byID: id,
-            fromArray: originalItems,
-            withDictionary: originalItemsDictionary
-        )
-    }
-    
-    private func getOriginalFilteredTodoItem(byID id: UUID) async -> TodoItem? {
-        return await getTodoItem(
-            byID: id,
-            fromArray: originalFilteredItems,
-            withDictionary: originalFilteredItemsDictionary
-        )
-    }
-    
+}
+
+// MARK: - Find unfinished todo dependecnies and generate a String of unfinished tasks
+extension TodoFeedViewModel {
     private func getListOfNotFinishedDependencies(
         id: UUID,
         in todos: ThreadSafeArray<TodoItem>,
@@ -280,6 +257,43 @@ public final class TodoFeedViewModel: ObservableObject {
     }
 }
 
+// MARK: - Filtering & Items Look up for Picking a necessaey task
+extension TodoFeedViewModel {
+    private func filterTasks(with tasks: [TodoItem]) async -> [TodoItem] {
+        tasksFilter(tasks)
+    }
+    
+    private func getTodoItem(
+        byID id: UUID,
+        fromArray array: ThreadSafeArray<TodoItem>,
+        withDictionary dictionary: ThreadSafeDictionary<UUID, Int>
+    ) async -> TodoItem? {
+        guard let index = await originalItemsDictionary[id],
+              let task = await originalItems.get(at: index) else {
+            return nil
+        }
+        
+        return task
+    }
+    
+    private func getOriginalTodoItem(byID id: UUID) async -> TodoItem? {
+        return await getTodoItem(
+            byID: id,
+            fromArray: originalItems,
+            withDictionary: originalItemsDictionary
+        )
+    }
+    
+    private func getOriginalFilteredTodoItem(byID id: UUID) async -> TodoItem? {
+        return await getTodoItem(
+            byID: id,
+            fromArray: originalFilteredItems,
+            withDictionary: originalFilteredItemsDictionary
+        )
+    }
+}
+
+// MARK: - Updating Data Source with Feed
 extension TodoFeedViewModel {
     private func addOrUpdateTasks(
         _ tasks: [TodoItem],
@@ -325,7 +339,7 @@ extension TodoFeedViewModel {
     }
 }
 
-
+// MARK: - Transftorming Helper
 extension Array where Element == TodoItem {
     func mapToViewRepresentationModel() -> [TodoItemPresentationModel] {
         return map {
@@ -333,4 +347,3 @@ extension Array where Element == TodoItem {
         }
     }
 }
-

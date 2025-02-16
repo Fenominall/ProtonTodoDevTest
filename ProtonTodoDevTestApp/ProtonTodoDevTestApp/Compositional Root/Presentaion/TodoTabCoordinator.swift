@@ -29,6 +29,7 @@ struct TodoTabCoordinator: View {
         self.imageLoader = imageLoader
         self.todoItemSaveable = todoItemSaveable
         self.tasksFilter = tasksFilter
+        print("CREATED TodoTabCoordinator")
     }
     
     var body: some View {
