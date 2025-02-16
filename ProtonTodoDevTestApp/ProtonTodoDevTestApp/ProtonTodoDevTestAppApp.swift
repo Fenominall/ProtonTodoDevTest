@@ -17,6 +17,8 @@ struct ProtonTodoDevTestAppApp: App {
             session: URLSession(configuration: .ephemeral))
     }()
     
+    private let endpoint = MyAPIEndpoint()
+    
     private let scheduler: DispatchQueue = {
         return DispatchQueue(label: "com.fenominall.infra.queue",
                              qos: .userInitiated,
@@ -36,9 +38,7 @@ struct ProtonTodoDevTestAppApp: App {
             return NullStore()
         }
     }()
-    
-    private let baseURL = URL(string: "https:/any.com/")!
-    
+        
     private let localTodoFeedManager: LocalTodoFeedManager
     
     // MARK: - Init
@@ -64,7 +64,7 @@ struct ProtonTodoDevTestAppApp: App {
             .loadImageDataPublisher(from: url)
             .fallback { [httpClient, scheduler] in
                 httpClient
-                    .getPublisher(from: url)
+                    .getPublisher(from: endpoint)
                     .tryMap(TodoImageDataMapper.map)
                     .caching(to: localimageLoader, using: url)
                     .subscribe(on: scheduler)
@@ -84,7 +84,7 @@ struct ProtonTodoDevTestAppApp: App {
     
     private func makeRemoteFeedLoader() -> AnyPublisher<[TodoItem], Error> {
         return mockHttpClient
-            .getPublisher(from: baseURL)
+            .getPublisher(from: endpoint)
             .tryMap(TodoFeedItemsMapper.map)
             .eraseToAnyPublisher()
     }

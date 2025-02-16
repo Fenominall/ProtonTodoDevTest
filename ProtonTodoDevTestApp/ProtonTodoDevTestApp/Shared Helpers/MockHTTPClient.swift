@@ -118,21 +118,22 @@ let mockJSONString = """
 final class MockHTTPClient: HTTPClient {
     private let data: Data
     private let statusCode: Int
-    
-    init(data: Data, statusCode: Int) {
+    private let url: URL
+
+    init(data: Data, statusCode: Int, url: URL = URL(string: "https://example.com")!) {
         self.data = data
         self.statusCode = statusCode
+        self.url = url
     }
-    
-    func get(from url: URL) async throws -> HTTPResult {
-        let response = HTTPURLResponse(
+
+    func sendRequest(endpoint: any Endpoint) async throws -> Result<Data, RequestError> {
+        _ = HTTPURLResponse(
             url: url,
             statusCode: statusCode,
             httpVersion: nil,
             headerFields: nil
         )!
-        return (data, response)
+        
+        return .success(data)
     }
 }
-
-

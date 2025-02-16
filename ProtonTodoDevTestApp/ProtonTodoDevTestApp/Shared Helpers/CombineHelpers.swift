@@ -11,19 +11,28 @@ import ProtonTodoDevTest
 
 // MARK: - API Helpers
 extension HTTPClient {
-    typealias Publisher = AnyPublisher<HTTPResult, Error>
+    typealias Publisher = AnyPublisher<HTTPResult, RequestError>
     
-    func getPublisher(from url: URL) -> Publisher {
+    func getPublisher(from endpoint: Endpoint) -> Publisher {
         var task: Task<Void, Never>?
         
         return Deferred {
             Future { promise in
                 task = Task {
                     do {
-                        let result = try await get(from: url)
-                        promise(.success(result))
+                        let result = try await sendRequest(endpoint: endpoint)
+                        switch result {
+                        case .success(let data):
+                            promise(.success(data))
+                        case .failure(let error):
+                            promise(.failure(error))
+                        }
                     } catch {
-                        promise(.failure(error))
+                        promise(
+                            .failure(
+                                error as? RequestError ?? .unknown(error.localizedDescription)
+                            )
+                        )
                     }
                 }
             }
