@@ -14,7 +14,7 @@ public final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
     
-    public func sendRequest(endpoint: any Endpoint) async throws -> Result<HTTPResult, RequestError> {
+    public func sendRequest(endpoint: any Endpoint) async throws -> HTTPResult {
         guard let urlRequest = Request.buildURLRequest(from: endpoint) else {
             return .failure(.urlMalformed)
         }

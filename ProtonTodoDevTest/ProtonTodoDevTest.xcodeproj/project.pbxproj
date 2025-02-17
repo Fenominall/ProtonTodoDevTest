@@ -288,6 +288,7 @@
 					};
 					4F7FC6CD2D548C7D002261B6 = {
 						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 1620;
 					};
 					4F7FC7182D54A37C002261B6 = {
 						CreatedOnToolsVersion = 16.2;
@@ -615,6 +616,7 @@
 		4F7FC6DD2D548C7D002261B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5YJ9NPM7MQ;
@@ -623,6 +625,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fenominall.ProtonTodoDevTestTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -630,6 +633,7 @@
 		4F7FC6DE2D548C7D002261B6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5YJ9NPM7MQ;

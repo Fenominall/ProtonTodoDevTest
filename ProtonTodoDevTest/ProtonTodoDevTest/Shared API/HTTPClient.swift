@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol HTTPClient {
-    typealias HTTPResult = Data
+    typealias HTTPResult = Result<Data, RequestError>
     
-    func sendRequest(endpoint: Endpoint) async throws -> Result<HTTPResult, RequestError>
+    func sendRequest(endpoint: Endpoint) async throws -> HTTPResult
 }
