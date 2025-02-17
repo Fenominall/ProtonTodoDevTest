@@ -49,7 +49,7 @@ struct ProtonTodoDevTestAppApp: App {
         WindowGroup {
             AppTabView(
                 feedLoader: makeRemoteFeedLoaderWithLocalFallback,
-                imageLoader: makeRemoteFeedImageDataLoaderWithLocalFallback,
+                imageLoader: makeRemoteImageDataLoaderWithLocalFallback,
                 todoItemSaveable: localTodoFeedManager
             )
         }
@@ -57,7 +57,7 @@ struct ProtonTodoDevTestAppApp: App {
     
     // MARK: - Helpers
     // Trying to load the image data from the local storage if not succes using httpclient to download the files by the url
-    private func makeRemoteFeedImageDataLoaderWithLocalFallback(url: URL) -> TodoImageLoader.Publisher {
+    private func makeRemoteImageDataLoaderWithLocalFallback(url: URL) -> TodoImageLoader.Publisher {
         let localimageLoader = LocalTodoImageCachingManager(imageStore: store)
         return localimageLoader
             .loadImageDataPublisher(from: url)
