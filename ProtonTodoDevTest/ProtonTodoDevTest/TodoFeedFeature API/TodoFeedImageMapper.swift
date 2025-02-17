@@ -16,7 +16,7 @@ public final class TodoImageDataMapper {
         _ data: Data,
         from response: HTTPURLResponse
     ) throws -> Data {
-        guard !data.isEmpty else {
+        guard response.isStatusOK, !data.isEmpty else {
             throw Error.invalidData
         }
         
