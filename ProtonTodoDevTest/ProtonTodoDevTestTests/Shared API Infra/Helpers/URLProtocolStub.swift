@@ -23,14 +23,15 @@ class URLProtocolStub: URLProtocol {
     
     private static let queue = DispatchQueue(label: "swift.urLprotocolstub.queue.com", attributes: .concurrent)
     
-    static func stub(data: Data?, response: URLResponse?, error: Error?) {
+    static func stub(data: Data?, response: URLResponse?, error: Error?) async {
         stub = Stub(data: data, response: response, error: error, requestObserver: nil)
     }
     
-    static func observeRequests(observer: @escaping (URLRequest) -> Void) {
+    static func observeRequests(observer: @escaping (URLRequest) -> Void) async {
         stub = Stub(data: nil, response: nil, error: nil, requestObserver: observer)
     }
-    static func removeStub() {
+    
+    static func removeStub() async {
         stub = nil
     }
     
@@ -44,16 +45,22 @@ class URLProtocolStub: URLProtocol {
     }
     
     override func startLoading() {
-        guard let stub = URLProtocolStub.stub else { return }
-        
-        if let data = stub.data {
-            client?.urlProtocol(self, didLoad: data)
+        guard let stub = URLProtocolStub.stub else {
+            return
         }
-        
+
+        if stub.response == nil {
+            client?.urlProtocol(self, didFailWithError: URLError(.unknown))
+        }
+
         if let response = stub.response {
             client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
         }
-        
+
+        if let data = stub.data {
+            client?.urlProtocol(self, didLoad: data)
+        }
+
         if let error = stub.error {
             client?.urlProtocol(self, didFailWithError: error)
         } else {
@@ -61,6 +68,7 @@ class URLProtocolStub: URLProtocol {
         }
         
         stub.requestObserver?(request)
+
     }
     
     override func stopLoading() {}

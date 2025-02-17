@@ -28,7 +28,7 @@ class URLSessionHTTPClinetTests: XCTestCase {
         _ values: (data: Data?, response: URLResponse?, error: Error?),
         file: StaticString = #file,
         line: UInt = #line
-    ) async -> Data? {
+    ) async -> (data: Data, response: HTTPURLResponse)? {
         let result = await resultFor(values, file: file, line: line)
         
         switch result {
@@ -61,11 +61,11 @@ class URLSessionHTTPClinetTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) async -> HTTPClient.HTTPResult {
-        values.map {
-            URLProtocolStub.stub(
-                data: $0,
-                response: $1,
-                error: $2
+        if let values = values {
+            await URLProtocolStub.stub(
+                data: values.data,
+                response: values.response,
+                error: values.error
             )
         }
         
@@ -74,8 +74,7 @@ class URLSessionHTTPClinetTests: XCTestCase {
         
         var receivedResult: HTTPClient.HTTPResult!
         Task {
-            let result = try await sut
-                .sendRequest(endpoint: MockEndpoint(url: anyURL()))
+            let result = try await sut.sendRequest(endpoint: anyURL())
             receivedResult = result
             exp.fulfill()
         }
@@ -90,24 +89,19 @@ class URLSessionHTTPClinetTests: XCTestCase {
     }
     
     private func anyURL() -> URL {
-        URL(string: "api.example.com")!
+        URL(string: "https://api-example.com/")!
+    }
+    
+    func anyNSError() -> NSError {
+        return NSError(domain: "any error",
+                       code: 1)
     }
     
     private func anyHTTPURLResponse() -> HTTPURLResponse {
-        HTTPURLResponse(
-            url: anyURL(),
-            statusCode: 200,
-            httpVersion: nil,
-            headerFields: nil
-        )!
+        return HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
     }
     
-    private func anyNonHTTPURLResponse() -> URLResponse {
-        URLResponse(
-            url: anyURL(),
-            mimeType: nil,
-            expectedContentLength: 0,
-            textEncodingName: nil
-        )
+    private func nonHTTPURLResponse() -> URLResponse {
+        return URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
     }
 }
