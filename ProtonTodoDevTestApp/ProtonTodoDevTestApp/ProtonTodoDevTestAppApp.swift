@@ -16,9 +16,7 @@ struct ProtonTodoDevTestAppApp: App {
         URLSessionHTTPClient(
             session: URLSession(configuration: .ephemeral))
     }()
-    
-    private let endpoint = MyAPIEndpoint()
-    
+        
     private let scheduler: DispatchQueue = {
         return DispatchQueue(label: "com.fenominall.infra.queue",
                              qos: .userInitiated,
@@ -40,6 +38,7 @@ struct ProtonTodoDevTestAppApp: App {
     }()
         
     private let localTodoFeedManager: LocalTodoFeedManager
+    private let baseURL = URL(string: "https://images.ctfassets.net")!
     
     // MARK: - Init
     init() {
@@ -64,7 +63,7 @@ struct ProtonTodoDevTestAppApp: App {
             .loadImageDataPublisher(from: url)
             .fallback { [httpClient, scheduler] in
                 httpClient
-                    .getPublisher(from: endpoint)
+                    .getPublisher(from: url)
                     .tryMap(TodoImageDataMapper.map)
                     .caching(to: localimageLoader, using: url)
                     .subscribe(on: scheduler)
@@ -84,7 +83,7 @@ struct ProtonTodoDevTestAppApp: App {
     
     private func makeRemoteFeedLoader() -> AnyPublisher<[TodoItem], Error> {
         return mockHttpClient
-            .getPublisher(from: endpoint)
+            .getPublisher(from: baseURL)
             .tryMap(TodoFeedItemsMapper.map)
             .eraseToAnyPublisher()
     }

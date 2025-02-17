@@ -13,7 +13,8 @@ public final class TodoImageDataMapper {
     }
     
     public static func map(
-        _ data: Data
+        _ data: Data,
+        from response: HTTPURLResponse
     ) throws -> Data {
         guard !data.isEmpty else {
             throw Error.invalidData

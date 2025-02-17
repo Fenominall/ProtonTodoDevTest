@@ -16,10 +16,10 @@ public enum BodyParameter {
 }
 
 public protocol Endpoint {
+    var baseURL: URL? { get }
     var method: RequestMethod { get }
     var header: Header? { get }
     var scheme: Scheme { get }
-    var host: String { get }
     var path: String { get }
     var body: BodyParameter? { get }
     var params: [String: String]? { get }

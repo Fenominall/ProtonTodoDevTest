@@ -49,7 +49,7 @@ public final class TodoFeedItemsMapper {
         return decoder
     }()
     
-    public static func map(_ data: Data) throws -> [TodoItem] {
+    public static func map(_ data: Data, from response: HTTPURLResponse) throws -> [TodoItem] {
         guard let root = try? decoder.decode(Root.self, from: data) else {
             throw Error.invalidData
         }

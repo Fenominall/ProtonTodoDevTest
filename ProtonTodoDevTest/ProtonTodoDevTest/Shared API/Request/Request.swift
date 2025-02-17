@@ -8,10 +8,13 @@
 import Foundation
 
 struct Request {
-    static func buildURLRequest(from endpoint: Endpoint) -> URLRequest? {
+    static func buildURLRequest(from endpoint: Endpoint, withConfig configuration: HTTPConfiguration) -> URLRequest? {
+        let host = endpoint.baseURL?.host ?? configuration.baseURL?.host
+        guard let host = host else { return nil }
+
         var components = URLComponents()
         components.scheme = endpoint.scheme.rawValue
-        components.host = endpoint.host
+        components.host = host
         components.path = endpoint.path
         if let urlQueries = endpoint.params {
             let queryItems: [URLQueryItem] = urlQueries.map { (key, value) in
@@ -24,7 +27,9 @@ struct Request {
         
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
-        request.allHTTPHeaderFields = endpoint.header ?? [:]
+        let ednpointHeaders = endpoint.header ?? [:]
+        let mergedHeaders = configuration.baseHeaders.merging(ednpointHeaders) { (_, new) in new }
+        request.allHTTPHeaderFields = mergedHeaders
         
         switch endpoint.body {
         case let .data(data):

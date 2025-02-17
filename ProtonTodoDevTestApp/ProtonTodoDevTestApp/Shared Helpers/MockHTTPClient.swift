@@ -119,21 +119,22 @@ final class MockHTTPClient: HTTPClient {
     private let data: Data
     private let statusCode: Int
     private let url: URL
-
+    
     init(data: Data, statusCode: Int, url: URL = URL(string: "https://example.com")!) {
         self.data = data
         self.statusCode = statusCode
         self.url = url
     }
 
-    func sendRequest(endpoint: any Endpoint) async throws -> Result<Data, RequestError> {
-        _ = HTTPURLResponse(
+    
+    func sendRequest(endpoint: URL) async throws -> HTTPResult {
+        let response = HTTPURLResponse(
             url: url,
             statusCode: statusCode,
             httpVersion: nil,
             headerFields: nil
         )!
         
-        return .success(data)
+        return .success((data, response))
     }
 }

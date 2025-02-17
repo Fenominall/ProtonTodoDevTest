@@ -14,13 +14,9 @@ public final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
     
-    public func sendRequest(endpoint: any Endpoint) async throws -> HTTPResult {
-        guard let urlRequest = Request.buildURLRequest(from: endpoint) else {
-            return .failure(.urlMalformed)
-        }
-        
+    public func sendRequest(endpoint: URL) async throws -> HTTPResult {
         do {
-            let (data, response) = try await session.data(for: urlRequest)
+            let (data, response) = try await session.data(from: endpoint)
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw RequestError.noResponse
@@ -30,14 +26,13 @@ public final class URLSessionHTTPClient: HTTPClient {
                 throw RequestError(fromHttpStatusCode: httpResponse.statusCode)
             }
             
-            return .success(data)
+            return .success((data, httpResponse))
         } catch {
-            return .failure(handleError(urlRequest, error))
+            return .failure(handleError(error))
         }
     }
     
     private func handleError(
-        _ request: URLRequest,
         _ error: Error
     ) -> RequestError {
         if let error = error as? RequestError {

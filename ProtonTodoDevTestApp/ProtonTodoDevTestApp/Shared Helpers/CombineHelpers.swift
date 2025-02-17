@@ -11,9 +11,9 @@ import ProtonTodoDevTest
 
 // MARK: - API Helpers
 extension HTTPClient {
-    typealias Publisher = AnyPublisher<Data, RequestError>
+    typealias Publisher = AnyPublisher<(Data, HTTPURLResponse), RequestError>
     
-    func getPublisher(from endpoint: Endpoint) -> Publisher {
+    func getPublisher(from endpoint: URL) -> Publisher {
         var task: Task<Void, Never>?
         
         return Deferred {
