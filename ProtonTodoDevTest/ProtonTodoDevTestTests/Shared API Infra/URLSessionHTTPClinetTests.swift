@@ -11,6 +11,78 @@ import ProtonTodoDevTest
 
 class URLSessionHTTPClinetTests: XCTestCase {
     
+    override func tearDown() async throws {
+        try await super.tearDown()
+        
+        await URLProtocolStub.removeStub()
+    }
+    
+    func test_sendRequest_perormsGETRequestWithURL() async throws {
+        let url = anyURL()
+        let exp = expectation(description: "Wait for completion")
+        
+        await URLProtocolStub.observeRequests { request in
+            XCTAssertEqual(request.url, url)
+            XCTAssertEqual(request.httpMethod, "GET")
+            exp.fulfill()
+        }
+        
+        _ = try await makeSUT().sendRequest(endpoint: url)
+        
+        await fulfillment(of: [exp], timeout: 1.0)
+    }
+    
+    func test_getFromURL_failsOnRequestError() async {
+        let requestError = anyNSError()
+        
+        let receivedError = await resultErrorFor((data: nil, response: nil, error: requestError))
+        
+        XCTAssertNotNil(receivedError)
+    }
+    
+    func test_sndRequest_failsOnAllInvalidRepresentationCases() async {
+        let oneErrorCase = await resultErrorFor((data: nil, response: nil, error: nil))
+        let twoErrorCase = await resultErrorFor((data: nil, response: nonHTTPURLResponse(), error: nil))
+        let threeErrorCase = await resultErrorFor((data: anyData(), response: nil, error: nil))
+        let fourErrorCase = await resultErrorFor((data: anyData(), response: nil, error: anyNSError()))
+        let fiveErrorCase = await resultErrorFor((data: nil, response: nonHTTPURLResponse(), error: anyNSError()))
+        let sixErrorCase = await resultErrorFor((data: nil, response: anyHTTPURLResponse(), error: anyNSError()))
+        let sevenErrorCase = await resultErrorFor((data: anyData(), response: nonHTTPURLResponse(), error: anyNSError()))
+        let eigthErrorCase = await resultErrorFor((data: anyData(), response: anyHTTPURLResponse(), error: anyNSError()))
+        let nineErrorCase = await resultErrorFor((data: anyData(), response: nonHTTPURLResponse(), error: nil))
+        
+        XCTAssertNotNil(oneErrorCase)
+        XCTAssertNotNil(twoErrorCase)
+        XCTAssertNotNil(threeErrorCase)
+        XCTAssertNotNil(fourErrorCase)
+        XCTAssertNotNil(fiveErrorCase)
+        XCTAssertNotNil(sixErrorCase)
+        XCTAssertNotNil(sevenErrorCase)
+        XCTAssertNotNil(eigthErrorCase)
+        XCTAssertNotNil(nineErrorCase)
+    }
+    
+    func test_getFromURL_succeedsOnHTTPURLResponseWithData() async {
+        let data = anyData()
+        let response = anyHTTPURLResponse()
+        
+        let receivedValues = await resultValuesFor((data: data, response: response, error: nil))
+        
+        XCTAssertEqual(receivedValues?.data, data)
+        XCTAssertEqual(receivedValues?.response.url, response.url)
+        XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
+    }
+    
+    func test_getFromURL_succeedsWithEmptyDataOnHTTPURLResponseWithNilData() async {
+        let response = anyHTTPURLResponse()
+        
+        let receivedValues = await resultValuesFor((data: nil, response: response, error: nil))
+        
+        let emptyData = Data()
+        XCTAssertEqual(receivedValues?.data, emptyData)
+        XCTAssertEqual(receivedValues?.response.url, response.url)
+        XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
+    }
     
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath,
