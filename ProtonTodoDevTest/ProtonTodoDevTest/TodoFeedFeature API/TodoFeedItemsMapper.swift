@@ -44,7 +44,7 @@ public final class TodoFeedItemsMapper {
     
     private static let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+        decoder.dateDecodingStrategy = .iso8601WithFractionalSeconds
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
@@ -54,6 +54,7 @@ public final class TodoFeedItemsMapper {
               let root = try? decoder.decode(Root.self, from: data) else {
             throw Error.invalidData
         }
+
         return root.items
     }
 }
