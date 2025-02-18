@@ -35,11 +35,11 @@ public final class TodoItemDetailViewModel: ObservableObject {
     }
     
     var createdAt: String {
-        task.createdAt.iso8601FormattedString(from: task.createdAt)
+        task.createdAt.iso8601FormattedString()
     }
     
     var dueDate: String {
-        task.dueDate.iso8601FormattedString(from: task.dueDate)
+        task.dueDate.iso8601FormattedString()
     }
     
     // MARK: - Actions

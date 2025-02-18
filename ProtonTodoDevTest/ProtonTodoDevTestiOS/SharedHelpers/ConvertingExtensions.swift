@@ -8,10 +8,10 @@
 import Foundation
 
 extension Date {
-    func iso8601FormattedString(from date: Date) -> String {
+    func iso8601FormattedString() -> String {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter.string(from: date)
+        return formatter.string(from: self)
     }
 }
 
