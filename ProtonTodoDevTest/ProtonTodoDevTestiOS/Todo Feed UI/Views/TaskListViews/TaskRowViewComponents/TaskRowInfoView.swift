@@ -14,11 +14,11 @@ struct TodoRowInfoVIew: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {
             HStack {
-                Image(systemName: AppImageConsntants.calendar.rawValue)
+                AppImageConstants.calendar.image
                 InfoRowView(label: "Created", timestamp: createdAt)
             }
             HStack {
-                Image(systemName: AppImageConsntants.bell.rawValue)
+                AppImageConstants.bell.image
                 InfoRowView(label: "Due", timestamp: dueDate)
             }
         }

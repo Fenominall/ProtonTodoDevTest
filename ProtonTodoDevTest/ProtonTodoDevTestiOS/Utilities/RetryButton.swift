@@ -18,18 +18,15 @@ struct RetryButton: View {
                 await action()
             }
         } label: {
-            
-            Image(
-                systemName: AppImageConsntants.refresh.rawValue
-            )
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .foregroundStyle(.white)
-            .frame(
-                width: frameSize,
-                height: frameSize
-            )
-            .clipped()
+            AppImageConstants.refresh.image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .foregroundStyle(.white)
+                .frame(
+                    width: frameSize,
+                    height: frameSize
+                )
+                .clipped()
         }
     }
 }

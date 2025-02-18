@@ -42,7 +42,7 @@ struct AppTabView: View {
             .tabItem {
                 Label(
                     "All Tasks",
-                    systemImage: AppImageConsntants.house.rawValue
+                    systemImage: AppImageConstants.house.imageName
                 )
             }
             
@@ -57,7 +57,7 @@ struct AppTabView: View {
             .tabItem {
                 Label(
                     "Upcoming Tasks",
-                    systemImage: AppImageConsntants.calendar.rawValue
+                    systemImage: AppImageConstants.calendar.imageName
                 )
             }
         }
