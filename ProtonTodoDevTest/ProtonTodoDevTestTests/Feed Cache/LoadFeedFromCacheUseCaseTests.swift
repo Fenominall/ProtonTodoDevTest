@@ -16,6 +16,14 @@ class LoadFeedFromCacheUseCaseTests: XCTestCase {
         XCTAssertEqual(store.receivedMessaged, [])
     }
     
+    func test_load_requestsCacheRetrieval() async throws {
+        let (sut, store) = makeSUT()
+        
+        _ = try await sut.load()
+        
+        XCTAssertEqual(store.receivedMessaged, [.retrieve])
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath,
                          line: UInt = #line) ->
