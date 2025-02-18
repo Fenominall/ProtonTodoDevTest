@@ -62,13 +62,17 @@ class URLSessionHTTPClinetTests: XCTestCase {
         XCTAssertNotNil(nineErrorCase)
     }
     
-    func test_getFromURL_succeedsOnHTTPURLResponseWithData() async {
-        let data = anyData()
+    func test_getFromURL_succeedsOnHTTPURLResponseWithData() async throws {
+        let item1 = makeItem(id: UUID(), dependencies: [])
+        let item2 = makeItem(id: UUID(), dependencies: [item1.model.id])
+        let jsonData = try makeItemsJSON([item1.json, item2.json])
+        
         let response = anyHTTPURLResponse()
         
-        let receivedValues = await resultValuesFor((data: data, response: response, error: nil))
+        let receivedValues = await resultValuesFor((data: jsonData, response: response, error: nil))
         
-        XCTAssertEqual(receivedValues?.data, data)
+        XCTAssertNotNil(receivedValues?.data)
+        XCTAssertEqual(receivedValues?.data, jsonData)
         XCTAssertEqual(receivedValues?.response.url, response.url)
         XCTAssertEqual(receivedValues?.response.statusCode, response.statusCode)
     }
@@ -153,20 +157,6 @@ class URLSessionHTTPClinetTests: XCTestCase {
         
         await fulfillment(of: [exp], timeout: 1.0)
         return receivedResult
-    }
-    
-    
-    private func anyData() -> Data {
-        return Data("any data".utf8)
-    }
-    
-    private func anyURL() -> URL {
-        URL(string: "https://api-example.com/")!
-    }
-    
-    func anyNSError() -> NSError {
-        return NSError(domain: "any error",
-                       code: 1)
     }
     
     private func anyHTTPURLResponse() -> HTTPURLResponse {
