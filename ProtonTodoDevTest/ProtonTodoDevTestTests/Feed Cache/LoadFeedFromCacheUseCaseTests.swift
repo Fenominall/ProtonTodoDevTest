@@ -10,9 +10,14 @@ import ProtonTodoDevTest
 import XCTest
 
 class LoadFeedFromCacheUseCaseTests: XCTestCase {
+    func test_init_deoesNotMessageStoreUponCreation() {
+        let (_, store) = makeSUT()
+        
+        XCTAssertEqual(store.receivedMessaged, [])
+    }
     
     // MARK: - Helpers
-    private func makeSUR(file: StaticString = #filePath,
+    private func makeSUT(file: StaticString = #filePath,
                          line: UInt = #line) ->
     (sut: LocalTodoFeedManager, store: TodoFeedStoreSpy) {
         let store = TodoFeedStoreSpy()
