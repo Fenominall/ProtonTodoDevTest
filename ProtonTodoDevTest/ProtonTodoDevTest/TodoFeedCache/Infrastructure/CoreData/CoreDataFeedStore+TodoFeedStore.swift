@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 extension CoreDataFeedStore: TodoFeedStore {
-    public func retrieve() async throws -> [LocalTodoItem] {
+    public func retrieve() async throws -> [LocalTodoItem]? {
         try await performAsync { context in
             guard let cache = try ManagedCache.find(in: context) else {
                 return []

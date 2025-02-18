@@ -14,23 +14,30 @@ class TodoFeedStoreSpy: TodoFeedStore {
         case update(LocalTodoItem)
     }
     
-    private(set) var receivedMessaged = [ReceivedMessaged]()
+    private(set) var receivedMessages = [ReceivedMessaged]()
     
     private var retrievalResult: Result<[LocalTodoItem], Error>?
     private var insertionResult: Result<Void, Error>?
     private var updatingResult: Result<Void, Error>?
     
     // MARK: - Retrieval
-    func retrieve() async throws -> [LocalTodoItem] {
-        receivedMessaged.append(.retrieve)
-        return try retrievalResult?.get() ?? []
+    func retrieve() async throws -> [LocalTodoItem]? {
+        receivedMessages.append(.retrieve)
+        switch retrievalResult {
+        case .success(let items):
+            return items
+        case .failure(let error):
+            throw error
+        case .none:
+            return []
+        }
     }
     
     func completeRetrieval(with error: Error, at index: Int = 0) {
         retrievalResult = .failure(error)
     }
     
-    func completeInsertionSuccessfullyWithEmptyCache(at index: Int = 0) {
+    func completeRetrievalSuccessfullyWithEmptyCache(at index: Int = 0) {
         insertionResult = .success(())
     }
     
@@ -40,7 +47,7 @@ class TodoFeedStoreSpy: TodoFeedStore {
     
     // MARK: - Insertion
     func insert(_ feed: [LocalTodoItem]) async throws {
-        receivedMessaged.append(.insert(feed))
+        receivedMessages.append(.insert(feed))
         try insertionResult?.get()
     }
     
@@ -54,7 +61,7 @@ class TodoFeedStoreSpy: TodoFeedStore {
     
     // MARK: - Updating
     func update(_ item: LocalTodoItem) async throws {
-        receivedMessaged.append(.update(item))
+        receivedMessages.append(.update(item))
         try updatingResult?.get()
     }
     

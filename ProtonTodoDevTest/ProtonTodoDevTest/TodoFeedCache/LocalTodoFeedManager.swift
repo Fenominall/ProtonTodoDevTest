@@ -18,8 +18,12 @@ public final class LocalTodoFeedManager {
 // MARK: - Loading Cache
 extension LocalTodoFeedManager: TodoFeedLoader {
     public func load() async throws -> [TodoItem] {
-        let items =  try await store.retrieve().convertedToModels()
-        return items
+        do {
+            let items =  try await store.retrieve()
+            return items?.convertedToModels() ?? []
+        } catch {
+            return []
+        }
     }
 }
 
