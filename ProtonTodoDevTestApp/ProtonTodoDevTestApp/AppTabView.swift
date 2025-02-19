@@ -14,6 +14,7 @@ struct AppTabView: View {
     let feedLoader: () -> AnyPublisher<[TodoItem], Error>
     let imageLoader: (URL) -> TodoImageLoader.Publisher
     let todoItemSaveable: TodoItemSaveable
+    @StateObject private var filteringManager = TodoItemsFilteringCountManager()
     
     init(
         feedLoader: @escaping () -> AnyPublisher<[TodoItem], Error>,
@@ -35,24 +36,24 @@ struct AppTabView: View {
                 feedLoader: feedLoader,
                 imageLoader: imageLoader,
                 todoItemSaveable: todoItemSaveable,
-                tasksFilter: { tasks in
-                    TasksFilteringManager
-                        .sortTasksAndFilterByPredicate(tasks) { $0.createdAt > $1.createdAt }
-                })
+                tasksFilter: filteringManager
+                    .filterAllTaksAndUpdateAllTasksCount
+            )
             .tabItem {
                 Label(
                     "All Tasks",
                     systemImage: AppImageConstants.house.imageName
                 )
             }
+            .badge(filteringManager.allTasksCount)
             
             TodoTabCoordinator(
                 title: "Upcoming Tasks",
                 feedLoader: feedLoader,
                 imageLoader: imageLoader,
                 todoItemSaveable: todoItemSaveable,
-                tasksFilter: TasksFilteringManager
-                    .filterUpcomingTasksByDependencies
+                tasksFilter: filteringManager
+                    .filterUpcomingTaksAndUpdateupcomingTasksCount
             )
             .tabItem {
                 Label(
@@ -60,6 +61,7 @@ struct AppTabView: View {
                     systemImage: AppImageConstants.calendar.imageName
                 )
             }
+            .badge(filteringManager.upcomingTasksCount)
         }
     }
 }
