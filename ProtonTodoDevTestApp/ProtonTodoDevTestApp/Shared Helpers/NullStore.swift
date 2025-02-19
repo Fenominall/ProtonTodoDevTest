@@ -9,7 +9,7 @@ import Foundation
 import ProtonTodoDevTest
 
 final class NullStore: TodoFeedStore {
-    func retrieve() async throws -> [ProtonTodoDevTest.LocalTodoItem] { [] }
+    func retrieve() async throws -> [LocalTodoItem]? { [] }
     
     func insert(_ feed: [ProtonTodoDevTest.LocalTodoItem]) async throws {}
     
