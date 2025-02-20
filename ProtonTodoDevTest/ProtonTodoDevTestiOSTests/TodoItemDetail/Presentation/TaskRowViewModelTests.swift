@@ -14,6 +14,7 @@ import XCTest
 
 final class TaskRowViewModelTests: XCTestCase {
     
+    // MARK: - Init state
     func test_init_setsCorrectlyInitialValues() {
         let anyTaskDTO = anyPresentationModel()
         
@@ -24,6 +25,7 @@ final class TaskRowViewModelTests: XCTestCase {
         XCTAssertFalse(sut.isImageLoadFail)
     }
     
+    // MARK: - Image Loading
     func test_loadImageData_setsImageDataForPublishedTaskImageDataOnSuccessfullImageLoad() async {
         let anyTaskDTO = anyPresentationModel()
         let anyData = anyData()
