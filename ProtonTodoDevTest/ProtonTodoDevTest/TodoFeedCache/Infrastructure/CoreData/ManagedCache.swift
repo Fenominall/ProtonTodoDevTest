@@ -52,21 +52,33 @@ extension ManagedCache {
     ) throws {
         let managedCache = try ManagedCache.fetchOrCreateCache(in: context)
         
-        let existingTaskIDs = try ManagedTodoItem.fetchExistingTodoIDs(in: context)
+        let existingTaskIDs = try ManagedTodoItem.fetchExistingTasksByID(in: context)
         
-        // Filter new tasks (skip existing tasks)
-        let newTasks = tasks.filter {
-            !existingTaskIDs.contains($0.id)
+        var tasksToUpdate = [ManagedTodoItem: LocalTodoItem]()
+        var newTasks = [LocalTodoItem]()
+                
+        for task in tasks {
+            if let existingID = existingTaskIDs[task.id] {
+                tasksToUpdate[existingID] = task
+            } else {
+                newTasks.append(task)
+            }
         }
         
-        // Insert only new tasks into the cache
+        for (managedTodo, localTodo) in tasksToUpdate {
+            try ManagedTodoItem.update(
+                managedTodo,
+                with: localTodo,
+                in: context
+            )
+        }
+                
         if !newTasks.isEmpty {
             try managedCache.updateCache(with: newTasks, in: context)
-            try context.save()
-            
-            // Clear cached user info after saving new tasks
-            ManagedTodoItem.clearUserInfo(in: context)
         }
+        try context.save()
+        // Clear cached user info after saving new tasks
+        ManagedTodoItem.clearUserInfo(in: context)
     }
 }
 
