@@ -23,6 +23,17 @@ final class TaskRowViewModelTests: XCTestCase {
         XCTAssertEqual(sut.publishedTask, anyTaskDTO)
         XCTAssertFalse(sut.isImageLoadFail)
     }
+    
+    func test_loadImageData_setsImageDataForPublishedTaskImageDataOnSuccessfullImageLoad() async {
+        let anyTaskDTO = anyPresentationModel()
+        let anyData = anyData()
+        let sut = makeSUT(task: anyTaskDTO, imageLoad: { anyData })
+        
+        await sut.loadImageData()
+        
+        XCTAssertEqual(sut.publishedTask.imageData, anyData)
+        XCTAssertFalse(sut.isImageLoadFail)
+    }
 
     // MARK: - Helpers
     private func makeSUT(
