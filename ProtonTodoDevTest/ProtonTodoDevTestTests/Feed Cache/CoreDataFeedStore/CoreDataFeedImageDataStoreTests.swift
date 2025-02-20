@@ -66,20 +66,6 @@ final class CoreDataFeedImageDataStoreTests: XCTestCase {
         return .success(data)
     }
     
-    private func localItem(url: URL) -> LocalTodoItem {
-        let item = uniqueLocalItem()
-        return LocalTodoItem(
-            id: item.id,
-            title: item.title,
-            description: item.description,
-            completed: item.completed,
-            createdAt: item.createdAt,
-            dueDate: item.dueDate,
-            imageURL: url,
-            dependencies: item.dependencies
-        )
-    }
-    
     private func  expect(
         _ sut: CoreDataFeedStore,
         toCompleteRetrievalWith expectedResult: RetrievalResult,

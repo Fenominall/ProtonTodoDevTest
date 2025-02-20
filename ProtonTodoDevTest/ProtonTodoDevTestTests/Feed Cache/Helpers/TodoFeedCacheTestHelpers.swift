@@ -8,18 +8,40 @@
 import Foundation
 import ProtonTodoDevTest
 
-func uniqueItem() -> TodoItem {
+func uniqueItem(
+    title: String = "A title",
+    description: String = "A description",
+    completed: Bool = false,
+    createdAt: Date = Date(),
+    dueDate: Date = Date().addingTimeInterval(1000)
+) -> TodoItem {
     TodoItem(
         id: UUID(),
-        title: "A title",
-        description: "A description",
-        completed: false,
-        createdAt: Date(),
-        dueDate: Date().addingTimeInterval(1000),
+        title: title,
+        description: description,
+        completed: completed,
+        createdAt: createdAt,
+        dueDate: dueDate,
         imageURL: anyURL(),
         dependencies: [UUID()]
     )
 }
+
+
+func localItem(url: URL) -> LocalTodoItem {
+    let item = uniqueLocalItem()
+    return LocalTodoItem(
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        completed: item.completed,
+        createdAt: item.createdAt,
+        dueDate: item.dueDate,
+        imageURL: url,
+        dependencies: item.dependencies
+    )
+}
+
 
 func uniqueLocalItem() -> LocalTodoItem {
     LocalTodoItem(
