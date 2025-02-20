@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "57455149-4FF3-4621-907C-92B1822040CF",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:ProtonTodoDevTest.xcodeproj",
+        "identifier" : "4F7FC7212D54A37C002261B6",
+        "name" : "ProtonTodoDevTestiOSTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -36,14 +36,14 @@ func makeItemsJSON(_ items: [[String: Any]]) throws -> Data {
 
 // Mock method to generate TodoItem and corresponding JSON for unit testing
 func makeItem(
-    id: UUID,
+    id: UUID = UUID(),
     title: String = "Default Task",
     description: String = "Task description",
     completed: Bool = false,
     createdAt: Date = Date(),
     dueDate: Date = Date(),
     imageURL: URL = URL(string: "https://example.com")!,
-    dependencies: [UUID]
+    dependencies: [UUID] = []
 ) -> (model: TodoItem, json: [String: Any]) {
     let item = TodoItem(
         id: id,
