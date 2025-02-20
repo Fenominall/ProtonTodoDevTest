@@ -53,6 +53,17 @@ final class TodoItemDetailViewModelTests: XCTestCase {
         try await expect(sut, toCompleteWith: .failure(error))
     }
     
+    
+    func test_downloadImage_doesNotStartLoadAgainWhileAlreadyLoading() async throws {
+        let data = anyData()
+        let sut = makeSUT {
+            try await Task.sleep(nanoseconds: 100_000_00)
+            return data
+        }
+        
+        try await expect(sut, toCompleteWith: .success(data))
+    }
+    
     // MARK: - Helpers
     private func makeSUT(
         task: TodoItem = uniqueItem(),
