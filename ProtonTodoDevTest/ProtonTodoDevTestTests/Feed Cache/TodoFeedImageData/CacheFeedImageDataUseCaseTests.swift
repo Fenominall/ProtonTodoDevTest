@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import ProtonTodoDevTest
 
-class CacheFeedImageDataUseCaseTests: XCTestCase {
+final class CacheFeedImageDataUseCaseTests: XCTestCase {
     func test_init_doesNotMessageStoreUponCreation() {
         let (_, store) = makeSUT()
         

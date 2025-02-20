@@ -7,7 +7,7 @@
 
 import ProtonTodoDevTest
 
-class TodoFeedStoreSpy: TodoFeedStore {
+final class TodoFeedStoreSpy: TodoFeedStore {
     enum ReceivedMessaged: Equatable {
         case retrieve
         case insert([LocalTodoItem])

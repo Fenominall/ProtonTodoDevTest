@@ -9,7 +9,7 @@ import Foundation
 import ProtonTodoDevTest
 import XCTest
 
-class LoadFeedFromCacheUseCaseTests: XCTestCase {
+final class LoadFeedFromCacheUseCaseTests: XCTestCase {
     func test_init_deoesNotMessageStoreUponCreation() {
         let (_, store) = makeSUT()
         

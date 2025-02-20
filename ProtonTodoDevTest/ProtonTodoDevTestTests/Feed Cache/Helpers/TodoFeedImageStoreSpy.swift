@@ -8,7 +8,7 @@
 import Foundation
 import ProtonTodoDevTest
 
-class TodoFeedImageStoreSpy: TodoFeedImageStore {
+final class TodoFeedImageStoreSpy: TodoFeedImageStore {
     enum ReceivedMessaged: Equatable {
         case retrieve(for: URL)
         case insert(data: Data, for: URL)

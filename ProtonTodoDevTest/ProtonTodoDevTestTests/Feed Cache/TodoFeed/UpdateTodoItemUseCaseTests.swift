@@ -9,7 +9,7 @@ import Foundation
 import ProtonTodoDevTest
 import XCTest
 
-class UpdateTodoItemUseCaseTests: XCTestCase {
+final class UpdateTodoItemUseCaseTests: XCTestCase {
     func test_init_doesNotMessageStoreUponCreation() async {
         let (_, store) = makeSUT()
         

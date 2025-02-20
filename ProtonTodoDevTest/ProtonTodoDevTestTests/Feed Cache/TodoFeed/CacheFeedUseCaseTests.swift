@@ -9,7 +9,7 @@ import Foundation
 import ProtonTodoDevTest
 import XCTest
 
-class CacheFeedUseCaseTests: XCTestCase {
+final class CacheFeedUseCaseTests: XCTestCase {
     func test_init_doesNotMessageStoreUponCreation() {
         let (_, store) = makeSUT()
         
@@ -55,7 +55,7 @@ class CacheFeedUseCaseTests: XCTestCase {
         await action()
 
         do {
-            try await sut.save(uniqueImageFeed().models)
+            try await sut.save(uniqueTodoItems().models)
         } catch  {
             XCTAssertEqual(error as NSError?, expectedError, file: file, line: line)
         }

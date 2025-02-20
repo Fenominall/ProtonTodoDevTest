@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import ProtonTodoDevTest
 
-class URLSessionHTTPClinetTests: XCTestCase {
+final class URLSessionHTTPClinetTests: XCTestCase {
     
     override func tearDown() async throws {
         try await super.tearDown()
