@@ -82,7 +82,7 @@ struct ProtonTodoDevTestAppApp: App {
     }
     
     private func makeRemoteFeedLoader() -> AnyPublisher<[TodoItem], Error> {
-        return mockHttpClient
+        return httpClient
             .getPublisher(from: baseURL)
             .tryMap(TodoFeedItemsMapper.map)
             .eraseToAnyPublisher()
