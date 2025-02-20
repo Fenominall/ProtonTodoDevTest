@@ -12,7 +12,7 @@ extension CoreDataFeedStore: TodoFeedStore {
     public func retrieve() async throws -> [LocalTodoItem]? {
         try await performAsync { context in
             guard let cache = try ManagedCache.find(in: context) else {
-                return []
+                return nil
             }
             return cache.localFeed
         }

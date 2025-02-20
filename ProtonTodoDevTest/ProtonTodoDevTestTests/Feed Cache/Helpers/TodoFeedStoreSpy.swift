@@ -29,7 +29,7 @@ final class TodoFeedStoreSpy: TodoFeedStore {
         case .failure(let error):
             throw error
         case .none:
-            return []
+            return nil
         }
     }
     
