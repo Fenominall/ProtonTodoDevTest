@@ -9,11 +9,23 @@
     }
   ],
   "defaultOptions" : {
-
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ProtonTodoDevTest.xcodeproj",
+          "identifier" : "4F7FC7182D54A37C002261B6",
+          "name" : "ProtonTodoDevTestiOS"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {
       "parallelizable" : true,
+      "selectedTests" : [
+        "TodoItemDetailViewModelTests\/test_init_setsCorrectInitialValues()"
+      ],
       "target" : {
         "containerPath" : "container:ProtonTodoDevTest.xcodeproj",
         "identifier" : "4F7FC7212D54A37C002261B6",
