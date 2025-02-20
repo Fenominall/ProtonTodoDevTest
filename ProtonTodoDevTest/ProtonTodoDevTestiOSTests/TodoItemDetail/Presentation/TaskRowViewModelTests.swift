@@ -13,6 +13,16 @@ import SwiftUI
 import XCTest
 
 final class TaskRowViewModelTests: XCTestCase {
+    
+    func test_init_setsCorrectlyInitialValues() {
+        let anyTaskDTO = anyPresentationModel()
+        
+        let sut = makeSUT(task: anyTaskDTO)
+        
+        XCTAssertEqual(sut.bindableTask, anyTaskDTO)
+        XCTAssertEqual(sut.publishedTask, anyTaskDTO)
+        XCTAssertFalse(sut.isImageLoadFail)
+    }
 
     // MARK: - Helpers
     private func makeSUT(
