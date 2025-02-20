@@ -21,7 +21,20 @@ func uniqueItem() -> TodoItem {
     )
 }
 
-func uniqueImageFeed() -> (models: [TodoItem], local: [LocalTodoItem]) {
+func uniqueLocalItem() -> LocalTodoItem {
+    LocalTodoItem(
+        id: UUID(),
+        title: "A title",
+        description: "A description",
+        completed: false,
+        createdAt: Date(),
+        dueDate: Date().addingTimeInterval(1000),
+        imageURL: anyURL(),
+        dependencies: [UUID()]
+    )
+}
+
+func uniqueTodoItems() -> (models: [TodoItem], local: [LocalTodoItem]) {
     let item1 = makeItem(id: UUID(), dependencies: [])
     let item2 = makeItem(id: UUID(), dependencies: [item1.model.id])
     let feed = [item1.model, item2.model]
