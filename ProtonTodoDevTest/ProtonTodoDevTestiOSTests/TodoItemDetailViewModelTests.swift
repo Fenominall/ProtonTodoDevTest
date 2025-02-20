@@ -39,29 +39,11 @@ final class TodoItemDetailViewModelTests: XCTestCase {
         XCTAssertNil(sut.imageLoadingError)
     }
     
-    func test_downloadImage_successfullySetsImageDataOnNonNilData() async {
+    func test_downloadImage_successfullySetsImageDataOnNonNilData() async throws {
         let anyData = anyData()
         let sut = makeSUT { anyData }
         
-        let exp = expectation(description: "Wait for image load")
-        var receivedData: Data?
-        
-        sut.$imageData
-            .dropFirst() // skip initial nil
-            .sink {
-                receivedData = $0
-                exp.fulfill()
-            }
-            .store(in: &cancelables)
-        
-        await sut.downloadImage()
-        
-        await fulfillment(of: [exp], timeout: 1.0)
-        
-        XCTAssertEqual(receivedData, anyData)
-        XCTAssertFalse(sut.isImageLoading)
-        XCTAssertNil(sut.imageLoadingError)
-        XCTAssertFalse(sut.showImageLoadingError)
+        try await expect(sut, toCompleteWith: .success(anyData))
     }
     
     // MARK: - Helpers
