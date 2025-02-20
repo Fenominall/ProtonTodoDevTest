@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 import ProtonTodoDevTest
 
-class TodoImageDataMapperTests: XCTestCase {
+final class TodoImageDataMapperTests: XCTestCase {
     
     
     func test_map_deliversInvalidDataErrorOn200HTTPResponseWithEmptyData() throws {

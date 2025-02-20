@@ -8,7 +8,7 @@
 import XCTest
 import ProtonTodoDevTest
 
-class TodoFeedItemsMapperTests: XCTestCase {
+final class TodoFeedItemsMapperTests: XCTestCase {
     func test_map_throwsErrorOnInvalidJSONAnd200StatusCode() throws {
         let invalidJson = Data("invalidJson".utf8)
         
