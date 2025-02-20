@@ -30,7 +30,7 @@ class LoadTodoItemDataFromCacheUseCaseTests: XCTestCase {
     func test_loadImgeFromURL_failsOnStoreError() async throws {
         let (sut, store) = makeSUT()
     
-        await excpect(sut, toCompleteWith: failed()) {
+        await expect(sut, toCompleteWith: failed()) {
             let retrievalError = anyNSError()
             store.completeRetrieval(with: retrievalError)
         }
@@ -39,7 +39,7 @@ class LoadTodoItemDataFromCacheUseCaseTests: XCTestCase {
     func test_loadImgeFromURL_deliversNotFoundErrorOnNotFound() async throws {
         let (sut, store) = makeSUT()
     
-        await excpect(sut, toCompleteWith: notFound()) {
+        await expect(sut, toCompleteWith: notFound()) {
             store.completeRetrieval(with: .none)
         }
     }
@@ -48,7 +48,7 @@ class LoadTodoItemDataFromCacheUseCaseTests: XCTestCase {
         let (sut, store) = makeSUT()
         let storeData = anyData()
     
-        await excpect(sut, toCompleteWith: .success(storeData)) {
+        await expect(sut, toCompleteWith: .success(storeData)) {
             store.completeRetrieval(with: storeData)
         }
     }
@@ -74,7 +74,7 @@ class LoadTodoItemDataFromCacheUseCaseTests: XCTestCase {
         return .failure(LocalTodoImageCachingManager.LoadError.failed)
     }
     
-    private func excpect(
+    private func expect(
         _ sut: LocalTodoImageCachingManager,
         toCompleteWith expectedResult: Result,
         when action: @escaping () async -> Void,
