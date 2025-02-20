@@ -10,6 +10,39 @@ import XCTest
 import ProtonTodoDevTest
 
 class CacheFeedImageDataUseCaseTests: XCTestCase {
+    func test_init_doesNotMessageStoreUponCreation() {
+        let (_, store) = makeSUT()
+        
+        XCTAssertTrue(store.receivedMessages.isEmpty)
+    }
+    
+    func test_saveImageDataForURL_requestStoredDataFromURL() async throws {
+        let (sut, store) = makeSUT()
+        let imageURL = anyURL()
+        let imageData = anyData()
+            
+        try await sut.save(imageData, for: imageURL)
+        
+        XCTAssertEqual(store.receivedMessages, [.insert(data: imageData, for: imageURL)])
+    }
+    
+    func test_saveImageDataForURL_failsOnInsertionError() async throws {
+        let (sut, store) = makeSUT()
+    
+        await expect(sut, toCompleteWith: failed()) {
+            let retrievalError = anyNSError()
+            store.completeInsertion(with: retrievalError)
+        }
+    }
+    
+    func test_saveImageDataFromURL_succeedsOnSuccessfulStoreInsertion() async throws {
+        let (sut, store) = makeSUT()
+    
+        await expect(sut, toCompleteWith: .success(())) {
+            store.completeInsertionSuccessfully()
+        }
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath,
                          line: UInt = #line) ->
