@@ -32,7 +32,6 @@ public final class TaskRowViewModel: ObservableObject {
     func loadImageData() async {
         do {
             let imageLoadResult = try await loadImageData()
-            isImageLoadFail = false
             publishedTask.imageData = imageLoadResult
         } catch {
             isImageLoadFail = true
