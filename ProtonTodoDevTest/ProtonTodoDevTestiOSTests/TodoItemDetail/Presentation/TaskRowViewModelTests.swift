@@ -36,6 +36,19 @@ final class TaskRowViewModelTests: XCTestCase {
         XCTAssertEqual(sut.publishedTask.imageData, anyData)
         XCTAssertFalse(sut.isImageLoadFail)
     }
+    
+    func test_loadImageData_setsIsImageLoadFailFlagToTrueAndKeepsImageDataNilOnImageLoadFailure() async {
+        let anyTaskDTO = anyPresentationModel()
+        let loadDataError = anyNSError()
+        let sut = makeSUT(task: anyTaskDTO, imageLoad: {
+            throw loadDataError
+        })
+        
+        await sut.loadImageData()
+        
+        XCTAssertNil(sut.publishedTask.imageData)
+        XCTAssertTrue(sut.isImageLoadFail)
+    }
 
     // MARK: - Helpers
     private func makeSUT(
