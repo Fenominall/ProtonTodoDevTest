@@ -10,6 +10,12 @@ import XCTest
 import ProtonTodoDevTest
 
 final class CoreDataFeedImageDataStoreTests: XCTestCase {
+    func test_retrieveImageData_deliversNotFoundWhenEmpty() async {
+        let sut = makeSUT()
+        
+        await expect(sut, toCompleteRetrievalWith: notFound(), for: anyURL())
+    }
+    
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> CoreDataFeedStore {
         let storeURL = URL(filePath: "/dev/null")
