@@ -49,6 +49,27 @@ final class TaskRowViewModelTests: XCTestCase {
         XCTAssertNil(sut.publishedTask.imageData)
         XCTAssertTrue(sut.isImageLoadFail)
     }
+    
+    // MARK: - Update Todo Status
+    func test_updateTodoStatus_returnFalseIfTodoStatusCannotBeToggled() async {
+        let sut = makeSUT(taskID:  { _ in
+            return false
+        })
+        
+        let result = await sut.updateTodoStatus()
+        
+        XCTAssertFalse(result)
+    }
+    
+    func test_updateTodoStatus_returnTrueIfTodoStatusCanBeToggled() async {
+        let sut = makeSUT(taskID:  { _ in
+            return true
+        })
+        
+        let result = await sut.updateTodoStatus()
+        
+        XCTAssertTrue(result)
+    }
 
     // MARK: - Helpers
     private func makeSUT(
