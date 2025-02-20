@@ -46,6 +46,13 @@ final class TodoItemDetailViewModelTests: XCTestCase {
         try await expect(sut, toCompleteWith: .success(anyData))
     }
     
+    func test_downloadImage_setsErrorOnImageLoadingFailure() async throws {
+        let error = anyNSError()
+        let sut = makeSUT { throw error }
+        
+        try await expect(sut, toCompleteWith: .failure(error))
+    }
+    
     // MARK: - Helpers
     private func makeSUT(
         task: TodoItem = uniqueItem(),
@@ -107,19 +114,19 @@ final class TodoItemDetailViewModelTests: XCTestCase {
             await fulfillment(of: [exp], timeout: 1.0)
             
             switch expectedResult {
-                case .success(let expectedData):
-                    XCTAssertEqual(receivedImageData, expectedData, "Expected imageData \(String(describing: expectedData)), got \(String(describing: receivedImageData))", file: file, line: line)
+            case .success(let expectedData):
+                XCTAssertEqual(receivedImageData, expectedData, "Expected imageData \(String(describing: expectedData)), got \(String(describing: receivedImageData))", file: file, line: line)
                 XCTAssertFalse(sut.isImageLoading, "Expected isImageLoading to be false", file: file, line: line)
-                    XCTAssertNil(receivedImageLoadingError, "Expected no error", file: file, line: line)
-                    XCTAssertFalse(sut.showImageLoadingError, "Expected showImageLoadingError to be false", file: file, line: line)
-                    XCTAssertEqual(receivedLoadingStates, [true, false], "Expected loading states [true, false]", file: file, line: line)
-                    
-                case .failure:
-                    XCTAssertNil(receivedImageData, "Expected no imageData on failure", file: file, line: line)
-                    XCTAssertFalse(sut.isImageLoading, "Expected isImageLoading to be false", file: file, line: line)
-                    XCTAssertEqual(receivedImageLoadingError, "Network Loading Error...", "Expected error message", file: file, line: line)
-                    XCTAssertTrue(sut.showImageLoadingError, "Expected showImageLoadingError to be true", file: file, line: line)
+                XCTAssertNil(receivedImageLoadingError, "Expected no error", file: file, line: line)
+                XCTAssertFalse(sut.showImageLoadingError, "Expected showImageLoadingError to be false", file: file, line: line)
+                XCTAssertEqual(receivedLoadingStates, [true, false], "Expected loading states [true, false]", file: file, line: line)
+                
+            case .failure:
+                XCTAssertNil(receivedImageData, "Expected no imageData on failure", file: file, line: line)
+                XCTAssertFalse(sut.isImageLoading, "Expected isImageLoading to be false", file: file, line: line)
+                XCTAssertEqual(receivedImageLoadingError, "Network Loading Error...", "Expected error message", file: file, line: line)
+                XCTAssertTrue(sut.showImageLoadingError, "Expected showImageLoadingError to be true", file: file, line: line)
                 XCTAssertEqual(receivedLoadingStates, [true ,false], "Expected loading states [true, false]", file: file, line: line)
-                }
+            }
         }
 }
