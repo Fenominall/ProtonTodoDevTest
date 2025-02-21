@@ -70,7 +70,10 @@ extension ManagedTodoItem {
         let request = NSFetchRequest<ManagedTodoItem>(entityName: "ManagedTodoItem")
         request.returnsObjectsAsFaults = false
         let tasks = try context.fetch(request)
-        return Dictionary(uniqueKeysWithValues: tasks.map { ($0.id, $0) })
+        
+        return tasks.reduce(into: [UUID: ManagedTodoItem]()) { result, task in
+            result[task.id] = task
+        }
     }
     
     static func first(with url: URL, in context: NSManagedObjectContext) throws -> ManagedTodoItem? {

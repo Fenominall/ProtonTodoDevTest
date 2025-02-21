@@ -50,7 +50,7 @@ extension ManagedCache {
         _ tasks: [LocalTodoItem],
         in context: NSManagedObjectContext
     ) throws {
-        let managedCache = try ManagedCache.fetchOrCreateCache(in: context)
+        let managedCache = try fetchOrCreateCache(in: context)
         
         let existingTaskIDs = try ManagedTodoItem.fetchExistingTasksByID(in: context)
         
@@ -88,25 +88,20 @@ extension ManagedCache {
         with items: [LocalTodoItem],
         in context: NSManagedObjectContext
     ) throws {
-        // Ensure cache is fetched or created
         let managedCache = try ManagedCache.fetchOrCreateCache(in: context)
+        let existingTasksByID = try ManagedTodoItem.fetchExistingTasksByID(in: context)
         
-        // Get current ordered tasks (avoiding duplicates)
-        let existingTasks = feed.mutableCopy() as? NSMutableOrderedSet ?? NSMutableOrderedSet()
+        let newItems = items.filter { existingTasksByID[$0.id] == nil }
+        let newTasks = try ManagedTodoItem.createBatch(from: newItems, in: context, with: managedCache)
+
+        let existingtasks = feed.mutableCopy() as? NSMutableOrderedSet ?? NSMutableOrderedSet()
+        addItemsToCache(existingtasks, newItems: newTasks)
         
-        // Create new tasks from the provided items
-        let newTasks = try ManagedTodoItem.createBatch(from: items, in: context, with: managedCache)
-        
-        // Add new tasks to the existing ordered set
-        addItemsToCache(existingTasks, newItems: newTasks)
-        
-        // Safely update the cache feed - NSOrderedSet
-        guard let updatedCache = existingTasks.copy() as? NSOrderedSet else {
+        guard let updatedCache = existingtasks.copy() as? NSOrderedSet else {
             throw CoreDataFeedStoreError.missingManagedObjectContext
         }
-        feed = updatedCache
         
-        ManagedTodoItem.clearUserInfo(in: context)
+        feed = updatedCache
     }
     
     private func addItemsToCache(_ existingTasks: NSMutableOrderedSet, newItems: [ManagedTodoItem]) {
