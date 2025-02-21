@@ -53,7 +53,7 @@ actor TasksFilteringManager {
         return resultStack
     }
     
-    static func sortTasksAndFilterByPredicate(
+    static func sortTasksBy(
         _ items: [TodoItem],
         by preicate: (TodoItem, TodoItem) -> Bool
     ) -> [TodoItem] {

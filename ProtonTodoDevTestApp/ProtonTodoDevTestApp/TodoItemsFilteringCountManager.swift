@@ -32,7 +32,7 @@ final class TodoItemsFilteringCountManager: ObservableObject {
     func filterAllTaksAndUpdateAllTasksCount(_ tasks: [TodoItem]) -> [TodoItem] {
         let filteredTasks = updateTaksCount(tasks: tasks) {
             TasksFilteringManager
-                .sortTasksAndFilterByPredicate($0) {
+                .sortTasksBy($0) {
                     $0.createdAt > $1.createdAt
                 }
         } updateTasksCount: { [weak self] in
