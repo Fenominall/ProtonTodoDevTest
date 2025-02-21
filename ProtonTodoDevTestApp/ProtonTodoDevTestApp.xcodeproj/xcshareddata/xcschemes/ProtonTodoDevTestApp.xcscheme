@@ -37,7 +37,7 @@
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES">
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4F240C9B2D68347800EBF731"
@@ -45,14 +45,6 @@
                BlueprintName = "ProtonTodoDevTestAppTests"
                ReferencedContainer = "container:ProtonTodoDevTestApp.xcodeproj">
             </BuildableReference>
-            <SelectedTests>
-               <Test
-                  Identifier = "ProtonTodoDevTestAppTests/testExample()">
-               </Test>
-               <Test
-                  Identifier = "ProtonTodoDevTestAppTests/testPerformanceExample()">
-               </Test>
-            </SelectedTests>
          </TestableReference>
       </Testables>
    </TestAction>
