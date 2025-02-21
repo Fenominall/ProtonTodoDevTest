@@ -47,10 +47,47 @@ final class TasksFilteringManagerTests: XCTestCase {
     func test_filterUpcomingTasksByDependencies_returnEmptyForAllCompletedTasks() {
         let item1 = uniqueItem(completed: true)
         let item2 = uniqueItem(completed: true)
-                
+        
         let input = [item1, item2]
         
         let result = TasksFilteringManager.filterUpcomingTasksByDependencies(input)
         XCTAssertEqual(result, [])
+    }
+
+    func test_filterUpcomingTasksByDependencies_ordersTasksByDependencies_reverseInput() {
+        let depID = UUID()
+        let depTask = uniqueItem(id: depID, completed: false)
+        let mainTask = uniqueItem(completed: false, dependencies: [depID])
+        let input = [depTask, mainTask]
+        
+        let result = TasksFilteringManager.filterUpcomingTasksByDependencies(input)
+        
+        XCTAssertEqual(result.count, 2)
+        XCTAssertEqual(result[0].id, depTask.id)
+        XCTAssertEqual(result[1].id, mainTask.id)
+    }
+
+    func test_filterUpcomingTasksByDependencies_handlesNoDependencies() {
+        let task1 = uniqueItem(completed: false)
+        let task2 = uniqueItem(completed: false)
+        let input = [task1, task2]
+        
+        let result = TasksFilteringManager.filterUpcomingTasksByDependencies(input)
+        
+        XCTAssertEqual(result.count, 2)
+        XCTAssertTrue(result.contains(where: { $0.id == task1.id }))
+        XCTAssertTrue(result.contains(where: { $0.id == task2.id }))
+    }
+    
+    func test_filterUpcomingTasksByDependencies_returnsIncompleteTasksWithNoDependencies() {
+        let task1 = uniqueItem(completed: false)
+        let task2 = uniqueItem(completed: true)
+        let task3 = uniqueItem(completed: false)
+        
+        let input = [task1, task2, task3]
+        let result = TasksFilteringManager.filterUpcomingTasksByDependencies(input)
+        
+        XCTAssertEqual(result.count, 2)
+        XCTAssertEqual(result, [task1, task3])
     }
 }
