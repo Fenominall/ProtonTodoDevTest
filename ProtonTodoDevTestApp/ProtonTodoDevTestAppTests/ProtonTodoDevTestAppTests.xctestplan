@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "2EDEF534-359A-4909-8728-FEF6904EAC33",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ProtonTodoDevTestApp.xcodeproj",
+          "identifier" : "4FD134A42D54DC1400BF7A49",
+          "name" : "ProtonTodoDevTestApp"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "selectedTests" : [
+
+      ],
+      "target" : {
+        "containerPath" : "container:ProtonTodoDevTestApp.xcodeproj",
+        "identifier" : "4F240C9B2D68347800EBF731",
+        "name" : "ProtonTodoDevTestAppTests"
+      }
+    }
+  ],
+  "version" : 1
+}
