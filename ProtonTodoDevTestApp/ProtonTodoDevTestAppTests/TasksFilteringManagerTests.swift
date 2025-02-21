@@ -12,6 +12,7 @@ import ProtonTodoDevTest
 
 final class TasksFilteringManagerTests: XCTestCase {
     
+    // MARK: - Sort Tasks By
     func test_sortTasksBy_returnsEmptyArrayForEmptyInput() {
         let emptySortedTasks = TasksFilteringManager.sortTasksBy([]) { $0.createdAt > $1.createdAt }
         XCTAssertEqual(emptySortedTasks, [])
@@ -35,5 +36,11 @@ final class TasksFilteringManagerTests: XCTestCase {
         XCTAssertEqual(sortedTasks.count, 2)
         XCTAssertEqual(sortedTasks[0].createdAt, date1)
         XCTAssertEqual(sortedTasks[1].createdAt, date2)
+    }
+    
+    // MARK: - Filter Upcoming Tasks By Dependencies
+    func test_filterUpcomingTasksByDependencies_returnEmptyArrayForEmptyInput() {
+        let emptyOutput = TasksFilteringManager.filterUpcomingTasksByDependencies([])
+        XCTAssertEqual(emptyOutput, [])
     }
 }
