@@ -13,13 +13,9 @@ import ProtonTodoDevTest
 final class TasksFilteringManagerTests: XCTestCase {
     
     
-    // MARK: - Helpers
-    private func makeSUT(
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) -> TasksFilteringManager {
-        let sut = TasksFilteringManager()
-        trackForMemoryLeaks(sut)
-        return sut
+    func test_sortedTasksBy_returnsSingleTaskUnchanged() {
+        let anyTask = uniqueItem()
+        let emptySortedTasks = TasksFilteringManager.sortTasksBy([anyTask]) { $0.createdAt > $1.createdAt }
+        XCTAssertEqual(emptySortedTasks, [anyTask])
     }
 }
