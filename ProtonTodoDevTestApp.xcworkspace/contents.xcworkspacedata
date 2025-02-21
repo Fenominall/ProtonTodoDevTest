@@ -11,6 +11,6 @@
       location = "group:ProtonTodoDevTest/ProtonTodoDevTestiOSTests/ProtonTodoDevTestiOSTests.xctestplan">
    </FileRef>
    <FileRef
-      location = "group:ProtonTodoDevTestApp/ProtonTodoDevTestAppTests/ProtonTodoDevTestAppTests.xctestplan">
+      location = "group:ProtonTodoDevTest/ProtonTodoDevTestTests/ProtonTodoDevTest.xctestplan">
    </FileRef>
 </Workspace>

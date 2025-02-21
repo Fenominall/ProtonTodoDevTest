@@ -9,10 +9,26 @@
     }
   ],
   "defaultOptions" : {
-
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ProtonTodoDevTestApp.xcodeproj",
+          "identifier" : "4FD134A42D54DC1400BF7A49",
+          "name" : "ProtonTodoDevTestApp"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
-
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:ProtonTodoDevTestApp.xcodeproj",
+        "identifier" : "4F240C9B2D68347800EBF731",
+        "name" : "ProtonTodoDevTestAppTests"
+      }
+    }
   ],
   "version" : 1
 }
