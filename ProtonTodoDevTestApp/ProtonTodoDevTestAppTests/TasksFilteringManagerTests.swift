@@ -12,6 +12,10 @@ import ProtonTodoDevTest
 
 final class TasksFilteringManagerTests: XCTestCase {
     
+    func test_sortTasksBy_returnsEmptyArrayForEmptyInput() {
+        let emptySortedTasks = TasksFilteringManager.sortTasksBy([]) { $0.createdAt > $1.createdAt }
+        XCTAssertEqual(emptySortedTasks, [])
+    }
     
     func test_sortedTasksBy_returnsSingleTaskUnchanged() {
         let anyTask = uniqueItem()
