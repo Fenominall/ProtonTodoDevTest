@@ -22,9 +22,12 @@
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
-      "selectedTests" : [
-        "TodoItemDetailViewModelTests\/test_init_setsCorrectInitialValues()"
+      "parallelizable" : false,
+      "skippedTests" : [
+        "TaskRowViewModelTests",
+        "TodoItemDetailViewModelTests\/test_downloadImage_doesNotStartLoadAgainWhileAlreadyLoading()",
+        "TodoItemDetailViewModelTests\/test_downloadImage_setsErrorOnImageLoadingFailure()",
+        "TodoItemDetailViewModelTests\/test_downloadImage_successfullySetsImageDataOnNonNilData()"
       ],
       "target" : {
         "containerPath" : "container:ProtonTodoDevTest.xcodeproj",
