@@ -13,6 +13,7 @@ func anyURL() -> URL {
 }
 
 func uniqueItem(
+    id: UUID = UUID(),
     title: String = "A title",
     description: String = "A description",
     completed: Bool = false,
@@ -21,7 +22,7 @@ func uniqueItem(
     dependencies: [UUID] = []
 ) -> TodoItem {
     TodoItem(
-        id: UUID(),
+        id: id,
         title: title,
         description: description,
         completed: completed,
