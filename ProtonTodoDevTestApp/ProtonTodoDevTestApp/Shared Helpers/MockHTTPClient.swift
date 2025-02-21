@@ -12,26 +12,6 @@ let mockJSONString = """
 {
   "tasks": [
     {
-      "id": "550e8400-e29b-41d4-a716-446655440000",
-      "title": "Buy Groceries",
-      "description": "Milk, Bread, Eggs, Butter",
-      "completed": true,
-      "createdAt": "2025-02-06T12:00:00Z",
-      "dueDate": "2025-02-10T12:00:00Z",
-      "imageURL": "https://images.ctfassets.net/f7l5sefbt57k/5qtjdCxnDwJ1drPVMkwBpf/410b1e7193b8f488d0d3fe2e5b65a0ce/Default_A_pair_of_hands_their_fingers_dancing_skillfully_acro_1.jpg",
-      "dependencies": []
-    },
-    {
-      "id": "660e8400-e29b-41d4-a716-446655440001",
-      "title": "Go to the Gym",
-      "description": "Workout session at 6 PM",
-      "completed": false,
-      "createdAt": "2025-02-05T08:00:00Z",
-      "dueDate": "2025-02-07T18:00:00Z",
-      "imageURL": "https://s.yimg.com/ny/api/res/1.2/JZqyCklnD.41dRADG.VkAg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD04Mjg7Y2Y9d2VicA--/https://media.zenfs.com/en/afp.co.uk/0d65ca9502dba95e03653a6d345740c6",
-      "dependencies": ["550e8400-e29b-41d4-a716-446655440000"]
-    },
-    {
       "id": "770e8400-e29b-41d4-a716-446655440002",
       "title": "Finish Project Report",
       "description": "Prepare and submit the final report",
@@ -60,6 +40,16 @@ let mockJSONString = """
       "dueDate": "2025-02-09T22:00:00Z",
       "imageURL": "https://s.yimg.com/ny/api/res/1.2/JZqyCklnD.41dRADG.VkAg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD04Mjg7Y2Y9d2VicA--/https://media.zenfs.com/en/afp.co.uk/0d65ca9502dba95e03653a6d345740c6",
       "dependencies": ["550e8400-e29b-41d4-a716-446655440000", "880e8400-e29b-41d4-a716-446655440003"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "title": "Buy Groceries",
+      "description": "Milk, Bread, Eggs, Butter",
+      "completed": false,
+      "createdAt": "2025-02-06T12:00:00Z",
+      "dueDate": "2025-02-10T12:00:00Z",
+      "imageURL": "https://images.ctfassets.net/f7l5sefbt57k/5qtjdCxnDwJ1drPVMkwBpf/410b1e7193b8f488d0d3fe2e5b65a0ce/Default_A_pair_of_hands_their_fingers_dancing_skillfully_acro_1.jpg",
+      "dependencies": []
     },
     {
       "id": "AA0e8400-e29b-41d4-a716-446655440005",
@@ -110,6 +100,16 @@ let mockJSONString = """
       "dueDate": "2025-02-10T16:30:00Z",
       "imageURL": "https://s.yimg.com/ny/api/res/1.2/JZqyCklnD.41dRADG.VkAg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD04Mjg7Y2Y9d2VicA--/https://media.zenfs.com/en/afp.co.uk/0d65ca9502dba95e03653a6d345740c6",
       "dependencies": ["DD0e8400-e29b-41d4-a716-446655440008"]
+    },
+    {
+      "id": "660e8400-e29b-41d4-a716-446655440001",
+      "title": "Go to the Gym",
+      "description": "Workout session at 6 PM",
+      "completed": false,
+      "createdAt": "2025-02-05T08:00:00Z",
+      "dueDate": "2025-02-07T18:00:00Z",
+      "imageURL": "https://s.yimg.com/ny/api/res/1.2/JZqyCklnD.41dRADG.VkAg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD04Mjg7Y2Y9d2VicA--/https://media.zenfs.com/en/afp.co.uk/0d65ca9502dba95e03653a6d345740c6",
+      "dependencies": ["550e8400-e29b-41d4-a716-446655440000"]
     }
   ]
 }
