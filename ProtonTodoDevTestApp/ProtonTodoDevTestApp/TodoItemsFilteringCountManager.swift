@@ -30,6 +30,11 @@ final class TodoItemsFilteringCountManager: ObservableObject {
     }
     
     func filterAllTaksAndUpdateAllTasksCount(_ tasks: [TodoItem]) -> [TodoItem] {
+        guard !tasks.isEmpty else {
+            allTasksCount = 0
+            return []
+        }
+        
         let filteredTasks = updateTaksCount(tasks: tasks) {
             TasksFilteringManager
                 .sortTasksBy($0) {
@@ -43,6 +48,11 @@ final class TodoItemsFilteringCountManager: ObservableObject {
     }
     
     func filterUpcomingTaksAndUpdateupcomingTasksCount(_ tasks: [TodoItem]) -> [TodoItem] {
+        guard !tasks.isEmpty else {
+            upcomingTasksCount = 0
+            return []
+        }
+        
         let filteredTasks = updateTaksCount(tasks: tasks) {
             TasksFilteringManager
                 .filterUpcomingTasksByDependencies($0)
