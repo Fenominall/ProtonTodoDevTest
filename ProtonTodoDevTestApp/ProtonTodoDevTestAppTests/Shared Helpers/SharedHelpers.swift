@@ -17,7 +17,7 @@ func uniqueItem(
     description: String = "A description",
     completed: Bool = false,
     createdAt: Date = Date(),
-    dueDate: Date = Date().addingTimeInterval(1000),
+    dueDate: Date = Date(),
     dependencies: [UUID] = []
 ) -> TodoItem {
     TodoItem(
