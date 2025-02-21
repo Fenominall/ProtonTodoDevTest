@@ -43,4 +43,14 @@ final class TasksFilteringManagerTests: XCTestCase {
         let emptyOutput = TasksFilteringManager.filterUpcomingTasksByDependencies([])
         XCTAssertEqual(emptyOutput, [])
     }
+    
+    func test_filterUpcomingTasksByDependencies_returnEmptyForAllCompletedTasks() {
+        let item1 = uniqueItem(completed: true)
+        let item2 = uniqueItem(completed: true)
+                
+        let input = [item1, item2]
+        
+        let result = TasksFilteringManager.filterUpcomingTasksByDependencies(input)
+        XCTAssertEqual(result, [])
+    }
 }
