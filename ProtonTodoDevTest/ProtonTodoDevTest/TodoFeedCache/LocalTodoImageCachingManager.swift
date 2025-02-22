@@ -16,7 +16,7 @@ public final class LocalTodoImageCachingManager {
 }
 
 extension LocalTodoImageCachingManager: TodoImageLoader {
-    enum LoadError: Error {
+    public enum LoadError: Error {
         case failed
         case notFound
     }
@@ -33,7 +33,7 @@ extension LocalTodoImageCachingManager: TodoImageLoader {
 }
 
 extension LocalTodoImageCachingManager: TodoImageCache {
-    enum SaveError: Error {
+    public enum SaveError: Error {
         case failed
     }
     

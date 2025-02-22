@@ -55,10 +55,10 @@ public struct TodoItemPresentationModel: Identifiable, Hashable {
     
     // MARK: - Helpers
     var createdAtString: String {
-        createdAt.iso8601FormattedString(from: createdAt)
+        createdAt.iso8601FormattedString()
     }
     
     var dueDateString: String {
-        dueDate.iso8601FormattedString(from: dueDate)
+        dueDate.iso8601FormattedString()
     }
 }

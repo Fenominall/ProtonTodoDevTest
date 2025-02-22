@@ -36,4 +36,15 @@ public struct TodoItem: Identifiable, Hashable {
         self.imageURL = imageURL
         self.dependencies = dependencies
     }
+    
+    public static func ==(lhs: TodoItem, rhs: TodoItem) -> Bool {
+        return lhs.id == rhs.id &&
+        lhs.title == rhs.title &&
+        lhs.description == rhs.description &&
+        lhs.completed == rhs.completed &&
+        lhs.createdAt == rhs.createdAt &&
+        lhs.dueDate == rhs.dueDate &&
+        lhs.imageURL == rhs.imageURL &&
+        lhs.dependencies == rhs.dependencies
+    }
 }

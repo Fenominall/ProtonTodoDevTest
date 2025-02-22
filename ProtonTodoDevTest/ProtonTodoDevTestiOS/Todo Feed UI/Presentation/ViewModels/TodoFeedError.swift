@@ -17,7 +17,7 @@ enum TodoFeedError: Identifiable, Error, Equatable {
         switch self {
         case .networkError:
             return "Network Error"
-        case .unmetDependencies(_):
+        case .unmetDependencies:
             return "Unmet Dependencies"
         }
     }
@@ -35,7 +35,7 @@ enum TodoFeedError: Identifiable, Error, Equatable {
         switch self {
         case .networkError:
             return "Retry"
-        case .unmetDependencies(_):
+        case .unmetDependencies:
             return "Ok"
         }
     }

@@ -11,13 +11,7 @@ import ProtonTodoDevTest
 actor TasksFilteringManager {
     
     static func filterUpcomingTasksByDependencies(_ items: [TodoItem]) -> [TodoItem] {
-        var filteredItems: [TodoItem] = []
-        
-        for item in items {
-            if !item.completed {
-                filteredItems.append(item)
-            }
-        }
+        let filteredItems = items.filter { !$0.completed }
         
         var graph: [UUID: [UUID]] = [:]
         var taskMap: [UUID: TodoItem] = [:]
@@ -50,18 +44,16 @@ actor TasksFilteringManager {
             return true
         }
         
-        for taskID in filteredItems {
-            if !visited.contains(taskID.id) {
-                if !dfs(taskID.id) {
-                    return []
-                }
+        for taskID in filteredItems where !visited.contains(taskID.id) {
+            if !dfs(taskID.id) {
+                return []
             }
         }
         
         return resultStack
     }
-
-    static func sortTasksAndFilterByPredicate(
+    
+    static func sortTasksBy(
         _ items: [TodoItem],
         by preicate: (TodoItem, TodoItem) -> Bool
     ) -> [TodoItem] {

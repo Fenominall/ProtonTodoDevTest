@@ -66,14 +66,14 @@ extension ManagedTodoItem {
 // MARK: - Fetching Cache
 extension ManagedTodoItem {
     
-    static func fetchExistingTodoIDs(in context: NSManagedObjectContext) throws -> Set<UUID> {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: ManagedTodoItem.entity().name!)
-        request.resultType = .dictionaryResultType
-        request.propertiesToFetch = ["id"]
+    static func fetchExistingTasksByID(in context: NSManagedObjectContext) throws -> [UUID: ManagedTodoItem] {
+        let request = NSFetchRequest<ManagedTodoItem>(entityName: "ManagedTodoItem")
+        request.returnsObjectsAsFaults = false
+        let tasks = try context.fetch(request)
         
-        let results = try context.fetch(request) as? [[String: Any]]
-        let ids = results?.compactMap { $0["id"] as? UUID }
-        return Set(ids ?? [])
+        return tasks.reduce(into: [UUID: ManagedTodoItem]()) { result, task in
+            result[task.id] = task
+        }
     }
     
     static func first(with url: URL, in context: NSManagedObjectContext) throws -> ManagedTodoItem? {

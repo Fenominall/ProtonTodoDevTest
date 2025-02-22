@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "DA631DAC-6138-4C1D-815C-587DC88C9769",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ProtonTodoDevTest.xcodeproj",
+          "identifier" : "4F7FC6C32D548C7C002261B6",
+          "name" : "ProtonTodoDevTest"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:ProtonTodoDevTest.xcodeproj",
+        "identifier" : "4F7FC6CD2D548C7D002261B6",
+        "name" : "ProtonTodoDevTestTests"
+      }
+    }
+  ],
+  "version" : 1
+}
