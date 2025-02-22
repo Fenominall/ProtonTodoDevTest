@@ -15,6 +15,7 @@ public struct LocalTodoItem: Equatable {
     public let createdAt: Date
     public let dueDate: Date
     public let imageURL: URL
+    public var dependencies: [UUID]
     
     public init(
         id: UUID,
@@ -23,7 +24,8 @@ public struct LocalTodoItem: Equatable {
         completed: Bool,
         createdAt: Date,
         dueDate: Date,
-        imageURL: URL
+        imageURL: URL,
+        dependencies: [UUID]
     ) {
         self.id = id
         self.title = title
@@ -32,5 +34,6 @@ public struct LocalTodoItem: Equatable {
         self.createdAt = createdAt
         self.dueDate = dueDate
         self.imageURL = imageURL
+        self.dependencies = dependencies
     }
 }

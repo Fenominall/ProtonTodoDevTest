@@ -8,18 +8,36 @@
 import SwiftUI
 
 struct TodoRowImageView: View {
-    let imageData: Data?
-    private let iconSize: CGFloat = 50
+    private let imageData: Data?
+    @Binding private var isImageLoadFail: Bool
+    private let onRefresh: () async -> Void
+    
+    private let iconSize: CGFloat = 70
+    
+    init(
+        imageData: Data?,
+        isImageLoadFail: Binding<Bool>,
+        onRefresh: @escaping () async -> Void
+    ) {
+        self.imageData = imageData
+        self._isImageLoadFail = isImageLoadFail
+        self.onRefresh = onRefresh
+    }
     
     var body: some View {
         Group {
             if let data = imageData, !data.isEmpty {
                 AsyncImageView(imageData: data)
                     .aspectRatio(contentMode: .fill)
+                    .frame(width: iconSize, height: iconSize)
                     .clipped()
             } else {
-                Rectangle()
-                    .foregroundStyle(.gray)
+                ZStack {
+                    Color.gray
+                    if isImageLoadFail {
+                        RetryButton(action: onRefresh)
+                    }
+                }
             }
         }
         .frame(width: iconSize, height: iconSize)

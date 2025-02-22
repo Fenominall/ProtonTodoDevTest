@@ -28,6 +28,10 @@ actor ThreadSafeArray<Element> {
         return array
     }
     
+    func removeAll() {
+        array.removeAll()
+    }
+    
     var count: Int {
         return array.count
     }

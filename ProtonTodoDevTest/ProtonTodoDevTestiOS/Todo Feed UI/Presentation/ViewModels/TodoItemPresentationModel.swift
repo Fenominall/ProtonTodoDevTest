@@ -17,6 +17,7 @@ public struct TodoItemPresentationModel: Identifiable, Hashable {
     public let dueDate: Date
     public let imageURL: URL
     public var imageData: Data?
+    public var dependencies: [UUID]
     
     init(
         id: UUID,
@@ -26,7 +27,8 @@ public struct TodoItemPresentationModel: Identifiable, Hashable {
         createdAt: Date,
         dueDate: Date,
         imageURL: URL,
-        imageData: Data?
+        imageData: Data?,
+        dependencies: [UUID]
     ) {
         self.id = id
         self.title = title
@@ -36,6 +38,7 @@ public struct TodoItemPresentationModel: Identifiable, Hashable {
         self.dueDate = dueDate
         self.imageURL = imageURL
         self.imageData = imageData
+        self.dependencies = dependencies
     }
     
     public init(from item: TodoItem) {
@@ -47,6 +50,7 @@ public struct TodoItemPresentationModel: Identifiable, Hashable {
         self.dueDate = item.dueDate
         self.imageURL = item.imageURL
         self.imageData = nil
+        self.dependencies = item.dependencies
     }
     
     // MARK: - Helpers

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import Combine
 import ProtonTodoDevTest
 import ProtonTodoDevTestiOS
@@ -24,27 +25,31 @@ final class TodoListViewComposer {
         tasksFilter: @escaping ([TodoItem]) -> [TodoItem],
         selection: @escaping (TodoItem) -> Void
     ) -> TodoListView {
+        print("CREATED TodoListViewComposer")
+        print("TodoListViewComposer INIT - ObjectIdentifier: \(ObjectIdentifier(self).hashValue)")
         let adapter = LoadFeedPresentationAdapter(loader: feedLoader)
-        let viewModel = TodoFeedViewModel(
-            loadFeed: adapter.load, taskFilter: tasksFilter,
-            selection: selection)
+        let feedViewModel = TodoFeedViewModel(
+            loadFeed: adapter.load,
+            taskFilter: tasksFilter,
+            selection: selection,
+            taskToUpdate: todoItemSaveable.cachingItem)
         
         let view = TodoListView(
             navigationTitle: title,
-            viewModel: viewModel,
+            viewModel: feedViewModel,
             todoRowView: { createTaskRow(with: $0) }
         )
         
-        func createTaskRow(with task: TodoItemPresentationModel) -> TodoRowView {
+        func createTaskRow(with task: Binding<TodoItemPresentationModel>) -> TodoRowView {
+            let imageURL = task.wrappedValue.imageURL
+
             let imageLoadingAdapter = ImageDataLoadingPresentationAdapter(loader: { [imageLoader] in
-                imageLoader(task.imageURL)
+                imageLoader(imageURL)
             })
             let viewModel = TaskRowViewModel(
                 receivedTask: task,
                 loadImageData: imageLoadingAdapter.load,
-                taskToUpdate: { task in
-                    todoItemSaveable.cachingItem(task.toModel())
-                })
+                taskId: feedViewModel.toggleTaskCompletion)
             return TodoRowView(viewModel: viewModel)
         }
         
@@ -57,19 +62,5 @@ private extension TodoItemSaveable {
         Task  {
             try await save(item)
         }
-    }
-}
-
-private extension TodoItemPresentationModel {
-    func toModel() -> TodoItem {
-        TodoItem(
-            id: id,
-            title: title,
-            description: description,
-            completed: completed,
-            createdAt: createdAt,
-            dueDate: createdAt,
-            imageURL: imageURL
-        )
     }
 }

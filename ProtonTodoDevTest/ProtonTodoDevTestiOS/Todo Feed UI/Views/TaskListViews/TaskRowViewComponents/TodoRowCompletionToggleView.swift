@@ -9,15 +9,28 @@ import SwiftUI
 
 struct TodoRowCompletionToggleView: View {
     @Binding var isCompleted: Bool
-    var onCompletionStatusChange: (Bool) async -> Void
+    @State private var localIsCompleted: Bool
+    private let onToggle: () async -> Bool
+    
+    init(
+        isCompleted: Binding<Bool>,
+        onToggle: @escaping () async -> Bool
+    ) {
+        self._isCompleted = isCompleted
+        self._localIsCompleted = State(initialValue: isCompleted.wrappedValue)
+        self.onToggle = onToggle
+    }
     
     var body: some View {
         
         HStack {
-            Toggle("Done", isOn: $isCompleted)
-                .onChange(of: isCompleted) { _, newValue in
+            Toggle("Done", isOn: $localIsCompleted)
+                .onChange(of: localIsCompleted) { _, _ in
                     Task {
-                        await onCompletionStatusChange(newValue)
+                        let success = await onToggle()
+                        if !success {
+                            localIsCompleted = isCompleted
+                        }
                     }
                 }
         }

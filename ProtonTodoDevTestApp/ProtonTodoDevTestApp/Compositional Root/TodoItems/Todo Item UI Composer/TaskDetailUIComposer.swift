@@ -18,12 +18,12 @@ final class TodoDetailViewComposer {
     static func composedViewWith(
         item: TodoItem,
         imageLoader: @escaping (URL) -> TodoImageLoader.Publisher
-    ) -> TodoItemkDetailView {
+    ) -> TodoItemDetailView {
         let imageLoadingAdapter = ImageDataLoadingPresentationAdapter(loader: { [imageLoader] in
             imageLoader(item.imageURL)
         })
         let viewModel = TodoItemDetailViewModel(task: item, imageLoad: imageLoadingAdapter.load)
-        let view = TodoItemkDetailView(viewModel: viewModel)
+        let view = TodoItemDetailView(viewModel: viewModel)
         return view
     }
 }

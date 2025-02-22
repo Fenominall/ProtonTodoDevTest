@@ -19,7 +19,7 @@ final class LoadResourcePresentationAdapter<Resource> {
     }
     
     func load() async throws -> Resource {
-        return try await withCheckedThrowingContinuation { [weak self] continuaion in
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self else { return }
             guard !isLoading else { return }
             
@@ -37,11 +37,11 @@ final class LoadResourcePresentationAdapter<Resource> {
                         case .finished:
                             break
                         case let .failure(error):
-                            continuaion.resume(throwing: error)
+                            continuation.resume(throwing: error)
                         }
                         self.finishLoading()
                     }, receiveValue: { value in
-                        continuaion.resume(returning: value)
+                        continuation.resume(returning: value)
                     })
         }
     }
