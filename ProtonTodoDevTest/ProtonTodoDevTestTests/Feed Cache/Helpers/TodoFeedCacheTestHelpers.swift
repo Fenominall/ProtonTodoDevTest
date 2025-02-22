@@ -13,7 +13,8 @@ func uniqueItem(
     description: String = "A description",
     completed: Bool = false,
     createdAt: Date = Date(),
-    dueDate: Date = Date().addingTimeInterval(1000)
+    dueDate: Date = Date().addingTimeInterval(1000),
+    dependencies: [UUID] = []
 ) -> TodoItem {
     TodoItem(
         id: UUID(),
@@ -23,7 +24,7 @@ func uniqueItem(
         createdAt: createdAt,
         dueDate: dueDate,
         imageURL: anyURL(),
-        dependencies: [UUID()]
+        dependencies: dependencies
     )
 }
 
