@@ -20,7 +20,6 @@ public final class TodoFeedViewModel: ObservableObject {
     private let selection: (TodoItem) -> Void
     private let taskToUpdate: (TodoItem) -> Void
     
-    
     private var originalItems = ThreadSafeArray<TodoItem>()
     private var originalItemsDictionary = ThreadSafeDictionary<UUID, Int>()
     
