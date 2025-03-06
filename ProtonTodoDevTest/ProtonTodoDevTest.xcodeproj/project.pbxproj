@@ -70,18 +70,6 @@
 		4F7FC7222D54A37C002261B6 /* ProtonTodoDevTestiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProtonTodoDevTestiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4FE2915B2D67564800DBEAAF /* Exceptions for "ProtonTodoDevTestTests" folder in "ProtonTodoDevTestiOSTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Feed Cache/Helpers/TodoFeedCacheTestHelpers.swift",
-				"Helpers/XCTestCase+MemoryLeakTracking.swift",
-				"Shared API Infra/Helpers/SharedExtensionHelpers.swift",
-			);
-			target = 4F7FC7212D54A37C002261B6 /* ProtonTodoDevTestiOSTests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4F7FC6C62D548C7C002261B6 /* ProtonTodoDevTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -90,9 +78,6 @@
 		};
 		4F7FC6D22D548C7D002261B6 /* ProtonTodoDevTestTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				4FE2915B2D67564800DBEAAF /* Exceptions for "ProtonTodoDevTestTests" folder in "ProtonTodoDevTestiOSTests" target */,
-			);
 			path = ProtonTodoDevTestTests;
 			sourceTree = "<group>";
 		};
